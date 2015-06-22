@@ -1,0 +1,26 @@
+{
+  "name": "react-wmks",
+  "version": "1.0.0",
+  "description": "react introduction",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/chrkhl/react-wmks.git"
+  },
+  "keywords": [
+    "react",
+    "introduction"
+  ],
+  "author": "Christian Kühl, René Viering",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/chrkhl/react-wmks/issues"
+  },
+  "homepage": "https://github.com/chrkhl/react-wmks#readme",
+  "dependencies": {
+    "reveal-md": "0.0.19"
+  }
+}
