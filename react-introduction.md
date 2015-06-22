@@ -13,14 +13,14 @@
       <br />
       René Viering
       <br />
-      <span style='color:#2b85c1'>@rvrng</span>
+      [@rvrng](http://twitter.com/rvrng)</span>
     </td>
     <td style='text-align:center;'>
       <img src='img/chrkhl.png' style='width:240px' />
       <br />
       Christian Kühl
       <br />
-      <span style='color:#2b85c1'>@chrkhl</span>
+      [@chrkhl](http://twitter.com/chrkhl)</span>
     </td>
   </tr>
 </table>
@@ -35,30 +35,41 @@ Yet another framework?
 
 ---
 
+<br />
 #What is React?
 
 ---
 
+<br />
 #What is React?
 
-`A JavaScript library`
-
-`for building user interfaces`
+<div style='color:#27ae60;font-size:200%;'>
+  A JavaScript library
+  for building user interfaces
+</div>
 
 ---
-
-\#Everything #is #a
-\#Component
 
 ``` javascript
-var hello = 'Hello #wmks';
-react.createClass({
-  render: function() {
-    return (
-      <p>
-        {hello}
-      </p>
-    )
+class SomeItem extends React.Component {
+  handleClick(event) {
+    // ...
   }
-});
+
+  render() {
+        var text = 'Hi there!';
+        return (
+            <p onClick={this.handleClick}>
+                <span>{text}</span>
+            </p>
+        );
+    }
+}
 ```
+
+---
+
+<br />
+<br />
+#<span style='color:#f1c40f'>#Everything #is #a</span>
+#<span style='color:#2b85c1'>#Component</span>
