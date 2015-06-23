@@ -39,15 +39,6 @@ Software-Developer
 
 ---
 
-#What is React?
-
-<img src='img/why_face_meme.jpg' style='border:none;height:300px' />
-
-<span style='color:#f1c40f;font-size:150%;font-weight:bold;font-style:italic'>
-  Yet another javascript framework?
-</span>
-
----
 
 #What is React?
 
@@ -98,11 +89,21 @@ Software-Developer
 
 #What is React?
 
-<img src='img/stahp.jpg' style='border:none;' />
+<img src='img/why_face_meme.jpg' style='border:none;height:300px' />
+
+<span style='color:#f1c40f;font-size:150%;font-weight:bold;font-style:italic'>
+  Yet another javascript framework?
+</span>
 
 ---
 
 #What is React?
+
+<img src='img/stahp.jpg' style='border:none;' />
+
+---
+
+#This is React!
 
 <br />
 <div style='color:#27ae60;font-size:200%;'>
@@ -132,42 +133,7 @@ class SomeItem extends React.Component {
 
 ---
 
-#This is React!
-
-<div style='border:3px solid red;width:100%;height:140px;position:absolute;top:330px;z-index:10'></div>
-``` javascript
-class SomeItem extends React.Component {
-  handleClick(event) {
-    // ...
-  }
-
-  render() {
-        var text = 'Hi there!';
-        return (
-            <p onClick={this.handleClick}>
-                <span>{text}</span>
-            </p>
-        );
-    }
-}
-```
-
-##<span style='color:red'>WTF is this?!</span>
-
----
-
-``` javascript
-var text = 'Hi there!';
-return (
-    <p onClick={this.handleClick}>
-        <span>{text}</span>
-    </p>
-);
-```
-
----
-
 <br />
 <br />
-#<span style='color:#f1c40f'>#Everything #is #a</span>
-#<span style='color:#2b85c1'>#Component</span>
+#<span style='color:#f1c40f'>#Everything</span> <span style='color:#e74c3c'>#is</span>
+#<span style='color:#27ae60'>#a</span> <span style='color:#2b85c1'>#Component</span>
