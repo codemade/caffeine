@@ -254,8 +254,9 @@ class SomeItem extends React.Component {
 
 ---
 
+<br />
+<br />
 #<span style='color:#e74c3c;font-size:300%;'>Wait!</span>
-<img src='img/neutral-wait.png' style='border:none;background:transparent;' />
 
 ---
 
@@ -304,3 +305,18 @@ class SomeItem extends React.Component {
 #<span style='color:#27ae60'>#a</span> <span style='color:#2b85c1'>#Component</span>
 
 ---
+
+#<span style='color:#1abc9c'>Components are</span>
+
+<table style='width:100%'>
+  <tr>
+    <td style='vertical-align:top;text-align:right;'>
+      <img src='img/thinking.png' style='border:none;background:white;display:inline' />
+    </td>
+    <td style='vertical-align:top;text-align:left;'>
+      Componsable<br />
+      Reusable<br />
+      Testable<br />
+    </td>
+  </tr>
+</table>
