@@ -114,6 +114,23 @@ Software-Developer
 
 #This is React!
 
+<br />
+<br />
+##<span style='color:#9b59b6'>React only handles the <span style='font-size:200%'>UI</span></span>
+
+---
+
+#This is React!
+
+<br />
+<br />
+##<span style='color:#f1c40f'>The <span style='font-size:200%'>V</span> in MVC</span>
+
+---
+
+
+#This is React!
+
 ``` javascript
 class SomeItem extends React.Component {
   handleClick(event) {
@@ -133,23 +150,7 @@ class SomeItem extends React.Component {
 
 ---
 
-#This is React!
-
-<br />
-<br />
-##<span style='color:#9b59b6'>React only handles the <span style='font-size:200%'>UI</span></span>
-
----
-
-#This is React!
-
-<br />
-<br />
-##<span style='color:#f1c40f'>The <span style='font-size:200%'>V</span> in MVC</span>
-
----
-
-#<span style='color:#3498db'>What about...</span>
+#<span style='color:#3498db'>What about</span>
 
 <table style='width:100%'>
   <tr>
@@ -218,6 +219,12 @@ class SomeItem extends React.Component {
 <img src='img/all-the-things.png' style='border:none;' />
 #<span style='color:#f1c40f'>#Everything</span> <span style='color:#e74c3c'>#is</span>
 #<span style='color:#27ae60'>#a</span> <span style='color:#2b85c1'>#Component</span>
+
+---
+
+#The react way
+
+ToDo: Add some slides with component screenshots etc.
 
 ---
 
