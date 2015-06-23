@@ -1,7 +1,7 @@
 #React
 <img src='/img/react-logo.png' style='border:none;height:300px' />
 
-\- Introduction -
+\- A brief introduction -
 
 ---
 
@@ -43,7 +43,9 @@ Software-Developer
 
 <img src='img/why_face_meme.jpg' style='border:none;height:300px' />
 
-<span style='color:#f1c40f;font-size:150%;font-weight:bold;font-style:italic'>Noch ein JavaScript-Framework?</span>
+<span style='color:#f1c40f;font-size:150%;font-weight:bold;font-style:italic'>
+  Yet another javascript framework?
+</span>
 
 ---
 
@@ -108,7 +110,8 @@ Software-Developer
 </div>
 
 ---
-#What is React?
+
+#This is React!
 
 ``` javascript
 class SomeItem extends React.Component {
@@ -125,6 +128,41 @@ class SomeItem extends React.Component {
         );
     }
 }
+```
+
+---
+
+#This is React!
+
+<div style='border:3px solid red;width:100%;height:140px;position:absolute;top:330px;z-index:10'></div>
+``` javascript
+class SomeItem extends React.Component {
+  handleClick(event) {
+    // ...
+  }
+
+  render() {
+        var text = 'Hi there!';
+        return (
+            <p onClick={this.handleClick}>
+                <span>{text}</span>
+            </p>
+        );
+    }
+}
+```
+
+##<span style='color:red'>WTF is this?!</span>
+
+---
+
+``` javascript
+var text = 'Hi there!';
+return (
+    <p onClick={this.handleClick}>
+        <span>{text}</span>
+    </p>
+);
 ```
 
 ---
