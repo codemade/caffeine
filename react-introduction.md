@@ -1,7 +1,7 @@
 #React
 <img src='/img/react-logo.png' style='border:none;height:300px' />
 
-\- Introduction -
+\- Eine Einführung -
 
 ---
 
@@ -29,34 +29,86 @@
   </tr>
 </table>
 
-software developers at [mserv.com](http://www.mserv.com)
+Software-Developer @ [mserv.com](http://www.mserv.com)
 
-with passion for js, node/io, cqrs, event sourcing, ...
+<span style='font-size:50%'>JavaScript, Node/IO, CQRS, Event Sourcing, Event Storming</span>
 
 ---
+
+#Was ist React?
+
+---
+
+#Was ist React?
 
 <img src='img/why_face_meme.jpg' style='border:none;height:300px' />
 
-ember.js, angular.js, ...
-
-Yet another framework?
+<span style='color:#f1c40f;font-size:150%;font-weight:bold;font-style:italic'>Noch ein JavaScript-Framework?</span>
 
 ---
 
+#Was ist React?
+
 <br />
-#What is React?
+<img src='img/backbone.png' style='border:none;background:transparent' />
 
 ---
 
-<br />
-#What is React?
+#Was ist React?
 
+<br />
+<img src='img/knockout.png' style='border:none;background:transparent' />
+
+---
+
+#Was ist React?
+
+<img src='img/angular.png' style='border:none;background:transparent;height:300px' />
+
+---
+
+#Was ist React?
+
+<br />
+<img src='img/ember.png' style='border:none;background:transparent' />
+
+---
+
+#Was ist React?
+
+<img src='img/meteor.png' style='border:none;background:transparent;' />
+
+---
+
+#Was ist React?
+
+<br />
+<img src='img/batman.png' style='border:none;background:white' />
+
+---
+
+#Was ist React?
+
+<br />
+<img src='img/laxar.svg' style='border:none;background:transparent' />
+
+---
+
+#Was ist React?
+
+<img src='img/stahp.jpg' style='border:none;' />
+
+---
+
+#Was ist React?
+
+<br />
 <div style='color:#27ae60;font-size:200%;'>
-  A JavaScript library
-  for building user interfaces
+  A JavaScript library for building user interfaces
 </div>
 
 ---
+#Was ist React?
 
 ``` javascript
 class SomeItem extends React.Component {
@@ -79,5 +131,5 @@ class SomeItem extends React.Component {
 
 <br />
 <br />
-#<span style='color:#f1c40f'>#Everything #is #a</span>
-#<span style='color:#2b85c1'>#Component</span>
+#<span style='color:#f1c40f'>#Alles #ist #eine</span>
+#<span style='color:#2b85c1'>#Komponente</span>
