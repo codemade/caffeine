@@ -29,6 +29,10 @@
   </tr>
 </table>
 
+software developers at [mserv.com](http://www.mserv.com)
+
+with passion for js, node/io, cqrs, event sourcing, ...
+
 ---
 
 <img src='img/why_face_meme.jpg' style='border:none;height:300px' />
