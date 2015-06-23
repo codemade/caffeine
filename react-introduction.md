@@ -137,7 +137,7 @@ class SomeItem extends React.Component {
 
 <br />
 <br />
-##<span style='color:#9b59b6'>React only handles the UI</span>
+##<span style='color:#9b59b6'>React only handles the <span style='font-size:200%'>UI</span></span>
 
 ---
 
@@ -254,9 +254,7 @@ class SomeItem extends React.Component {
 
 ---
 
-<br />
-#<span style='color:#e74c3c'>Wait!</span>
-<br />
+#<span style='color:#e74c3c;font-size:300%;'>Wait!</span>
 <img src='img/neutral-wait.png' style='border:none;background:transparent;' />
 
 ---
@@ -289,7 +287,7 @@ class SomeItem extends React.Component {
 ##In React there is no
 
 <br />
-#<span style='color:#f1c40f'>$scope</span>
+#<span style='color:#f1c40f'>$root-parent-scope</span>
 
 ---
 
