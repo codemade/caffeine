@@ -12,15 +12,19 @@
       <img src='img/revrng.png' style='width:240px' />
       <br />
       René Viering
-      <br />
-      [@rvrng](http://twitter.com/rvrng)</span>
+      <div style='margin-top:-32px'>
+        <img src='img/twitter-icon.svg' style='height:48px;border:none;background:transparent;position:relative;top:28px;' />
+        [@rvrng](http://twitter.com/rvrng)
+      </div>
     </td>
     <td style='text-align:center;'>
       <img src='img/chrkhl.png' style='width:240px' />
       <br />
       Christian Kühl
-      <br />
-      [@chrkhl](http://twitter.com/chrkhl)</span>
+      <div style='margin-top:-32px'>
+        <img src='img/twitter-icon.svg' style='height:48px;border:none;background:transparent;position:relative;top:28px;' />
+        [@chrkhl](http://twitter.com/chrkhl)
+      </div>
     </td>
   </tr>
 </table>
