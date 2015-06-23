@@ -133,7 +133,176 @@ class SomeItem extends React.Component {
 
 ---
 
+#This is React!
+
 <br />
 <br />
+##<span style='color:#9b59b6'>React only handles the UI</span>
+
+---
+
+#This is React!
+
+<br />
+<br />
+##<span style='color:#f1c40f'>The <span style='font-size:200%'>V</span> in MVC</span>
+
+---
+
+#<span style='color:#3498db'>What about...</span>
+
+<table style='width:100%'>
+  <tr>
+    <td style='vertical-align:top;text-align:right;'>
+      <img src='img/seriously.png' style='border:none;background:white;display:inline' />
+    </td>
+    <td style='vertical-align:top;text-align:left;'>
+      ... Single Page Applications ?<br />
+    </td>
+  </tr>
+</table>
+
+---
+
+#<span style='color:#3498db'>What about...</span>
+
+<table style='width:100%'>
+  <tr>
+    <td style='vertical-align:top;text-align:right;'>
+      <img src='img/seriously.png' style='border:none;background:white;display:inline' />
+    </td>
+    <td style='vertical-align:top;text-align:left;'>
+      ... Single Page Applications ?<br />
+      ... 2-way-data-binding ?<br />
+    </td>
+  </tr>
+</table>
+
+---
+
+#<span style='color:#3498db'>What about...</span>
+
+<table style='width:100%'>
+  <tr>
+    <td style='vertical-align:top;text-align:right;'>
+      <img src='img/seriously.png' style='border:none;background:white;display:inline' />
+    </td>
+    <td style='vertical-align:top;text-align:left;'>
+      ... Single Page Applications ?<br />
+      ... 2-way-data-binding ?<br />
+      ... MVC ?<br />
+    </td>
+  </tr>
+</table>
+
+---
+
+#<span style='color:#3498db'>What about...</span>
+
+<table style='width:100%'>
+  <tr>
+    <td style='vertical-align:top;text-align:right;'>
+      <img src='img/seriously.png' style='border:none;background:white;display:inline' />
+    </td>
+    <td style='vertical-align:top;text-align:left;'>
+      ... Single Page Applications ?<br />
+      ... 2-way-data-binding ?<br />
+      ... MVC ?<br />
+      ... MVVM ?<br />
+    </td>
+  </tr>
+</table>
+
+---
+
+#<span style='color:#3498db'>What about...</span>
+
+<table style='width:100%'>
+  <tr>
+    <td style='vertical-align:top;text-align:right;'>
+      <img src='img/seriously.png' style='border:none;background:white;display:inline' />
+    </td>
+    <td style='vertical-align:top;text-align:left;'>
+      ... Single Page Applications ?<br />
+      ... 2-way-data-binding ?<br />
+      ... MVC ?<br />
+      ... MVVM ?<br />
+      ... Templates ?<br />
+    </td>
+  </tr>
+</table>
+
+---
+
+#<span style='color:#3498db'>What about...</span>
+
+<table style='width:100%'>
+  <tr>
+    <td style='vertical-align:top;text-align:right;'>
+      <img src='img/seriously.png' style='border:none;background:white;display:inline' />
+    </td>
+    <td style='vertical-align:top;text-align:left;'>
+      ... Single Page Applications ?<br />
+      ... 2-way-data-binding ?<br />
+      ... MVC ?<br />
+      ... MVVM ?<br />
+      ... Templates ?<br />
+      ... Routes ?<br />
+    </td>
+  </tr>
+</table>
+
+---
+
+<br />
+#<span style='color:#e74c3c'>Wait!</span>
+<br />
+<img src='img/neutral-wait.png' style='border:none;background:transparent;' />
+
+---
+
+<br />
+##In React there is no
+
+<br />
+#<span style='color:#f1c40f'>Controller</span>
+
+---
+
+<br />
+##In React there is no
+
+<br />
+#<span style='color:#f1c40f'>Model</span>
+
+---
+
+<br />
+##In React there is no
+
+<br />
+#<span style='color:#f1c40f'>Data Binding</span>
+
+---
+
+<br />
+##In React there is no
+
+<br />
+#<span style='color:#f1c40f'>$scope</span>
+
+---
+
+<br />
+##In React there are just
+
+<br />
+#<span style='color:#2ecc71'>#Components</span>
+
+---
+
+<img src='img/all-the-things.png' style='border:none;' />
 #<span style='color:#f1c40f'>#Everything</span> <span style='color:#e74c3c'>#is</span>
 #<span style='color:#27ae60'>#a</span> <span style='color:#2b85c1'>#Component</span>
+
+---
