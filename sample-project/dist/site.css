@@ -1,4 +1,19 @@
 body{
   margin:0px;
-  padding:0px;
+  padding:20px;
+  background-color:#111111;
+  font-family: 'Trebuchet MS',Helvetica,Arial,sans-serif;
+  color: #ecf0f1;
+}
+
+img {
+  vertical-align: middle;
+}
+
+div.variation-details {
+  height:60px;
+}
+
+span.variation-name {
+  font-size:160%;
 }

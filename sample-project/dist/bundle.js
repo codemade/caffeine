@@ -130,13 +130,29 @@ var Variation = (function (_React$Component) {
       var image = 'assets/variation_' + variation.id + '.png';
       return React.createElement(
         'div',
-        null,
+        { className: 'variation-details' },
         React.createElement('img', { src: image }),
-        variation.name,
-        'Intensität ',
-        variation.intensity,
-        'Preis ',
-        variation.price
+        React.createElement(
+          'span',
+          { className: 'variation-name' },
+          variation.name
+        ),
+        ' (',
+        React.createElement(
+          'span',
+          { className: 'variation-intensity' },
+          'Intensität ',
+          variation.intensity
+        ),
+        ', ',
+        React.createElement(
+          'span',
+          { className: 'variation-price' },
+          'Preis ',
+          variation.price,
+          ' €'
+        ),
+        ')'
       );
     }
   }]);
