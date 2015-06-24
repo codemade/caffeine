@@ -9,7 +9,8 @@
     "browser-sync": "./node_modules/browser-sync/bin/browser-sync.js start --files 'dist/bundle.js, index.html' --proxy 'http://localhost:8000'",
     "build": "./node_modules/watchify/bin/cmd.js -v -t babelify js/app.js -o dist/bundle.js",
     "develop": "npm run build & npm run local-ws & npm run browser-sync",
-    "test": "mocha --compilers js:babel/register",
+    "test": "mocha tests --recursive --compilers js:babel/register",
+    "test:watch": "mocha tests --watch --recursive --compilers js:babel/register",
     "start": "npm run develop"
   },
   "keywords": [
