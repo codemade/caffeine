@@ -209,6 +209,13 @@ class SomeItem extends React.Component {
 ---
 
 <br />
+##In React there is no
+
+<img src='img/magic.gif' style='border:none;background:transparent' />
+#<span style='color:#f1c40f'>Magic</span>
+
+---
+<br />
 ##In React there are just
 
 <br />
