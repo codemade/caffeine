@@ -1,0 +1,22 @@
+{
+  "name": "coffee-store",
+  "private": "true",
+  "version": "1.0.0",
+  "description": "react sample project coffee store",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "react",
+    "sample",
+    "project",
+    "coffee",
+    "store"
+  ],
+  "author": "René Viering, Christian Kühl",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^0.13.3"
+  }
+}
