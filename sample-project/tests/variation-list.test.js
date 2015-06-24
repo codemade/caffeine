@@ -4,9 +4,9 @@ var React = require('react/addons');
 var DOM = require('../bootstrap-jsdom.js');
 var renderTarget, component;
 
-describe('variations component', () => {
+describe('variation-list component', () => {
   beforeEach(() => {
-    var ComponentClass = require('../app/components/variation.react.js');
+    var ComponentClass = require('../app/components/variation-list.react.js');
     renderTarget = DOM.document.getElementsByTagName('body')[0];
     var renderedComponent = React.createElement(ComponentClass, renderTarget);
     component = renderedComponent;
