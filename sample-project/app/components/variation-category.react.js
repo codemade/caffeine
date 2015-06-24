@@ -7,7 +7,7 @@ class VariationCategory extends React.Component {
       return <Variation variation={variation} />
     });
 
-    return <div>
+    return <div className="category">
             <h3>{this.props.category.name}</h3>
             {variations}
           </div>;

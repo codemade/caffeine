@@ -10,8 +10,12 @@ img {
   vertical-align: middle;
 }
 
+div.category {
+  padding-bottom:80px;
+}
+
 div.variation-details {
-  height:60px;
+  height:80px;
 }
 
 span.variation-name {

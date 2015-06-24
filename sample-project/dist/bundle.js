@@ -30,7 +30,7 @@ var VariationCategory = (function (_React$Component) {
 
       return React.createElement(
         'div',
-        null,
+        { className: 'category' },
         React.createElement(
           'h3',
           null,
@@ -127,7 +127,7 @@ var Variation = (function (_React$Component) {
     key: 'render',
     value: function render() {
       var variation = this.props.variation;
-      var image = 'assets/variation_' + variation.id + '.png';
+      var image = 'assets/138x138/variation_' + variation.id + '.png';
       return React.createElement(
         'div',
         { className: 'variation-details' },
