@@ -12,7 +12,16 @@ describe('variations component', () => {
     component = renderedComponent;
   });
 
+  afterEach(() => {
+    React.unmountComponentAtNode(renderTarget);
+    component = null;
+  });
+
   it('should be able to render', () => {
+    expect(component).not.to.equal(null);
+  });
+
+  it('should not be null', () => {
     expect(component).not.to.equal(null);
   });
 });
