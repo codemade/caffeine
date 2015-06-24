@@ -2,7 +2,14 @@ var React = require('react');
 
 class Variation extends React.Component {
   render(){
-    return <div>I am a variation</div>;
+    var variation = this.props.variation;
+    var image = 'assets/variation_' + variation.id + '.png';
+    return <div>
+            <img src={image} />
+            {variation.name}
+            Intensität {variation.intensity}
+            Preis {variation.price}
+           </div>;
   }
 };
 
