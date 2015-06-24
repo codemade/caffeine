@@ -5,9 +5,9 @@
   "description": "react sample project coffee store",
   "main": "index.js",
   "scripts": {
-    "local-ws": "./node_modules/local-web-server/bin/ws.js",
-    "browser-sync": "./node_modules/browser-sync/bin/browser-sync.js start --files 'dist/bundle.js, index.html' --proxy 'http://localhost:8000'",
-    "build": "./node_modules/watchify/bin/cmd.js -v -t babelify js/app.js -o dist/bundle.js",
+    "local-ws": "node ./node_modules/local-web-server/bin/ws.js",
+    "browser-sync": "node ./node_modules/browser-sync/bin/browser-sync.js start --files dist/bundle.js --proxy http://localhost:8000",
+    "build": "node ./node_modules/watchify/bin/cmd.js -v -t babelify app/main.js -o dist/bundle.js",
     "develop": "npm run build & npm run local-ws & npm run browser-sync",
     "test": "mocha tests --recursive --compilers js:babel/register",
     "test:watch": "mocha tests --watch --recursive --compilers js:babel/register",
