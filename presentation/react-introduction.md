@@ -249,3 +249,28 @@ ToDo: Add some slides with component screenshots etc.
     </td>
   </tr>
 </table>
+---
+<img src="./img/shopping-cart.png" />
+---
+# Online-Shop
+- Root-Component "Shop"
+- Shopping-Cart
+- Product List
+  - ProductList Item
+---
+# Separation of concerns
+- small components with single responsibility
+---
+# NOT Separation of technology
+- HTML
+- JS
+- CSS
+
+---
+# SHOW ME CODE
+- zugrunde liegende Daten als JSON
+-Daten werden in der Root-Component entgegen genommen und readonly an die Sub-Komponenten weitergegeben
+---
+Überleitung props vs state
+- Sub-Komponenten bekommen callbacks über props und rufen so Funktionalität der Root-Komonente auf. Diese stößt das re-rendering an via setState()
+---
