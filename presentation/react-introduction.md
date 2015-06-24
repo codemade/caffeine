@@ -215,6 +215,7 @@ class SomeItem extends React.Component {
 #<span style='color:#f1c40f'>Magic</span>
 
 ---
+
 <br />
 ##In React there are just
 
