@@ -24,6 +24,7 @@
     "babelify": "^6.1.2",
     "browser-sync": "^2.7.12",
     "chai": "^3.0.0",
+    "local-web-server": "^0.5.19",
     "mocha": "^2.2.5",
     "sinon": "^1.15.3",
     "sinon-chai": "^2.8.0",
