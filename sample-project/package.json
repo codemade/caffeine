@@ -1,0 +1,39 @@
+{
+  "name": "coffee-store",
+  "private": "true",
+  "version": "1.0.0",
+  "description": "react sample project coffee store",
+  "main": "index.js",
+  "scripts": {
+    "local-ws": "node ./node_modules/local-web-server/bin/ws.js",
+    "browser-sync": "node ./node_modules/browser-sync/bin/browser-sync.js start --files dist/bundle.js --proxy http://localhost:8000",
+    "build": "node ./node_modules/watchify/bin/cmd.js -v -t babelify app/main.js -o dist/bundle.js",
+    "develop": "npm run build & npm run local-ws & npm run browser-sync",
+    "test": "mocha tests --recursive --compilers js:babel/register",
+    "test:watch": "mocha tests --watch --recursive --compilers js:babel/register",
+    "start": "npm run develop"
+  },
+  "keywords": [
+    "react",
+    "sample",
+    "project",
+    "coffee",
+    "store"
+  ],
+  "author": "René Viering, Christian Kühl",
+  "license": "MIT",
+  "dependencies": {
+    "react": "^0.13.3"
+  },
+  "devDependencies": {
+    "babel": "^5.6.5",
+    "babelify": "^6.1.2",
+    "browser-sync": "^2.7.12",
+    "chai": "^3.0.0",
+    "local-web-server": "^0.5.19",
+    "mocha": "^2.2.5",
+    "sinon": "^1.15.3",
+    "sinon-chai": "^2.8.0",
+    "watchify": "^3.2.3"
+  }
+}
