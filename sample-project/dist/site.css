@@ -40,17 +40,17 @@ span.intensity-label {
 
 span.dot-on {
   display:inline-block;
-  margin:2px;
-  width:6px;
-  height:6px;
+  margin:1px;
+  width:4px;
+  height:4px;
   border:1px solid #aaaaaa;
   background-color: #999999;
 }
 
 span.dot-off {
   display:inline-block;
-  margin:2px;
-  width:6px;
-  height:6px;
+  margin:1px;
+  width:4px;
+  height:4px;
   border:1px solid #aaaaaa;
 }
