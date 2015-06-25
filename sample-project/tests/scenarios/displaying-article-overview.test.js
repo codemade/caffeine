@@ -10,7 +10,7 @@ describe('displaying article overview', () => {
     var ComponentClass = require('../../app/components/app.react.js');
     renderTarget = document.getElementsByTagName('body')[0];
 
-    var api = {
+    var dataAccess = {
       getCategoriesAndArticles: () => {
         return {
           categories: categories,
@@ -18,10 +18,12 @@ describe('displaying article overview', () => {
         };
       }
     };
-    var ActionCreator = require('../../app/actionCreator.js');
-    var actionCreator = ActionCreator(api, null);
+    var Store = require('../../app/store.js');
+    var ActionCreator = require('../../app/action-creator.js');
+    var store = new Store();
+    var actionCreator = new ActionCreator(dataAccess, store);
 
-    var renderedComponent = React.render(<ComponentClass />, renderTarget);
+    var renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
     component = renderedComponent;
   });
 
