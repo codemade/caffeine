@@ -7,7 +7,7 @@ var categories = [
   {id: 6, name: 'Variations'}
 ];
 
-var variations = [
+var articles = [
   // Intenso
   {id:  1, intensity: 12, category: 1, price: 0.39, name: 'Kazaar'},
   {id:  2, intensity: 10, category: 1, price: 0.35, name: 'Ristretto'},
@@ -39,4 +39,4 @@ var variations = [
   {id: 23, intensity:  6, category: 6, price: 0.42, name: 'Ciocattino'}
 ]
 
-module.exports = {categories: categories, variations: variations};
+module.exports = {categories: categories, articles: articles};

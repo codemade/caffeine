@@ -3,9 +3,9 @@ var expect = chai.expect;
 var React = require('react/addons');
 var renderTarget, component;
 
-describe('variations component', () => {
+describe('article-category component', () => {
   beforeEach(() => {
-    var ComponentClass = require('../app/components/variation.react.js');
+    var ComponentClass = require('../app/components/article-category.react.js');
     renderTarget = document.getElementsByTagName('body')[0];
     var renderedComponent = React.createElement(ComponentClass, renderTarget);
     component = renderedComponent;
