@@ -10,7 +10,7 @@
     "build": "node ./node_modules/watchify/bin/cmd.js -v -t babelify app/main.js -o dist/bundle.js",
     "develop": "npm run build & npm run local-ws & npm run browser-sync",
     "test": "mocha tests --require ./bootstrap-jsdom.js --recursive --compilers js:babel/register",
-    "test:watch": "mocha tests --watch --recursive --compilers js:babel/register",
+    "test:watch": "mocha tests --require ./bootstrap-jsdom.js --watch --recursive --compilers js:babel/register",
     "start": "npm run develop"
   },
   "keywords": [
