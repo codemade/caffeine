@@ -21,3 +21,20 @@ div.article-details {
 span.article-name {
   font-size:160%;
 }
+
+span.dot-on {
+  display:inline-block;
+  margin:2px;
+  width:8px;
+  height:8px;
+  border:1px solid white;
+  background-color: #DDDDDD;
+}
+
+span.dot-off {
+  display:inline-block;
+  margin:2px;
+  width:8px;
+  height:8px;
+  border:1px solid white;
+}
