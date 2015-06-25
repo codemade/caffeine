@@ -10,6 +10,15 @@ class App extends React.Component {
     };
   }
 
+  handleDataChanged(data){
+    this.setState(data);
+  }
+
+  componentWillMount(){
+    this.props.store.subscribe(this.handleDataChanged.bind(this));
+    this.props.actionCreator.initialize();
+  }
+
   render(){
     return <div>
             <h1>Unsere Kaffee-Geschmackserlebnisse</h1>
