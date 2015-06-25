@@ -1,11 +1,13 @@
 var React = require('react');
 var ArticleList = require('../../app/components/article-list.react.js');
-var DataSource = require('../../article-data.js');
 
 class App extends React.Component {
   constructor(props) {
     super(props);
-    this.state = DataSource;
+    this.state = {
+      categories: [],
+      articles: []
+    };
   }
 
   render(){
