@@ -219,34 +219,33 @@ var Article = (function (_React$Component) {
     key: 'render',
     value: function render() {
       var article = this.props.article;
-      var image = 'assets/138x138/article_' + article.id + '.png';
+      var image = 'assets/60x60/article_' + article.id + '.png';
 
       return React.createElement(
         'div',
         { className: 'article-details' },
         React.createElement('img', { src: image }),
+        React.createElement('br', null),
         React.createElement(
           'span',
-          { className: 'article-name' },
+          null,
           this.props.article.name
         ),
-        ' (',
+        React.createElement('br', null),
         React.createElement(
           'span',
-          { className: 'article-intensity' },
+          { className: 'intensity-label' },
           'Intensität ',
           this.props.article.intensity
         ),
-        ', ',
+        React.createElement(IntensityBar, { intensity: this.props.article.intensity }),
         React.createElement(
           'span',
           { className: 'article-price' },
           'Preis ',
           this.props.article.price,
           ' €'
-        ),
-        ')',
-        React.createElement(IntensityBar, { intensity: this.props.article.intensity })
+        )
       );
     }
   }]);

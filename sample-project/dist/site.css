@@ -11,30 +11,46 @@ img {
 }
 
 div.category {
-  padding-bottom:80px;
+  padding-bottom:10px;
+  text-align:center;
+  text-decoration: underline;
 }
 
 div.article-details {
-  height:80px;
+  display:inline-block;
+  width:220px;
+  height:140px;
+  padding:10px;
+  margin:10px;
+  text-align:center;
+  border:1px solid white;
+  background: rgba(76,76,76,1);
+  background: -moz-linear-gradient(top, rgba(76,76,76,1) 0%, rgba(102,102,102,1) 0%, rgba(44,44,44,1) 0%, rgba(89,89,89,1) 0%, rgba(71,71,71,1) 23%, rgba(0,0,0,1) 51%, rgba(17,17,17,1) 63%, rgba(43,43,43,1) 88%, rgba(28,28,28,1) 93%, rgba(19,19,19,1) 100%);
+  background: -webkit-gradient(left top, left bottom, color-stop(0%, rgba(76,76,76,1)), color-stop(0%, rgba(102,102,102,1)), color-stop(0%, rgba(44,44,44,1)), color-stop(0%, rgba(89,89,89,1)), color-stop(23%, rgba(71,71,71,1)), color-stop(51%, rgba(0,0,0,1)), color-stop(63%, rgba(17,17,17,1)), color-stop(88%, rgba(43,43,43,1)), color-stop(93%, rgba(28,28,28,1)), color-stop(100%, rgba(19,19,19,1)));
+  background: -webkit-linear-gradient(top, rgba(76,76,76,1) 0%, rgba(102,102,102,1) 0%, rgba(44,44,44,1) 0%, rgba(89,89,89,1) 0%, rgba(71,71,71,1) 23%, rgba(0,0,0,1) 51%, rgba(17,17,17,1) 63%, rgba(43,43,43,1) 88%, rgba(28,28,28,1) 93%, rgba(19,19,19,1) 100%);
+  background: -o-linear-gradient(top, rgba(76,76,76,1) 0%, rgba(102,102,102,1) 0%, rgba(44,44,44,1) 0%, rgba(89,89,89,1) 0%, rgba(71,71,71,1) 23%, rgba(0,0,0,1) 51%, rgba(17,17,17,1) 63%, rgba(43,43,43,1) 88%, rgba(28,28,28,1) 93%, rgba(19,19,19,1) 100%);
+  background: -ms-linear-gradient(top, rgba(76,76,76,1) 0%, rgba(102,102,102,1) 0%, rgba(44,44,44,1) 0%, rgba(89,89,89,1) 0%, rgba(71,71,71,1) 23%, rgba(0,0,0,1) 51%, rgba(17,17,17,1) 63%, rgba(43,43,43,1) 88%, rgba(28,28,28,1) 93%, rgba(19,19,19,1) 100%);
+  background: linear-gradient(to bottom, rgba(76,76,76,1) 0%, rgba(102,102,102,1) 0%, rgba(44,44,44,1) 0%, rgba(89,89,89,1) 0%, rgba(71,71,71,1) 23%, rgba(0,0,0,1) 51%, rgba(17,17,17,1) 63%, rgba(43,43,43,1) 88%, rgba(28,28,28,1) 93%, rgba(19,19,19,1) 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4c4c4c', endColorstr='#131313', GradientType=0 );
 }
 
-span.article-name {
-  font-size:160%;
+span.intensity-label {
+  font-size:60%;
 }
 
 span.dot-on {
   display:inline-block;
   margin:2px;
-  width:8px;
-  height:8px;
-  border:1px solid white;
-  background-color: #DDDDDD;
+  width:6px;
+  height:6px;
+  border:1px solid #aaaaaa;
+  background-color: #999999;
 }
 
 span.dot-off {
   display:inline-block;
   margin:2px;
-  width:8px;
-  height:8px;
-  border:1px solid white;
+  width:6px;
+  height:6px;
+  border:1px solid #aaaaaa;
 }
