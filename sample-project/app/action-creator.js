@@ -1,12 +1,26 @@
-class ActionCreator {
-  constructor(api, store){
+var EventEmitter = require('events').EventEmitter;
+
+class ActionCreator extends EventEmitter {
+  constructor(api){
+    super();
     this.api = api;
-    this.store = store;
+  }
+
+  subscribe(actionName, callback) {
+    this.on(actionName, callback);
+  }
+
+  unsubscribe(actionName, callback) {
+    this.removeListener(actionName, callback);
   }
 
   initialize() {
     var data = this.api.getCategoriesAndArticles();
-    this.store.initialize(data);
+    this.emit('initialize', data)
+  }
+
+  filterByIntensity(intensity) {
+    this.emit('filterByIntensity', intensity);
   }
 };
 

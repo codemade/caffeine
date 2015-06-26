@@ -10,13 +10,22 @@ class App extends React.Component {
     };
   }
 
-  handleDataChanged(data){
-    this.setState(data);
+  handleDataChanged(){
+    this.setState(
+      {
+        categories: this.props.store.getCategories(),
+        articles: this.props.store.getArticles()
+      }
+    );
   }
 
   componentWillMount(){
-    this.props.store.subscribe(this.handleDataChanged.bind(this));
+    this.props.store.subscribe('changed', this.handleDataChanged.bind(this));
     this.props.actionCreator.initialize();
+  }
+
+  filterByIntensity(intensity) {
+    this.props.actionCreator.filterByIntensity(intensity);
   }
 
   render(){
