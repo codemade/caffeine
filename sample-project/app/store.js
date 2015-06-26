@@ -5,6 +5,7 @@ class Store extends EventEmitter {
     super();
     actionCreator.subscribe('initialize', this.onInitialize.bind(this));
     actionCreator.subscribe('filterByIntensity', this.onFilterByIntensity.bind(this));
+    this.intensityFilter = null;
   }
 
   subscribe(eventName, callback){
@@ -21,10 +22,17 @@ class Store extends EventEmitter {
 
   getArticles() {
     var articles = utils.clone(this.data.articles);
-    return articles.map((article) => {
-      article.active = article.intensity === this.intensityFilter;
+
+    var result = articles.map((article) => {
+      article.active = this.articleMatchesFilter(article);
       return article;
     });
+    return result;
+  }
+
+  articleMatchesFilter(article){
+    if(this.intensityFilter === null) return true;
+    return article.intensity === this.intensityFilter;
   }
 
   onInitialize(data) {

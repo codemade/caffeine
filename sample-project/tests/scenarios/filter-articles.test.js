@@ -4,7 +4,7 @@ var renderTarget, component;
 
 describe('filter articles', () => {
   var categories = [{id:1}, {id:2}];
-  var articles = [{id:3, intensity: 3, active: true}, {id:4, intensity:8, active: true}, {id:5, intensity:3, active: true}];
+  var articles = [{id:3, intensity: 3}, {id:4, intensity:8}, {id:5, intensity:3}];
 
   beforeEach(() => {
     var ComponentClass = require('../../app/components/app.react.js');

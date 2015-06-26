@@ -399,6 +399,7 @@ var Store = (function (_EventEmitter) {
     _get(Object.getPrototypeOf(Store.prototype), 'constructor', this).call(this);
     actionCreator.subscribe('initialize', this.onInitialize.bind(this));
     actionCreator.subscribe('filterByIntensity', this.onFilterByIntensity.bind(this));
+    this.intensityFilter = null;
   }
 
   _inherits(Store, _EventEmitter);
@@ -424,10 +425,18 @@ var Store = (function (_EventEmitter) {
       var _this = this;
 
       var articles = utils.clone(this.data.articles);
-      return articles.map(function (article) {
-        article.active = article.intensity === _this.intensityFilter;
+
+      var result = articles.map(function (article) {
+        article.active = _this.articleMatchesFilter(article);
         return article;
       });
+      return result;
+    }
+  }, {
+    key: 'articleMatchesFilter',
+    value: function articleMatchesFilter(article) {
+      if (this.intensityFilter === null) return true;
+      return article.intensity === this.intensityFilter;
     }
   }, {
     key: 'onInitialize',

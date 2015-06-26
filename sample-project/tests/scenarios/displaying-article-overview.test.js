@@ -4,7 +4,7 @@ var renderTarget, component;
 
 describe('displaying article overview', () => {
   var categories = [{id:1}, {id:2}];
-  var articles = [{id:3}, {id:4}];
+  var articles = [{id:3, intensity: 3}, {id:4, intensity: 8}];
 
   beforeEach(() => {
     var ComponentClass = require('../../app/components/app.react.js');
@@ -23,8 +23,6 @@ describe('displaying article overview', () => {
     var actionCreator = new ActionCreator(dataAccess);
     var Store = require('../../app/store.js');
     var store = new Store(actionCreator);
-
-
     var renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
     component = renderedComponent;
   });
@@ -40,7 +38,11 @@ describe('displaying article overview', () => {
     });
 
     it('should display articles from server', () => {
-      expect(component.state.categories).to.deep.equal(categories);
+      var expected = articles.map((article) => {
+        article.active = true;
+        return article;
+      });
+      expect(component.state.articles).to.deep.equal(expected);
     });
   });
 });
