@@ -1,5 +1,5 @@
 var React = require('react');
-var Article = require('../../app/components/article.react.js');
+var Article = require('./article.react.js');
 
 class ArticleCategory extends React.Component {
   render(){

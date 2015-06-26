@@ -1,5 +1,5 @@
 var React = require('react');
-var ArticleList = require('../../app/components/article-list.react.js');
+var ArticleList = require('./article-list.react.js');
 
 class App extends React.Component {
   constructor(props) {

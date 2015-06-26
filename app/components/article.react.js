@@ -1,5 +1,5 @@
 var React = require('react');
-var IntensityBar = require('../../app/components/intensity-bar.react.js');
+var IntensityBar = require('./intensity-bar.react.js');
 
 class Article extends React.Component {
   render(){

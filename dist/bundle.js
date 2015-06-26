@@ -90,7 +90,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
 var React = require('react');
-var ArticleList = require('../../app/components/article-list.react.js');
+var ArticleList = require('./article-list.react.js');
 
 var App = (function (_React$Component) {
   function App(props) {
@@ -147,7 +147,7 @@ var App = (function (_React$Component) {
 ;
 module.exports = App;
 
-},{"../../app/components/article-list.react.js":5,"react":166}],4:[function(require,module,exports){
+},{"./article-list.react.js":5,"react":166}],4:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -159,7 +159,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
 var React = require('react');
-var Article = require('../../app/components/article.react.js');
+var Article = require('./article.react.js');
 
 var ArticleCategory = (function (_React$Component) {
   function ArticleCategory() {
@@ -196,7 +196,7 @@ var ArticleCategory = (function (_React$Component) {
 ;
 module.exports = ArticleCategory;
 
-},{"../../app/components/article.react.js":6,"react":166}],5:[function(require,module,exports){
+},{"./article.react.js":6,"react":166}],5:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -208,7 +208,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
 var React = require('react');
-var ArticleCategory = require('../../app/components/article-category.react.js');
+var ArticleCategory = require('./article-category.react.js');
 
 var ArticleList = (function (_React$Component) {
   function ArticleList() {
@@ -250,7 +250,7 @@ var ArticleList = (function (_React$Component) {
 ;
 module.exports = ArticleList;
 
-},{"../../app/components/article-category.react.js":4,"react":166}],6:[function(require,module,exports){
+},{"./article-category.react.js":4,"react":166}],6:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -262,7 +262,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) subClass.__proto__ = superClass; }
 
 var React = require('react');
-var IntensityBar = require('../../app/components/intensity-bar.react.js');
+var IntensityBar = require('./intensity-bar.react.js');
 
 var Article = (function (_React$Component) {
   function Article() {
@@ -316,7 +316,7 @@ var Article = (function (_React$Component) {
 
 module.exports = Article;
 
-},{"../../app/components/intensity-bar.react.js":7,"react":166}],7:[function(require,module,exports){
+},{"./intensity-bar.react.js":7,"react":166}],7:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -394,10 +394,10 @@ module.exports = DataAccess;
 'use strict';
 
 var React = require('react');
-var Store = require('../app/store.js');
-var ActionCreator = require('../app/action-creator.js');
-var App = require('../app/components/app.react.js');
-var DataAccess = require('../app/data-access.js');
+var Store = require('./store.js');
+var ActionCreator = require('./action-creator.js');
+var App = require('./components/app.react.js');
+var DataAccess = require('./data-access.js');
 
 var dataAccess = new DataAccess();
 var actionCreator = new ActionCreator(dataAccess);
@@ -405,7 +405,7 @@ var store = new Store(actionCreator);
 
 React.render(React.createElement(App, { store: store, actionCreator: actionCreator }), document.body);
 
-},{"../app/action-creator.js":1,"../app/components/app.react.js":3,"../app/data-access.js":8,"../app/store.js":10,"react":166}],10:[function(require,module,exports){
+},{"./action-creator.js":1,"./components/app.react.js":3,"./data-access.js":8,"./store.js":10,"react":166}],10:[function(require,module,exports){
 'use strict';
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();

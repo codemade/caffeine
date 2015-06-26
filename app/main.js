@@ -1,8 +1,8 @@
 var React = require('react');
-var Store = require('../app/store.js');
-var ActionCreator = require('../app/action-creator.js');
-var App = require('../app/components/app.react.js');
-var DataAccess = require('../app/data-access.js');
+var Store = require('./store.js');
+var ActionCreator = require('./action-creator.js');
+var App = require('./components/app.react.js');
+var DataAccess = require('./data-access.js');
 
 
 var dataAccess = new DataAccess();
