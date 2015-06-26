@@ -1,6 +1,6 @@
 class DataAccess {
   getCategoriesAndArticles(){
-    return require('../article-data.js');
+    return require('./article-data.js');
   }
 };
 
