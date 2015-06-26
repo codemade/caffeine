@@ -1,4 +1,4 @@
-# react-wmks
-react introduction
+# caffeine
+coffee store made with react, flux and node
 
-[![Build Status](https://travis-ci.org/chrkhl/react-wmks.svg?branch=master)](https://travis-ci.org/chrkhl/react-wmks)
+[![Build Status](https://travis-ci.org/codemade/caffeine.svg?branch=master)](https://travis-ci.org/codemade/caffeine)
