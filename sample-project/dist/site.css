@@ -34,6 +34,10 @@ div.article-details {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4c4c4c', endColorstr='#131313', GradientType=0 );
 }
 
+div.article-details.inactive{
+  opacity:0.3;
+}
+
 span.intensity-label {
   font-size:60%;
 }

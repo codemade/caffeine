@@ -5,8 +5,9 @@ class Article extends React.Component {
   render(){
     var article = this.props.article;
     var image = 'assets/60x60/article_' + article.id + '.png';
+    var className = article.active ? "article-details" : "article-details inactive";
 
-    return <div className="article-details">
+    return <div className={className}>
             <img src={image} />
             <br />
             <span>{this.props.article.name}</span>
