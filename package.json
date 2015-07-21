@@ -37,6 +37,7 @@
     "jsdom": "^5.4.3",
     "local-web-server": "^0.5.19",
     "mocha": "^2.2.5",
+    "mocha-lcov-reporter": "^0.0.1",
     "sinon": "^1.15.3",
     "sinon-chai": "^2.8.0",
     "watchify": "^3.2.3"
