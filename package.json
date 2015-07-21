@@ -3,6 +3,7 @@
   "private": "true",
   "version": "1.0.0",
   "description": "react sample project coffee store",
+  "repository": "codemade/caffeine",
   "main": "index.js",
   "scripts": {
     "local-ws": "node ./node_modules/local-web-server/bin/ws.js",
