@@ -11,6 +11,7 @@
     "develop": "npm run build & npm run local-ws & npm run browser-sync",
     "test": "mocha tests --require ./bootstrap-jsdom.js --recursive --compilers js:babel/register",
     "test:watch": "mocha tests --require ./bootstrap-jsdom.js --watch --recursive --compilers js:babel/register",
+    "coveralls": "node ./node_modules/.bin/istanbul cover ./node_Modules/mocha/bin/_mocha tests --report lcovonly -- --require ./bootstrap-jsdom.js --recursive --compilers js:babel/register",
     "start": "npm run develop"
   },
   "keywords": [
@@ -30,6 +31,8 @@
     "babelify": "^6.1.2",
     "browser-sync": "^2.7.12",
     "chai": "^3.0.0",
+    "coveralls": "^2.11.3",
+    "istanbul": "^0.3.17",
     "jsdom": "^5.4.3",
     "local-web-server": "^0.5.19",
     "mocha": "^2.2.5",
