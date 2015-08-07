@@ -1,4 +1,5 @@
-var Dispatcher = require('./flux/dispatcher.js');
+var dispatcher = require('./flux/dispatcher.js');
+var actionIdentifiers = require('./action-identifiers.js');
 
 class ActionCreator {
   constructor(api){
@@ -8,14 +9,14 @@ class ActionCreator {
   initialize() {
     var data = this.api.getCategoriesAndArticles();
     dispatcher.dispatch({
-      action: 'initialize',
+      type: actionIdentifiers.articleList.initialize,
       data: data
     });
   }
 
   filterByIntensity(intensity) {
     dispatcher.dispatch({
-      action: 'filterByIntensity',
+      type: actionIdentifiers.articleList.filterByIntensity,
       intensity: intensity
     });
   }

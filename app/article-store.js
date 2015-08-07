@@ -1,19 +1,12 @@
 var utils = require('./utils.js');
-var EventEmitter = require('events').EventEmitter;
-class Store extends EventEmitter {
-  constructor(actionCreator){
+var dispatcher = require('./flux/dispatcher.js');
+var actionIdentifiers = require('./action-identifiers.js');
+var Store = require('./flux/store.js');
+class ArticleStore extends Store {
+  constructor(){
     super();
-    actionCreator.subscribe('initialize', this.onInitialize.bind(this));
-    actionCreator.subscribe('filterByIntensity', this.onFilterByIntensity.bind(this));
     this.intensityFilter = null;
-  }
-
-  subscribe(eventName, callback){
-    this.on(eventName, callback);
-  }
-
-  unsubscribe(eventName, callback) {
-    this.removeListener(eventName, callback);
+    dispatcher.register(this.onActionDispatched.bind(this));
   }
 
   getCategories() {
@@ -37,13 +30,26 @@ class Store extends EventEmitter {
 
   onInitialize(data) {
     this.data = data;
-    this.emit('changed');
+    this.emitChange('changed');
   }
 
   onFilterByIntensity(intensity) {
     this.intensityFilter = intensity;
-    this.emit('changed');
+    this.emitChange('changed');
+  }
+
+  onActionDispatched(action) {
+    switch(action.type) {
+      case actionIdentifiers.articleList.initialize:
+        this.onInitialize(action.data);
+        break;
+      case actionIdentifiers.articleList.filterByIntensity:
+        this.onFilterByIntensity(action.intensity);
+        break;
+      default:
+        // nothing to do here
+    }
   }
 }
 
-module.exports = Store;
+module.exports = ArticleStore;

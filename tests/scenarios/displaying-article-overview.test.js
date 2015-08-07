@@ -21,8 +21,8 @@ describe('displaying article overview', () => {
 
     var ActionCreator = require('../../app/action-creator.js');
     var actionCreator = new ActionCreator(dataAccess);
-    var Store = require('../../app/article-store.js');
-    var store = new Store(actionCreator);
+    var ArticleStore = require('../../app/article-store.js');
+    var store = new ArticleStore();
     var renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
     component = renderedComponent;
   });
