@@ -14,4 +14,4 @@ class Dispatcher {
   }
 }
 
-module.exports = Dispatcher;
+module.exports = new Dispatcher();

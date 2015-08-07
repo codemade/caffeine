@@ -7,8 +7,7 @@ chai.use(sinonChai);
 describe('dispatcher', () => {
   var dispatcher;
   beforeEach(function() {
-    var Dispatcher = require('../../app/flux/dispatcher.js');
-    dispatcher = new Dispatcher();
+    dispatcher = require('../../app/flux/dispatcher.js');
   });
 
   it('should execute all subscriber callbacks', function() {
