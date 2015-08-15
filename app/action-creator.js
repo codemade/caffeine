@@ -1,26 +1,24 @@
-var EventEmitter = require('events').EventEmitter;
+var dispatcher = require('./flux/dispatcher.js');
+var actionIdentifiers = require('./action-identifiers.js');
 
-class ActionCreator extends EventEmitter {
+class ActionCreator {
   constructor(api){
-    super();
     this.api = api;
-  }
-
-  subscribe(actionName, callback) {
-    this.on(actionName, callback);
-  }
-
-  unsubscribe(actionName, callback) {
-    this.removeListener(actionName, callback);
   }
 
   initialize() {
     var data = this.api.getCategoriesAndArticles();
-    this.emit('initialize', data)
+    dispatcher.dispatch({
+      type: actionIdentifiers.articleList.initialize,
+      data: data
+    });
   }
 
   filterByIntensity(intensity) {
-    this.emit('filterByIntensity', intensity);
+    dispatcher.dispatch({
+      type: actionIdentifiers.articleList.filterByIntensity,
+      intensity: intensity
+    });
   }
 };
 

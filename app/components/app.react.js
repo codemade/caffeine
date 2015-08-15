@@ -20,7 +20,7 @@ class App extends React.Component {
   }
 
   componentWillMount(){
-    this.props.store.subscribe('changed', this.handleDataChanged.bind(this));
+    this.props.store.addChangeListener('changed', this.handleDataChanged.bind(this));
     this.props.actionCreator.initialize();
   }
 
