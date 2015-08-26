@@ -19,9 +19,13 @@ class App extends React.Component {
     );
   }
 
-  componentWillMount(){
-    this.props.store.addChangeListener('changed', this.handleDataChanged.bind(this));
+  componentWillMount() {
+    this.deregisterChangeListener = this.props.store.addChangeListener('changed', this.handleDataChanged.bind(this));
     this.props.actionCreator.initialize();
+  }
+
+  componentWillUnmount() {
+    this.deregisterChangeListener();
   }
 
   filterByIntensity(intensity) {
