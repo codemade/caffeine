@@ -1,5 +1,6 @@
 var React = require('react');
 var ArticleList = require('./article-list.react.js');
+var ArticleInformation = require('./article-information.react.js');
 
 class App extends React.Component {
   constructor(props) {
@@ -33,6 +34,7 @@ class App extends React.Component {
             <h1>Unsere Kaffee-Geschmackserlebnisse</h1>
             <ArticleList categories={this.state.categories}
                            articles={this.state.articles} />
+            <ArticleInformation />
           </div>;
   }
 };
