@@ -3,9 +3,9 @@ var React = require('react/addons');
 var ActionCreator = require('../../app/action-creator.js');
 var Store = require('../../app/article-store.js');
 var TestUtils = React.addons.TestUtils;
-var renderTarget, firstArticleComponent, articleInformationComponent;
+var renderTarget, articleInformationComponent;
 
-describe('selecting an article', () => {
+describe('no article is selected', () => {
   var categories = [{id:1}, {id:2}];
   var articles = [{id:3, intensity: 3, category:1, name:'Ristretto'}, {id:4, intensity: 8, category:1, name:'Volluto'}];
 
@@ -26,8 +26,6 @@ describe('selecting an article', () => {
     var store = new Store(actionCreator);
 
     var renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
-    firstArticleComponent = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-details')[0];
-    React.addons.TestUtils.Simulate.click(firstArticleComponent);
     articleInformationComponent = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-information')[0];
   });
 
@@ -35,8 +33,8 @@ describe('selecting an article', () => {
     React.unmountComponentAtNode(renderTarget);
   });
 
-  it('should show details for article', () => {
-    var title = articleInformationComponent.getDOMNode();
-    expect(title.innerHTML).to.equal('Ristretto');
+  it('no article information is displayed', () => {
+    var title = articleInformationComponent;
+    expect(title).to.equal(undefined);
   });
 });

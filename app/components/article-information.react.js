@@ -2,16 +2,11 @@ var React = require('react');
 
 class ArticleInformation extends React.Component {
   render() {
-
-    var title = '';
-
-    if(typeof(this.props.article) !== 'undefined'){
-      title = this.props.article.name;
-    }
-
-
-    return <div className="article-information">
-       {title}
+    var styles = {
+      border:'1px solid white'
+    };
+    return <div className="article-information" style={styles}>
+       {this.props.article.name}
     </div>;
   }
 }

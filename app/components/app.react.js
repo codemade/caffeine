@@ -17,7 +17,8 @@ class App extends React.Component {
       {
         categories: this.props.store.getCategories(),
         articles: this.props.store.getArticles(),
-        selectedArticle: this.props.store.getSelectedArticle()
+        selectedArticle: this.props.store.getSelectedArticle(),
+        articleIsSelected: this.props.store.articleIsSelected()
       }
     );
   }
@@ -32,12 +33,18 @@ class App extends React.Component {
   }
 
   render(){
+    var articleInformation;
+    if (this.state.articleIsSelected) {
+      articleInformation = <ArticleInformation article={this.state.selectedArticle}/>;
+    }
+
+
     return <div>
             <h1>Unsere Kaffee-Geschmackserlebnisse</h1>
             <ArticleList categories={this.state.categories}
                          articles={this.state.articles}
                          actionCreator={this.props.actionCreator}/>
-            <ArticleInformation article={this.state.selectedArticle}/>
+            {articleInformation}
           </div>;
   }
 };

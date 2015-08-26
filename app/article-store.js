@@ -34,6 +34,10 @@ class ArticleStore extends Store {
     return article.intensity === this.intensityFilter;
   }
 
+  articleIsSelected() {
+    return typeof(this.selectedArticleId) !== 'undefined';
+  }
+
   onInitialize(data) {
     this.data = data;
     this.emitChange('changed');
