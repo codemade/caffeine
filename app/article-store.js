@@ -23,6 +23,12 @@ class ArticleStore extends Store {
     return result;
   }
 
+  getSelectedArticle() {
+    return this.data.articles.filter((article) => {
+      return article.id === this.selectedArticleId;
+    })[0];
+  }
+
   articleMatchesFilter(article){
     if(this.intensityFilter === null) return true;
     return article.intensity === this.intensityFilter;
@@ -38,6 +44,11 @@ class ArticleStore extends Store {
     this.emitChange('changed');
   }
 
+  onSelectArticle(articleId) {
+    this.selectedArticleId = articleId;
+    this.emitChange('changed');
+  }
+
   onActionDispatched(action) {
     switch(action.type) {
       case actionIdentifiers.articleList.initialize:
@@ -45,6 +56,9 @@ class ArticleStore extends Store {
         break;
       case actionIdentifiers.articleList.filterByIntensity:
         this.onFilterByIntensity(action.intensity);
+        break;
+      case actionIdentifiers.articleList.selectArticle:
+        this.onSelectArticle(action.articleId);
         break;
       default:
         // nothing to do here

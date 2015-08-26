@@ -1,7 +1,8 @@
 var actionIdentifiers = {
   articleList: {
     initialize: 'articleList.initialize',
-    filterByIntensity: 'articleList.filterByIntensity'
+    filterByIntensity: 'articleList.filterByIntensity',
+    selectArticle: 'articleList.selectArticle'
   }
 };
 

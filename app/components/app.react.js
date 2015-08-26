@@ -7,7 +7,8 @@ class App extends React.Component {
     super(props);
     this.state = {
       categories: [],
-      articles: []
+      articles: [],
+      selectedArticle: null
     };
   }
 
@@ -15,7 +16,8 @@ class App extends React.Component {
     this.setState(
       {
         categories: this.props.store.getCategories(),
-        articles: this.props.store.getArticles()
+        articles: this.props.store.getArticles(),
+        selectedArticle: this.props.store.getSelectedArticle()
       }
     );
   }
@@ -33,9 +35,15 @@ class App extends React.Component {
     return <div>
             <h1>Unsere Kaffee-Geschmackserlebnisse</h1>
             <ArticleList categories={this.state.categories}
-                           articles={this.state.articles} />
-            <ArticleInformation />
+                         articles={this.state.articles}
+                         actionCreator={this.props.actionCreator}/>
+            <ArticleInformation article={this.state.selectedArticle}/>
           </div>;
   }
+};
+
+App.propTypes = {
+  store: React.PropTypes.object,
+  actionCreator: React.PropTypes.object
 };
 module.exports = App;
