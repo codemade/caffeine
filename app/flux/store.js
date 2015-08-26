@@ -6,26 +6,26 @@ function removeChangeListenerWithId(listenerId, eventIdentifier, store) {
 class Store {
   constructor() {
     this.listeners = {};
-    this.highestCallbackId = 0;
+    this.highestListenerId = 0;
   }
 
-  addChangeListener(eventIdentifier, callback) {
-    var callbackWithId = { callback: callback, id: this.highestCallbackId };
-    this.highestCallbackId++;
+  addChangeListener(eventIdentifier, listener) {
+    var listenerWithId = { execute: listener, id: this.highestListenerId };
+    this.highestListenerId++;
 
     if(!this.listeners[eventIdentifier]) {
       this.listeners[eventIdentifier] = [];
     }
 
-    this.listeners[eventIdentifier].push(callbackWithId);
-    return () => { removeChangeListenerWithId(callbackWithId.id, eventIdentifier, this)};
+    this.listeners[eventIdentifier].push(listenerWithId);
+    return () => { removeChangeListenerWithId(listenerWithId.id, eventIdentifier, this)};
   }
 
   emitChange(eventIdentifier) {
     var listenersForEvent = this.listeners[eventIdentifier];
     if(listenersForEvent) {
       listenersForEvent.forEach((listener) => {
-        listener.callback();
+        listener.execute();
       })
     }
   }
