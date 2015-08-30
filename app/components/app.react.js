@@ -41,7 +41,6 @@ class App extends React.Component {
     if (this.state.selectedArticle.hasValue) {
       articleInformation = <ArticleInformation article={this.state.selectedArticle.value}/>;
     }
-    console.log(this.state);
 
     return <div>
             <h1>Unsere Kaffee-Geschmackserlebnisse</h1>
