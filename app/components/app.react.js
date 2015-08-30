@@ -1,12 +1,15 @@
 var React = require('react');
 var ArticleList = require('./article-list.react.js');
+var ArticleInformation = require('./article-information.react.js');
+var Maybe = require('../maybe.js');
 
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       categories: [],
-      articles: []
+      articles: [],
+      selectedArticle: new Maybe(null)
     };
   }
 
@@ -14,7 +17,8 @@ class App extends React.Component {
     this.setState(
       {
         categories: this.props.store.getCategories(),
-        articles: this.props.store.getArticles()
+        articles: this.props.store.getArticles(),
+        selectedArticle: this.props.store.getMaybeSelectedArticle(),
       }
     );
   }
@@ -33,11 +37,23 @@ class App extends React.Component {
   }
 
   render(){
+    var articleInformation;
+    if (this.state.selectedArticle.hasValue) {
+      articleInformation = <ArticleInformation article={this.state.selectedArticle.value}/>;
+    }
+
     return <div>
             <h1>Unsere Kaffee-Geschmackserlebnisse</h1>
             <ArticleList categories={this.state.categories}
-                           articles={this.state.articles} />
+                         articles={this.state.articles}
+                         actionCreator={this.props.actionCreator}/>
+            {articleInformation}
           </div>;
   }
+};
+
+App.propTypes = {
+  store: React.PropTypes.object,
+  actionCreator: React.PropTypes.object
 };
 module.exports = App;

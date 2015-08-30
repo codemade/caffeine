@@ -8,7 +8,10 @@ class ArticleList extends React.Component {
         .filter((article) => {
           return article.category === category.id;
         });
-      return <ArticleCategory category={category} articles={articles} />
+      return <ArticleCategory
+                category={category}
+                articles={articles}
+                actionCreator={this.props.actionCreator} />
     });
 
     return <div>
@@ -16,5 +19,9 @@ class ArticleList extends React.Component {
             {categories}
           </div>;
   }
+};
+
+ArticleList.propTypes = {
+  actionCreator: React.PropTypes.object
 };
 module.exports = ArticleList;

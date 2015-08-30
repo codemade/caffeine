@@ -4,7 +4,8 @@ var Article = require('./article.react.js');
 class ArticleCategory extends React.Component {
   render(){
     var articles = this.props.articles.map((article) => {
-      return <Article article={article} />
+      return <Article article={article}
+                      actionCreator={this.props.actionCreator}/>
     });
 
     return <div className="category">
@@ -12,5 +13,9 @@ class ArticleCategory extends React.Component {
             {articles}
           </div>;
   }
+};
+
+ArticleCategory.propTypes = {
+  actionCreator: React.PropTypes.object
 };
 module.exports = ArticleCategory;

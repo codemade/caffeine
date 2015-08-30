@@ -20,6 +20,13 @@ class ActionCreator {
       intensity: intensity
     });
   }
+
+  selectArticle(articleId) {
+    dispatcher.dispatch({
+      type: actionIdentifiers.articleList.selectArticle,
+      articleId: articleId
+    });
+  }
 };
 
 module.exports = ActionCreator;
