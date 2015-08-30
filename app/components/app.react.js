@@ -1,6 +1,7 @@
 var React = require('react');
 var ArticleList = require('./article-list.react.js');
 var ArticleInformation = require('./article-information.react.js');
+var Maybe = require('../maybe.js');
 
 class App extends React.Component {
   constructor(props) {
@@ -8,7 +9,7 @@ class App extends React.Component {
     this.state = {
       categories: [],
       articles: [],
-      selectedArticle: null
+      selectedArticle: new Maybe(null)
     };
   }
 
@@ -17,8 +18,7 @@ class App extends React.Component {
       {
         categories: this.props.store.getCategories(),
         articles: this.props.store.getArticles(),
-        selectedArticle: this.props.store.getSelectedArticle(),
-        articleIsSelected: this.props.store.articleIsSelected()
+        selectedArticle: this.props.store.getMaybeSelectedArticle(),
       }
     );
   }
@@ -38,10 +38,10 @@ class App extends React.Component {
 
   render(){
     var articleInformation;
-    if (this.state.articleIsSelected) {
-      articleInformation = <ArticleInformation article={this.state.selectedArticle}/>;
+    if (this.state.selectedArticle.hasValue) {
+      articleInformation = <ArticleInformation article={this.state.selectedArticle.value}/>;
     }
-
+    console.log(this.state);
 
     return <div>
             <h1>Unsere Kaffee-Geschmackserlebnisse</h1>
