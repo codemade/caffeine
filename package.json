@@ -8,7 +8,7 @@
   "scripts": {
     "local-ws": "node ./node_modules/local-web-server/bin/ws.js",
     "browser-sync": "node ./node_modules/browser-sync/bin/browser-sync.js start --files dist/bundle.js --proxy http://localhost:8000",
-    "build": "node ./node_modules/watchify/bin/cmd.js -v -t babelify app/main.js -o dist/bundle.js",
+    "build": "node ./node_modules/webpack/bin/webpack --watch",
     "develop": "npm run build & npm run local-ws & npm run browser-sync",
     "test": "mocha tests --require ./bootstrap-jsdom.js --recursive --compilers js:babel/register",
     "test:watch": "mocha tests --require ./bootstrap-jsdom.js --watch --recursive --compilers js:babel/register",
@@ -29,10 +29,12 @@
   },
   "devDependencies": {
     "babel": "^5.6.5",
-    "babelify": "^6.1.2",
+    "babel-loader": "^5.3.2",
     "browser-sync": "^2.7.12",
     "chai": "^3.0.0",
     "coveralls": "^2.11.3",
+    "eslint": "^1.1.0",
+    "eslint-plugin-react": "^3.2.2",
     "istanbul": "^0.3.17",
     "jsdom": "^5.4.3",
     "local-web-server": "^0.5.19",
@@ -40,6 +42,6 @@
     "mocha-lcov-reporter": "^0.0.1",
     "sinon": "^1.15.3",
     "sinon-chai": "^2.8.0",
-    "watchify": "^3.2.3"
+    "webpack": "^1.11.0"
   }
 }

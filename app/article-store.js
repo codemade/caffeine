@@ -2,10 +2,13 @@ var utils = require('./utils.js');
 var dispatcher = require('./flux/dispatcher.js');
 var actionIdentifiers = require('./action-identifiers.js');
 var Store = require('./flux/store.js');
+var Maybe = require('./maybe.js');
+
 class ArticleStore extends Store {
   constructor(){
     super();
     this.intensityFilter = null;
+    this.maybeSelectedArticle = new Maybe(null);
     dispatcher.register(this.onActionDispatched.bind(this));
   }
 
@@ -23,19 +26,13 @@ class ArticleStore extends Store {
     return result;
   }
 
-  getSelectedArticle() {
-    return this.data.articles.filter((article) => {
-      return article.id === this.selectedArticleId;
-    })[0];
+  getMaybeSelectedArticle() {
+    return this.maybeSelectedArticle;
   }
 
   articleMatchesFilter(article){
     if(this.intensityFilter === null) return true;
     return article.intensity === this.intensityFilter;
-  }
-
-  articleIsSelected() {
-    return typeof(this.selectedArticleId) !== 'undefined';
   }
 
   onInitialize(data) {
@@ -49,7 +46,10 @@ class ArticleStore extends Store {
   }
 
   onSelectArticle(articleId) {
-    this.selectedArticleId = articleId;
+    let selectedArticle = this.data.articles.filter((article) => {
+      return article.id === articleId;
+    })[0];
+    this.maybeSelectedArticle = new Maybe(selectedArticle);
     this.emitChange('changed');
   }
 

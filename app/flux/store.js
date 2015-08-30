@@ -1,20 +1,31 @@
+function removeChangeListenerWithId(listenerId, eventIdentifier, store) {
+  store.listeners[eventIdentifier] = store.listeners[eventIdentifier]
+    .filter((listener) => { return listener.id !== listenerId; });
+};
+
 class Store {
   constructor() {
     this.listeners = {};
+    this.highestListenerId = 0;
   }
 
-  addChangeListener(eventIdentifier, callback) {
+  addChangeListener(eventIdentifier, listener) {
+    var listenerWithId = { execute: listener, id: this.highestListenerId };
+    this.highestListenerId++;
+
     if(!this.listeners[eventIdentifier]) {
       this.listeners[eventIdentifier] = [];
     }
-    this.listeners[eventIdentifier].push(callback);
+
+    this.listeners[eventIdentifier].push(listenerWithId);
+    return () => { removeChangeListenerWithId(listenerWithId.id, eventIdentifier, this)};
   }
 
   emitChange(eventIdentifier) {
     var listenersForEvent = this.listeners[eventIdentifier];
     if(listenersForEvent) {
       listenersForEvent.forEach((listener) => {
-        listener();
+        listener.execute();
       })
     }
   }
