@@ -525,6 +525,7 @@
 
 	;
 
+	/* istanbul ignore next */
 	App.propTypes = {
 	  store: React.PropTypes.object,
 	  actionCreator: React.PropTypes.object
