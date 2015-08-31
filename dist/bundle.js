@@ -57,7 +57,7 @@
 	var ArticleStore = __webpack_require__(3);
 	var ActionCreator = __webpack_require__(9);
 	var App = __webpack_require__(10);
-	var DataAccess = __webpack_require__(16);
+	var DataAccess = __webpack_require__(17);
 
 	var dataAccess = new DataAccess();
 	var actionCreator = new ActionCreator(dataAccess);
@@ -105,6 +105,7 @@
 	var actionIdentifiers = __webpack_require__(6);
 	var Store = __webpack_require__(7);
 	var Maybe = __webpack_require__(8);
+	var MAXIMUM_POSSIBLE_INTENSITY = 13;
 
 	var ArticleStore = (function (_Store) {
 	  _inherits(ArticleStore, _Store);
@@ -150,7 +151,26 @@
 	  }, {
 	    key: 'getMaximumPossibleIntensity',
 	    value: function getMaximumPossibleIntensity() {
-	      return 13;
+	      return MAXIMUM_POSSIBLE_INTENSITY;
+	    }
+	  }, {
+	    key: 'getAvailableIntensities',
+	    value: function getAvailableIntensities() {
+	      var intensities = [];
+	      for (var intensity = 1; intensity <= MAXIMUM_POSSIBLE_INTENSITY; intensity++) {
+	        if (this.isIntensityAvailable(intensity)) {
+	          intensities.push(intensity);
+	        }
+	      }
+	      return intensities;
+	    }
+	  }, {
+	    key: 'isIntensityAvailable',
+	    value: function isIntensityAvailable(intensity) {
+	      if (!this.data || !this.data.articles) return false;
+	      return this.data.articles.filter(function (article) {
+	        return article.intensity === intensity;
+	      }).length > 0;
 	    }
 	  }, {
 	    key: 'onInitialize',
@@ -411,7 +431,7 @@
 	var React = __webpack_require__(2);
 	var ArticleList = __webpack_require__(11);
 	var ArticleInformation = __webpack_require__(15);
-	var IntensityFilter = __webpack_require__(18);
+	var IntensityFilter = __webpack_require__(16);
 	var Maybe = __webpack_require__(8);
 
 	var App = (function (_React$Component) {
@@ -456,10 +476,12 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var articleInformation;
+	      var articleInformation = undefined;
 	      if (this.state.selectedArticle.hasValue) {
 	        articleInformation = React.createElement(ArticleInformation, { article: this.state.selectedArticle.value });
 	      }
+	      var maximumIntensity = this.props.store.getMaximumPossibleIntensity();
+	      var availableIntensities = this.props.store.getAvailableIntensities();
 
 	      return React.createElement(
 	        'div',
@@ -469,7 +491,8 @@
 	          null,
 	          'Unsere Kaffee-Geschmackserlebnisse'
 	        ),
-	        React.createElement(IntensityFilter, { maximumIntensity: this.props.store.getMaximumPossibleIntensity() }),
+	        React.createElement(IntensityFilter, { maximumIntensity: maximumIntensity,
+	          availableIntensities: availableIntensities }),
 	        React.createElement(ArticleList, { categories: this.state.categories,
 	          articles: this.state.articles,
 	          actionCreator: this.props.actionCreator }),
@@ -791,6 +814,61 @@
 
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = __webpack_require__(2);
+
+	var IntensityFilter = (function (_React$Component) {
+	  _inherits(IntensityFilter, _React$Component);
+
+	  function IntensityFilter(props) {
+	    _classCallCheck(this, IntensityFilter);
+
+	    _get(Object.getPrototypeOf(IntensityFilter.prototype), 'constructor', this).call(this, props);
+	  }
+
+	  _createClass(IntensityFilter, [{
+	    key: 'render',
+	    value: function render() {
+	      var intensityFilterItems = [];
+	      for (var index = 0; index < this.props.maximumIntensity; index++) {
+	        var className = this.props.availableIntensities.indexOf(index + 1) > -1 ? 'intensity-filter-item' : 'intensity-filter-item disabled';
+	        intensityFilterItems.push(React.createElement(
+	          'div',
+	          { className: className },
+	          index + 1
+	        ));
+	      }
+
+	      return React.createElement(
+	        'div',
+	        { className: 'intensity-filter' },
+	        intensityFilterItems
+	      );
+	    }
+	  }]);
+
+	  return IntensityFilter;
+	})(React.Component);
+
+	IntensityFilter.propTypes = {
+	  maximumIntensity: React.PropTypes.Number,
+	  availableIntensities: React.PropTypes.Array
+	};
+	module.exports = IntensityFilter;
+
+/***/ },
+/* 17 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 	var DataAccess = (function () {
@@ -801,7 +879,7 @@
 	  _createClass(DataAccess, [{
 	    key: 'getCategoriesAndArticles',
 	    value: function getCategoriesAndArticles() {
-	      return __webpack_require__(17);
+	      return __webpack_require__(18);
 	    }
 	  }]);
 
@@ -813,7 +891,7 @@
 	module.exports = DataAccess;
 
 /***/ },
-/* 17 */
+/* 18 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -841,56 +919,6 @@
 	  confections: confections,
 	  articles: articles
 	};
-
-/***/ },
-/* 18 */
-/***/ function(module, exports, __webpack_require__) {
-
-	"use strict";
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var React = __webpack_require__(2);
-
-	var IntensityFilter = (function (_React$Component) {
-	  _inherits(IntensityFilter, _React$Component);
-
-	  function IntensityFilter(props) {
-	    _classCallCheck(this, IntensityFilter);
-
-	    _get(Object.getPrototypeOf(IntensityFilter.prototype), "constructor", this).call(this, props);
-	  }
-
-	  _createClass(IntensityFilter, [{
-	    key: "render",
-	    value: function render() {
-	      var intensityFilterItems = [];
-	      for (var index = 0; index < this.props.maximumIntensity; index++) {
-	        intensityFilterItems.push(React.createElement(
-	          "div",
-	          { className: "intensity-filter-item" },
-	          index + 1
-	        ));
-	      }
-
-	      return React.createElement(
-	        "div",
-	        { className: "intensity-filter" },
-	        intensityFilterItems
-	      );
-	    }
-	  }]);
-
-	  return IntensityFilter;
-	})(React.Component);
-
-	module.exports = IntensityFilter;
 
 /***/ }
 /******/ ]);

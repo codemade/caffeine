@@ -9,6 +9,7 @@ describe('filtering articles by intensity', () => {
   let categories = [{id:1}, {id:2}];
   let articles = [{id:3, intensity: 3}, {id:4, intensity:8}, {id:5, intensity:7}];
   let maximumIntensity;
+  let availableIntensities;
 
   beforeEach(() => {
     let ComponentClass = require('../../app/components/app.react.js');
@@ -24,8 +25,10 @@ describe('filtering articles by intensity', () => {
     };
     let actionCreator = new ActionCreator(dataAccess);
     let store = new Store(actionCreator);
-    maximumIntensity = store.getMaximumPossibleIntensity();
     renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
+
+    maximumIntensity = store.getMaximumPossibleIntensity();
+    availableIntensities = store.getAvailableIntensities();
   });
 
   afterEach(() => {
@@ -34,15 +37,23 @@ describe('filtering articles by intensity', () => {
   });
 
   describe('intensity filter component', () => {
-    let intensityFilterItems;
-
-    beforeEach(() => {
-      intensityFilterItems = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'intensity-filter-item');
+    it('should display an intensity-filter-item for each possible intensity', () => {
+      let allIntensityFilterItems = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'intensity-filter-item');
+      expect(allIntensityFilterItems.length).to.equal(maximumIntensity);
     });
 
-    it('should display an intensity-filter-item for each possible intensity', () => {
-      console.log(intensityFilterItems)
-      expect(intensityFilterItems.length).to.equal(maximumIntensity);
+    it('should disable intensity filter items with unavailable intensity', () => {
+      let expectedClassNames = [];
+      for(let intensity = 1; intensity <= maximumIntensity; intensity++) {
+        let className = availableIntensities.indexOf(intensity) > -1
+          ? 'intensity-filter-item'
+          : 'intensity-filter-item disabled';
+        expectedClassNames.push(className);
+      }
+      let intensityFilterItems = document.querySelectorAll('div.intensity-filter div.intensity-filter-item');
+      let actualClassNames = Array.from(intensityFilterItems)
+        .map(child => child.className);
+      expect(actualClassNames).to.deep.equal(expectedClassNames);
     });
   });
 

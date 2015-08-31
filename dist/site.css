@@ -59,6 +59,11 @@ span.dot-off {
   border:1px solid #aaaaaa;
 }
 
-div.intensity-filter {
-  
+div.intensity-filter-item {
+  cursor:pointer;
+}
+
+div.intensity-filter > div.disabled {
+  color:#FF0000;
+  cursor:default;
 }

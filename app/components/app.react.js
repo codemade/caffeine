@@ -38,14 +38,17 @@ class App extends React.Component {
   }
 
   render(){
-    var articleInformation;
+    let articleInformation;
     if (this.state.selectedArticle.hasValue) {
       articleInformation = <ArticleInformation article={this.state.selectedArticle.value}/>;
     }
+    let maximumIntensity = this.props.store.getMaximumPossibleIntensity();
+    let availableIntensities = this.props.store.getAvailableIntensities();
 
     return <div>
             <h1>Unsere Kaffee-Geschmackserlebnisse</h1>
-            <IntensityFilter maximumIntensity={this.props.store.getMaximumPossibleIntensity()} />
+            <IntensityFilter maximumIntensity={maximumIntensity}
+                             availableIntensities={availableIntensities} />
             <ArticleList categories={this.state.categories}
                          articles={this.state.articles}
                          actionCreator={this.props.actionCreator}/>

@@ -3,6 +3,7 @@ var dispatcher = require('./flux/dispatcher.js');
 var actionIdentifiers = require('./action-identifiers.js');
 var Store = require('./flux/store.js');
 var Maybe = require('./maybe.js');
+const MAXIMUM_POSSIBLE_INTENSITY = 13;
 
 class ArticleStore extends Store {
   constructor(){
@@ -36,7 +37,24 @@ class ArticleStore extends Store {
   }
 
   getMaximumPossibleIntensity(){
-    return 13;
+    return MAXIMUM_POSSIBLE_INTENSITY;
+  }
+
+  getAvailableIntensities(){
+    let intensities = [];
+    for(let intensity = 1; intensity <= MAXIMUM_POSSIBLE_INTENSITY; intensity++) {
+      if(this.isIntensityAvailable(intensity)) {
+        intensities.push(intensity);
+      }
+    }
+    return intensities;
+  }
+
+  isIntensityAvailable(intensity){
+    if(!this.data || !this.data.articles) return false;
+    return this.data.articles
+      .filter((article) => article.intensity === intensity)
+      .length > 0;
   }
 
   onInitialize(data) {
