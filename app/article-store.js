@@ -8,8 +8,8 @@ const MAXIMUM_POSSIBLE_INTENSITY = 13;
 class ArticleStore extends Store {
   constructor(){
     super();
-    this.intensityFilter = null;
-    this.maybeSelectedArticle = new Maybe(null);
+    this.intensityFilter = Maybe.Not;
+    this.maybeSelectedArticle = Maybe.Not;
     dispatcher.register(this.onActionDispatched.bind(this));
   }
 
@@ -32,8 +32,8 @@ class ArticleStore extends Store {
   }
 
   articleMatchesFilter(article){
-    if(this.intensityFilter === null) return true;
-    return article.intensity === this.intensityFilter;
+    if(!this.intensityFilter.hasValue) return true;
+    return article.intensity === this.intensityFilter.value;
   }
 
   getMaximumPossibleIntensity(){
@@ -42,16 +42,14 @@ class ArticleStore extends Store {
 
   getAvailableIntensities(){
     let intensities = [];
+    if(this.intensityFilter.hasValue) {
+      intensities.push(this.intensityFilter.value);
+      return intensities;
+    }
+
     for(let intensity = 1; intensity <= MAXIMUM_POSSIBLE_INTENSITY; intensity++) {
-      if(this.intensityFilter !== null){
-        if(this.intensityFilter === intensity) {
-          intensities.push(intensity);
-        }
-      }
-      else {
-        if(this.isIntensityAvailable(intensity)) {
-          intensities.push(intensity);
-        }
+      if(this.isIntensityAvailable(intensity)) {
+        intensities.push(intensity);
       }
     }
     return intensities;
@@ -70,7 +68,7 @@ class ArticleStore extends Store {
   }
 
   onFilterByIntensity(intensity) {
-    this.intensityFilter = intensity;
+    this.intensityFilter = new Maybe(intensity);
     this.emitChange('changed');
   }
 

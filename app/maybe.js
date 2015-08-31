@@ -9,6 +9,10 @@ class Maybe {
     this.hasValue = hasValue(value);
     this.value = this.hasValue ? value : null;
   }
+
+  static get Not() {
+    return new Maybe();
+  }
 }
 
 module.exports = Maybe;

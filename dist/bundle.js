@@ -114,8 +114,8 @@
 	    _classCallCheck(this, ArticleStore);
 
 	    _get(Object.getPrototypeOf(ArticleStore.prototype), 'constructor', this).call(this);
-	    this.intensityFilter = null;
-	    this.maybeSelectedArticle = new Maybe(null);
+	    this.intensityFilter = Maybe.Not;
+	    this.maybeSelectedArticle = Maybe.Not;
 	    dispatcher.register(this.onActionDispatched.bind(this));
 	  }
 
@@ -145,8 +145,8 @@
 	  }, {
 	    key: 'articleMatchesFilter',
 	    value: function articleMatchesFilter(article) {
-	      if (this.intensityFilter === null) return true;
-	      return article.intensity === this.intensityFilter;
+	      if (!this.intensityFilter.hasValue) return true;
+	      return article.intensity === this.intensityFilter.value;
 	    }
 	  }, {
 	    key: 'getMaximumPossibleIntensity',
@@ -157,15 +157,14 @@
 	    key: 'getAvailableIntensities',
 	    value: function getAvailableIntensities() {
 	      var intensities = [];
+	      if (this.intensityFilter.hasValue) {
+	        intensities.push(this.intensityFilter.value);
+	        return intensities;
+	      }
+
 	      for (var intensity = 1; intensity <= MAXIMUM_POSSIBLE_INTENSITY; intensity++) {
-	        if (this.intensityFilter !== null) {
-	          if (this.intensityFilter === intensity) {
-	            intensities.push(intensity);
-	          }
-	        } else {
-	          if (this.isIntensityAvailable(intensity)) {
-	            intensities.push(intensity);
-	          }
+	        if (this.isIntensityAvailable(intensity)) {
+	          intensities.push(intensity);
 	        }
 	      }
 	      return intensities;
@@ -187,7 +186,7 @@
 	  }, {
 	    key: 'onFilterByIntensity',
 	    value: function onFilterByIntensity(intensity) {
-	      this.intensityFilter = intensity;
+	      this.intensityFilter = new Maybe(intensity);
 	      this.emitChange('changed');
 	    }
 	  }, {
@@ -349,6 +348,8 @@
 
 	'use strict';
 
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
 	var hasValue = function hasValue(value) {
@@ -357,12 +358,23 @@
 	  return true;
 	};
 
-	var Maybe = function Maybe(value) {
-	  _classCallCheck(this, Maybe);
+	var Maybe = (function () {
+	  function Maybe(value) {
+	    _classCallCheck(this, Maybe);
 
-	  this.hasValue = hasValue(value);
-	  this.value = this.hasValue ? value : null;
-	};
+	    this.hasValue = hasValue(value);
+	    this.value = this.hasValue ? value : null;
+	  }
+
+	  _createClass(Maybe, null, [{
+	    key: 'Not',
+	    get: function get() {
+	      return new Maybe();
+	    }
+	  }]);
+
+	  return Maybe;
+	})();
 
 	module.exports = Maybe;
 
