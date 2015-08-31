@@ -158,8 +158,14 @@
 	    value: function getAvailableIntensities() {
 	      var intensities = [];
 	      for (var intensity = 1; intensity <= MAXIMUM_POSSIBLE_INTENSITY; intensity++) {
-	        if (this.isIntensityAvailable(intensity)) {
-	          intensities.push(intensity);
+	        if (this.intensityFilter !== null) {
+	          if (this.intensityFilter === intensity) {
+	            intensities.push(intensity);
+	          }
+	        } else {
+	          if (this.isIntensityAvailable(intensity)) {
+	            intensities.push(intensity);
+	          }
 	        }
 	      }
 	      return intensities;
@@ -491,7 +497,8 @@
 	          null,
 	          'Unsere Kaffee-Geschmackserlebnisse'
 	        ),
-	        React.createElement(IntensityFilter, { maximumIntensity: maximumIntensity,
+	        React.createElement(IntensityFilter, { actionCreator: this.props.actionCreator,
+	          maximumIntensity: maximumIntensity,
 	          availableIntensities: availableIntensities }),
 	        React.createElement(ArticleList, { categories: this.state.categories,
 	          articles: this.state.articles,
@@ -834,14 +841,24 @@
 	  _createClass(IntensityFilter, [{
 	    key: 'render',
 	    value: function render() {
+	      var _this = this;
+
 	      var intensityFilterItems = [];
-	      for (var index = 0; index < this.props.maximumIntensity; index++) {
-	        var className = this.props.availableIntensities.indexOf(index + 1) > -1 ? 'intensity-filter-item' : 'intensity-filter-item disabled';
+
+	      var _loop = function (intensity) {
+	        var className = _this.props.availableIntensities.indexOf(intensity) > -1 ? 'intensity-filter-item' : 'intensity-filter-item unavailable';
+	        var selectIntensity = function selectIntensity() {
+	          _this.props.actionCreator.filterByIntensity(intensity);
+	        };
 	        intensityFilterItems.push(React.createElement(
 	          'div',
-	          { className: className },
-	          index + 1
+	          { className: className, onClick: selectIntensity },
+	          intensity
 	        ));
+	      };
+
+	      for (var intensity = 1; intensity <= this.props.maximumIntensity; intensity++) {
+	        _loop(intensity);
 	      }
 
 	      return React.createElement(

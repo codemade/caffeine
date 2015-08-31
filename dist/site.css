@@ -63,7 +63,7 @@ div.intensity-filter-item {
   cursor:pointer;
 }
 
-div.intensity-filter > div.disabled {
+div.intensity-filter > div.unavailable {
   color:#FF0000;
   cursor:default;
 }

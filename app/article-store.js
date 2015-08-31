@@ -43,8 +43,15 @@ class ArticleStore extends Store {
   getAvailableIntensities(){
     let intensities = [];
     for(let intensity = 1; intensity <= MAXIMUM_POSSIBLE_INTENSITY; intensity++) {
-      if(this.isIntensityAvailable(intensity)) {
-        intensities.push(intensity);
+      if(this.intensityFilter !== null){
+        if(this.intensityFilter === intensity) {
+          intensities.push(intensity);
+        }
+      }
+      else {
+        if(this.isIntensityAvailable(intensity)) {
+          intensities.push(intensity);
+        }
       }
     }
     return intensities;

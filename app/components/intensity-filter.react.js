@@ -7,11 +7,12 @@ class IntensityFilter extends React.Component {
 
   render() {
     let intensityFilterItems = [];
-    for(let index = 0; index < this.props.maximumIntensity; index++) {
-      let className = this.props.availableIntensities.indexOf(index+1) > -1
+    for(let intensity = 1; intensity <= this.props.maximumIntensity; intensity++) {
+      let className = this.props.availableIntensities.indexOf(intensity) > -1
         ? 'intensity-filter-item'
-        : 'intensity-filter-item disabled';
-      intensityFilterItems.push(<div className={className}>{index+1}</div>)
+        : 'intensity-filter-item unavailable';
+      let selectIntensity = () => { this.props.actionCreator.filterByIntensity(intensity)};
+      intensityFilterItems.push(<div className={className} onClick={selectIntensity}>{intensity}</div>)
     }
 
     return <div className="intensity-filter">

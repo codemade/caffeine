@@ -47,7 +47,8 @@ class App extends React.Component {
 
     return <div>
             <h1>Unsere Kaffee-Geschmackserlebnisse</h1>
-            <IntensityFilter maximumIntensity={maximumIntensity}
+            <IntensityFilter actionCreator={this.props.actionCreator}
+                             maximumIntensity={maximumIntensity}
                              availableIntensities={availableIntensities} />
             <ArticleList categories={this.state.categories}
                          articles={this.state.articles}
