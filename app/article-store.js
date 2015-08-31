@@ -21,7 +21,7 @@ class ArticleStore extends Store {
     var articles = utils.clone(this.data.articles);
 
     var result = articles.map((article) => {
-      article.active = this.articleMatchesFilter(article);
+      article.isMatchingFilter = this.articleMatchesFilter(article);
       return article;
     });
     return result;

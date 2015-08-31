@@ -132,7 +132,7 @@
 	      var articles = utils.clone(this.data.articles);
 
 	      var result = articles.map(function (article) {
-	        article.active = _this.articleMatchesFilter(article);
+	        article.isMatchingFilter = _this.articleMatchesFilter(article);
 	        return article;
 	      });
 	      return result;
@@ -678,7 +678,7 @@
 	    value: function render() {
 	      var article = this.props.article;
 	      var image = 'assets/60x60/article_' + article.id + '.png';
-	      var className = article.active ? "article-details" : "article-details inactive";
+	      var className = article.isMatchingFilter ? "article-details" : "article-details grayed-out";
 
 	      return React.createElement(
 	        'div',

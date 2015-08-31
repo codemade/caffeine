@@ -9,7 +9,7 @@ class Article extends React.Component {
   render(){
     var article = this.props.article;
     var image = 'assets/60x60/article_' + article.id + '.png';
-    var className = article.active ? "article-details" : "article-details inactive";
+    var className = article.isMatchingFilter ? "article-details" : "article-details grayed-out";
 
     return <div className={className} onClick={this.handleClick.bind(this)}>
             <img src={image} />

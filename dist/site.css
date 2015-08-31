@@ -34,7 +34,7 @@ div.article-details {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4c4c4c', endColorstr='#131313', GradientType=0 );
 }
 
-div.article-details.inactive{
+div.article-details.grayed-out{
   opacity:0.3;
 }
 
@@ -63,7 +63,7 @@ div.intensity-filter-item {
   cursor:pointer;
 }
 
-div.intensity-filter > div.unavailable {
+div.intensity-filter-item.unavailable {
   color:#FF0000;
   cursor:default;
 }

@@ -57,20 +57,41 @@ describe('filtering articles by intensity', () => {
     });
   });
 
-  it('should disable all other intensity filter items', () => {
-    let firstAvailableIntensityItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'intensity-filter-item')[2];
-    React.addons.TestUtils.Simulate.click(firstAvailableIntensityItem);
-    let expectedClassNames = [];
-    for(let intensity = 1; intensity <= maximumIntensity; intensity++) {
-      let className = intensity === 3
-        ? 'intensity-filter-item'
-        : 'intensity-filter-item unavailable';
-      expectedClassNames.push(className);
-    }
-    let intensityFilterItems = document.querySelectorAll('div.intensity-filter div.intensity-filter-item');
-    let actualClassNames = Array.from(intensityFilterItems)
-      .map(child => child.className);
-    expect(actualClassNames).to.deep.equal(expectedClassNames);
+  describe('clicking on an intensity filter item', () => {
+    beforeEach(() => {
+      let firstAvailableIntensityItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'intensity-filter-item')[2];
+      React.addons.TestUtils.Simulate.click(firstAvailableIntensityItem);
+    });
+
+    it('should set isMatchingFilter property of articles with that intensity to true', () => {
+      let articlesWithIntensity = renderedComponent
+          .state
+          .articles
+          .filter(article => article.intensity === 3);
+      expect(articlesWithIntensity.every(article => article.isMatchingFilter)).to.equal(true);
+    });
+
+    it('should set isMatchingFilter property of articles with other intensity to false', () => {
+      let articlesWithIntensity = renderedComponent
+          .state
+          .articles
+          .filter(article => article.intensity !== 3);
+      expect(articlesWithIntensity.every(article => !article.isMatchingFilter)).to.equal(true);
+    });
+
+    it('should disable all other intensity filter items', () => {
+      let expectedClassNames = [];
+      for(let intensity = 1; intensity <= maximumIntensity; intensity++) {
+        let className = intensity === 3
+          ? 'intensity-filter-item'
+          : 'intensity-filter-item unavailable';
+        expectedClassNames.push(className);
+      }
+      let intensityFilterItems = document.querySelectorAll('div.intensity-filter div.intensity-filter-item');
+      let actualClassNames = Array.from(intensityFilterItems)
+        .map(child => child.className);
+      expect(actualClassNames).to.deep.equal(expectedClassNames);
+    });
   });
   // describe('by intensity', () => {
   //   it('should highlight articles with matching intensity', () => {
