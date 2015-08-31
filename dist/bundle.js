@@ -186,7 +186,7 @@
 	  }, {
 	    key: 'onFilterByIntensity',
 	    value: function onFilterByIntensity(intensity) {
-	      this.intensityFilter = new Maybe(intensity);
+	      this.intensityFilter = this.intensityFilter.hasValue && this.intensityFilter.value === intensity ? Maybe.Not : new Maybe(intensity);
 	      this.emitChange('changed');
 	    }
 	  }, {

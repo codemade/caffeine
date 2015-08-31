@@ -36,6 +36,20 @@ describe('filtering articles by intensity', () => {
     renderedComponent = null;
   });
 
+  let expectUnavailableIntensitiesAreDisplayedAsUnavailable = () => {
+    let expectedClassNames = [];
+    for(let intensity = 1; intensity <= maximumIntensity; intensity++) {
+      let className = availableIntensities.indexOf(intensity) > -1
+        ? 'intensity-filter-item'
+        : 'intensity-filter-item unavailable';
+      expectedClassNames.push(className);
+    }
+    let intensityFilterItems = document.querySelectorAll('div.intensity-filter div.intensity-filter-item');
+    let actualClassNames = Array.from(intensityFilterItems)
+      .map(child => child.className);
+    expect(actualClassNames).to.deep.equal(expectedClassNames);
+  };
+
   describe('intensity filter component', () => {
     it('should display an intensity-filter-item for each possible intensity', () => {
       let allIntensityFilterItems = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'intensity-filter-item');
@@ -43,23 +57,14 @@ describe('filtering articles by intensity', () => {
     });
 
     it('should disable intensity filter items with unavailable intensity', () => {
-      let expectedClassNames = [];
-      for(let intensity = 1; intensity <= maximumIntensity; intensity++) {
-        let className = availableIntensities.indexOf(intensity) > -1
-          ? 'intensity-filter-item'
-          : 'intensity-filter-item unavailable';
-        expectedClassNames.push(className);
-      }
-      let intensityFilterItems = document.querySelectorAll('div.intensity-filter div.intensity-filter-item');
-      let actualClassNames = Array.from(intensityFilterItems)
-        .map(child => child.className);
-      expect(actualClassNames).to.deep.equal(expectedClassNames);
+      expectUnavailableIntensitiesAreDisplayedAsUnavailable();
     });
   });
 
   describe('clicking on an intensity filter item', () => {
+    let firstAvailableIntensityItem;
     beforeEach(() => {
-      let firstAvailableIntensityItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'intensity-filter-item')[2];
+      firstAvailableIntensityItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'intensity-filter-item')[2];
       React.addons.TestUtils.Simulate.click(firstAvailableIntensityItem);
     });
 
@@ -91,6 +96,16 @@ describe('filtering articles by intensity', () => {
       let actualClassNames = Array.from(intensityFilterItems)
         .map(child => child.className);
       expect(actualClassNames).to.deep.equal(expectedClassNames);
+    });
+
+    describe('twice', () => {
+      beforeEach(() => {
+        React.addons.TestUtils.Simulate.click(firstAvailableIntensityItem);
+      });
+
+      it('should disable intensity filter items with unavailable intensity', () => {
+        expectUnavailableIntensitiesAreDisplayedAsUnavailable();
+      });
     });
   });
   // describe('by intensity', () => {
