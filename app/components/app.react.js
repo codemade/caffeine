@@ -1,6 +1,7 @@
 var React = require('react');
 var ArticleList = require('./article-list.react.js');
 var ArticleInformation = require('./article-information.react.js');
+var IntensityFilter = require('./intensity-filter.react.js');
 var Maybe = require('../maybe.js');
 
 class App extends React.Component {
@@ -44,6 +45,7 @@ class App extends React.Component {
 
     return <div>
             <h1>Unsere Kaffee-Geschmackserlebnisse</h1>
+            <IntensityFilter maximumIntensity={this.props.store.getMaximumPossibleIntensity()} />
             <ArticleList categories={this.state.categories}
                          articles={this.state.articles}
                          actionCreator={this.props.actionCreator}/>

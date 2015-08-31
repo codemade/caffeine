@@ -35,6 +35,10 @@ class ArticleStore extends Store {
     return article.intensity === this.intensityFilter;
   }
 
+  getMaximumPossibleIntensity(){
+    return 13;
+  }
+
   onInitialize(data) {
     this.data = data;
     this.emitChange('changed');
