@@ -462,7 +462,7 @@
 	    this.state = {
 	      categories: [],
 	      articles: [],
-	      selectedArticle: new Maybe(null)
+	      selectedArticle: Maybe.Not
 	    };
 	  }
 
