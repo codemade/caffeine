@@ -863,7 +863,7 @@
 	          _this.props.actionCreator.filterByIntensity(intensity);
 	        };
 	        intensityFilterItems.push(React.createElement(
-	          'div',
+	          'span',
 	          { className: className, onClick: selectIntensity },
 	          intensity
 	        ));
@@ -876,6 +876,11 @@
 	      return React.createElement(
 	        'div',
 	        { className: 'intensity-filter' },
+	        React.createElement(
+	          'div',
+	          { className: 'legend' },
+	          'Nach Intensität filtern'
+	        ),
 	        intensityFilterItems
 	      );
 	    }

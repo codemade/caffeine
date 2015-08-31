@@ -44,7 +44,7 @@ describe('filtering articles by intensity', () => {
         : 'intensity-filter-item unavailable';
       expectedClassNames.push(className);
     }
-    let intensityFilterItems = document.querySelectorAll('div.intensity-filter div.intensity-filter-item');
+    let intensityFilterItems = document.querySelectorAll('div.intensity-filter span.intensity-filter-item');
     let actualClassNames = Array.from(intensityFilterItems)
       .map(child => child.className);
     expect(actualClassNames).to.deep.equal(expectedClassNames);
@@ -92,7 +92,7 @@ describe('filtering articles by intensity', () => {
           : 'intensity-filter-item unavailable';
         expectedClassNames.push(className);
       }
-      let intensityFilterItems = document.querySelectorAll('div.intensity-filter div.intensity-filter-item');
+      let intensityFilterItems = document.querySelectorAll('div.intensity-filter span.intensity-filter-item');
       let actualClassNames = Array.from(intensityFilterItems)
         .map(child => child.className);
       expect(actualClassNames).to.deep.equal(expectedClassNames);

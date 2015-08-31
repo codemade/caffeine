@@ -12,10 +12,11 @@ class IntensityFilter extends React.Component {
         ? 'intensity-filter-item'
         : 'intensity-filter-item unavailable';
       let selectIntensity = () => { this.props.actionCreator.filterByIntensity(intensity)};
-      intensityFilterItems.push(<div className={className} onClick={selectIntensity}>{intensity}</div>)
+      intensityFilterItems.push(<span className={className} onClick={selectIntensity}>{intensity}</span>)
     }
 
     return <div className="intensity-filter">
+      <div className="legend">Nach Intensität filtern</div>
       {intensityFilterItems}
     </div>
   }
