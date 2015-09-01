@@ -8,8 +8,7 @@ var renderTarget, renderedComponent;
 describe('filtering articles by intensity', () => {
   let categories = [{id:1}, {id:2}];
   var articles = [{id:3, intensity: 3, category:1, name:'Ristretto'}, {id:4, intensity: 8, category:1, name:'Volluto'}];
-  let maximumIntensity;
-  let availableIntensities;
+  let maximumIntensity, store;
 
   beforeEach(() => {
     let ComponentClass = require('../../app/components/app.react.js');
@@ -24,10 +23,9 @@ describe('filtering articles by intensity', () => {
       }
     };
     let actionCreator = new ActionCreator(dataAccess);
-    let store = new Store(actionCreator);
+    store = new Store(actionCreator);
     renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
     maximumIntensity = store.getMaximumPossibleIntensity();
-    availableIntensities = store.getAvailableIntensities();
   });
 
   afterEach(() => {
@@ -35,7 +33,7 @@ describe('filtering articles by intensity', () => {
     renderedComponent = null;
   });
 
-  let expectUnavailableIntensitiesAreDisplayedAsUnavailable = () => {
+  let expectUnavailableIntensitiesAreDisplayedAsUnavailable = (availableIntensities) => {
     let intensityFilterItems = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'intensity-filter-item');
     let itemsWithWrongClassName = Array.from(intensityFilterItems)
       .filter((intensityItem) => {
@@ -54,7 +52,7 @@ describe('filtering articles by intensity', () => {
     });
 
     it('should disable intensity filter items with unavailable intensity', () => {
-      expectUnavailableIntensitiesAreDisplayedAsUnavailable();
+      expectUnavailableIntensitiesAreDisplayedAsUnavailable(store.getAvailableIntensities());
     });
   });
 
@@ -86,17 +84,8 @@ describe('filtering articles by intensity', () => {
     });
 
     it('should disable all other intensity filter items', () => {
-      let expectedClassNames = [];
-      for(let intensity = 1; intensity <= maximumIntensity; intensity++) {
-        let className = intensity === 3
-          ? 'intensity-filter-item'
-          : 'intensity-filter-item unavailable';
-        expectedClassNames.push(className);
-      }
-      let intensityFilterItems = document.querySelectorAll('div.intensity-filter span.intensity-filter-item');
-      let actualClassNames = Array.from(intensityFilterItems)
-        .map(child => child.className);
-      expect(actualClassNames).to.deep.equal(expectedClassNames);
+      var availableIntensities = [3];
+      expectUnavailableIntensitiesAreDisplayedAsUnavailable(availableIntensities);
     });
 
     describe('twice', () => {
@@ -105,7 +94,7 @@ describe('filtering articles by intensity', () => {
       });
 
       it('should disable intensity filter items with unavailable intensity', () => {
-        expectUnavailableIntensitiesAreDisplayedAsUnavailable();
+        expectUnavailableIntensitiesAreDisplayedAsUnavailable(store.getAvailableIntensities());
       });
     });
   });
