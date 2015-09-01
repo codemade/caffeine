@@ -96,3 +96,8 @@ span.intensity-filter-item.unavailable {
   opacity:.1;
   filter:alpha(opacity=10);
 }
+
+div.shopping-cart-badge {
+  border:1px solid white;
+  background-color:gray;
+}

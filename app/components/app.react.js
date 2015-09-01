@@ -1,4 +1,5 @@
 var React = require('react');
+var ShoppingCartBadge = require('./shopping-cart-badge.react.js');
 var ArticleList = require('./article-list.react.js');
 var ArticleInformation = require('./article-information.react.js');
 var IntensityFilter = require('./intensity-filter.react.js');
@@ -10,7 +11,8 @@ class App extends React.Component {
     this.state = {
       categories: [],
       articles: [],
-      selectedArticle: Maybe.Not
+      selectedArticle: Maybe.Not,
+      shoppingCartInfo: {}
     };
   }
 
@@ -20,6 +22,7 @@ class App extends React.Component {
         categories: this.props.store.getCategories(),
         articles: this.props.store.getArticles(),
         selectedArticle: this.props.store.getMaybeSelectedArticle(),
+        shoppingCartInfo: this.props.store.getShoppingCartBadgeInformation()
       }
     );
   }
@@ -40,7 +43,7 @@ class App extends React.Component {
   render(){
     let articleInformation;
     if (this.state.selectedArticle.hasValue) {
-      articleInformation = <ArticleInformation article={this.state.selectedArticle.value}/>;
+      articleInformation = <ArticleInformation actionCreator={this.props.actionCreator} article={this.state.selectedArticle.value}/>;
     }
     let maximumIntensity = this.props.store.getMaximumPossibleIntensity();
     let availableIntensities = this.props.store.getAvailableIntensities();
@@ -53,6 +56,7 @@ class App extends React.Component {
             <ArticleList categories={this.state.categories}
                          articles={this.state.articles}
                          actionCreator={this.props.actionCreator}/>
+            <ShoppingCartBadge shoppingCartInfo={this.state.shoppingCartInfo}/>
             {articleInformation}
           </div>;
   }

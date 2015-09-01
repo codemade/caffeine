@@ -3,6 +3,9 @@ var actionIdentifiers = {
     initialize: 'articleList.initialize',
     filterByIntensity: 'articleList.filterByIntensity',
     selectArticle: 'articleList.selectArticle'
+  },
+  shoppingCart: {
+    addArticle: 'shoppingCart.addArticle'
   }
 };
 
