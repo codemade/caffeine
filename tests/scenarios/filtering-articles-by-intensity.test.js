@@ -36,17 +36,15 @@ describe('filtering articles by intensity', () => {
   });
 
   let expectUnavailableIntensitiesAreDisplayedAsUnavailable = () => {
-    let expectedClassNames = [];
-    for(let intensity = 1; intensity <= maximumIntensity; intensity++) {
-      let className = availableIntensities.indexOf(intensity) > -1
-        ? 'intensity-filter-item'
-        : 'intensity-filter-item unavailable';
-      expectedClassNames.push(className);
-    }
-    let intensityFilterItems = document.querySelectorAll('div.intensity-filter span.intensity-filter-item');
-    let actualClassNames = Array.from(intensityFilterItems)
-      .map(child => child.className);
-    expect(actualClassNames).to.deep.equal(expectedClassNames);
+    let intensityFilterItems = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'intensity-filter-item');
+    let itemsWithWrongClassName = Array.from(intensityFilterItems)
+      .filter((intensityItem) => {
+        let expectedClassName = availableIntensities.indexOf(+intensityItem.getDOMNode().textContent) > -1
+          ? 'intensity-filter-item'
+          : 'intensity-filter-item unavailable';
+        return intensityItem.getDOMNode().className !== expectedClassName;
+      });
+      expect(itemsWithWrongClassName.length).to.equal(0);
   };
 
   describe('intensity filter component', () => {
@@ -111,12 +109,4 @@ describe('filtering articles by intensity', () => {
       });
     });
   });
-  // describe('by intensity', () => {
-  //   it('should highlight articles with matching intensity', () => {
-  //     var intensity = 3;
-  //     var expected = [{id:3, intensity: 3, active: true}, {id:4, intensity:8, active: false}, {id:5, intensity:3, active: true}];
-  //     renderedComponent.filterByIntensity(3);
-  //     expect(renderedComponent.state.articles).to.deep.equal(expected);
-  //   });
-  // });
 });
