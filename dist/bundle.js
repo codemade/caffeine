@@ -214,7 +214,9 @@
 	  }, {
 	    key: 'onAddArticleToShoppingCart',
 	    value: function onAddArticleToShoppingCart(articleId, amount) {
-	      this.shoppingCart[articleId] = amount;
+	      var previousAmount = this.shoppingCart[articleId];
+	      var currentAmount = previousAmount ? previousAmount + amount : amount;
+	      this.shoppingCart[articleId] = currentAmount;
 	      this.emitChange('changed');
 	    }
 	  }, {
@@ -1047,12 +1049,12 @@
 	        { className: 'shopping-cart-badge' },
 	        'Shopping Cart',
 	        React.createElement(
-	          'span',
+	          'div',
 	          { className: 'article-count' },
 	          this.props.shoppingCartInfo.articleCount
 	        ),
 	        React.createElement(
-	          'span',
+	          'div',
 	          { className: 'total-price' },
 	          this.props.shoppingCartInfo.totalPrice
 	        )

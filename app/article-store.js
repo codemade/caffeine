@@ -94,7 +94,9 @@ class ArticleStore extends Store {
   }
 
   onAddArticleToShoppingCart(articleId, amount) {
-    this.shoppingCart[articleId] = amount;
+    let previousAmount = this.shoppingCart[articleId];
+    let currentAmount = previousAmount ? previousAmount + amount : amount;
+    this.shoppingCart[articleId] = currentAmount;
     this.emitChange('changed');
   }
 
