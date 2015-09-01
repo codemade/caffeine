@@ -47,19 +47,14 @@ class ArticleStore extends Store {
       return intensities;
     }
 
-    for(let intensity = 1; intensity <= MAXIMUM_POSSIBLE_INTENSITY; intensity++) {
-      if(this.isIntensityAvailable(intensity)) {
-        intensities.push(intensity);
-      }
-    }
-    return intensities;
-  }
+    if(!this.data || !this.data.articles) return intensities;
 
-  isIntensityAvailable(intensity){
-    if(!this.data || !this.data.articles) return false;
-    return this.data.articles
-      .filter((article) => article.intensity === intensity)
-      .length > 0;
+    return this.data.articles.reduce((acc, current) => {
+      if(acc.indexOf(current.intensity) === -1){
+        acc.push(current.intensity);
+      }
+      return acc;
+    }, intensities);
   }
 
   onInitialize(data) {

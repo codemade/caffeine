@@ -162,20 +162,14 @@
 	        return intensities;
 	      }
 
-	      for (var intensity = 1; intensity <= MAXIMUM_POSSIBLE_INTENSITY; intensity++) {
-	        if (this.isIntensityAvailable(intensity)) {
-	          intensities.push(intensity);
+	      if (!this.data || !this.data.articles) return intensities;
+
+	      return this.data.articles.reduce(function (acc, current) {
+	        if (acc.indexOf(current.intensity) === -1) {
+	          acc.push(current.intensity);
 	        }
-	      }
-	      return intensities;
-	    }
-	  }, {
-	    key: 'isIntensityAvailable',
-	    value: function isIntensityAvailable(intensity) {
-	      if (!this.data || !this.data.articles) return false;
-	      return this.data.articles.filter(function (article) {
-	        return article.intensity === intensity;
-	      }).length > 0;
+	        return acc;
+	      }, intensities);
 	    }
 	  }, {
 	    key: 'onInitialize',
