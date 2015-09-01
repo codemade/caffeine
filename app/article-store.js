@@ -67,7 +67,7 @@ class ArticleStore extends Store {
 
       if(amount) {
         acc.articleCount += amount;
-        acc.totalPrice += article.price * 100 * amount / 100;
+        acc.totalPrice += article.price * amount / 100;
       }
       return acc;
     }, shoppingCartInfo);

@@ -10,8 +10,8 @@ let shoppingCartBadge, articleInformationComponent;
 describe('adding an article to the shopping cart', () => {
   let categories = [{id:1}, {id:2}];
   let articles = [
-    {id:3, intensity: 3, category:1, name:'Ristretto', price: 0.39},
-    {id:4, intensity: 8, category:1, name:'Volluto', price: 0.42}
+    {id:3, intensity: 3, category:1, name:'Ristretto', price: 39},
+    {id:4, intensity: 8, category:1, name:'Volluto', price: 42}
   ];
 
   beforeEach(() => {
