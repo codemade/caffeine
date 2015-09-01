@@ -16,7 +16,7 @@ class Article extends React.Component {
             <br />
             <span>{this.props.article.name}</span>
             <br />
-            <span className='intensity-label'>Intensität {this.props.article.intensity}</span>
+            <span className='intensity-label'>Intensität <span className="intensity-value">{this.props.article.intensity}</span></span>
             <IntensityBar intensity={this.props.article.intensity} />
             <span className="article-price">Preis {this.props.article.price} €</span>
            </div>;

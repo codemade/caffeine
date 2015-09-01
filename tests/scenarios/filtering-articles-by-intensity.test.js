@@ -7,7 +7,7 @@ var renderTarget, renderedComponent;
 
 describe('filtering articles by intensity', () => {
   let categories = [{id:1}, {id:2}];
-  let articles = [{id:3, intensity: 3}, {id:4, intensity:8}, {id:5, intensity:7}];
+  var articles = [{id:3, intensity: 3, category:1, name:'Ristretto'}, {id:4, intensity: 8, category:1, name:'Volluto'}];
   let maximumIntensity;
   let availableIntensities;
 
@@ -26,7 +26,6 @@ describe('filtering articles by intensity', () => {
     let actionCreator = new ActionCreator(dataAccess);
     let store = new Store(actionCreator);
     renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
-
     maximumIntensity = store.getMaximumPossibleIntensity();
     availableIntensities = store.getAvailableIntensities();
   });
@@ -68,20 +67,24 @@ describe('filtering articles by intensity', () => {
       React.addons.TestUtils.Simulate.click(firstAvailableIntensityItem);
     });
 
-    it('should set isMatchingFilter property of articles with that intensity to true', () => {
-      let articlesWithIntensity = renderedComponent
-          .state
-          .articles
-          .filter(article => article.intensity === 3);
-      expect(articlesWithIntensity.every(article => article.isMatchingFilter)).to.equal(true);
+    it('should display articles with matching intensity as default', () => {
+      let articleDetails = Array.from(TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-details'));
+      var articleInfosWithIntensity = articleDetails
+          .map((article) => article.getDOMNode())
+          .filter((article) => {
+            return +article.querySelector('.intensity-value').textContent === 3;
+          });
+      expect(articleInfosWithIntensity.every(article => article.className === 'article-details')).to.equal(true);
     });
 
-    it('should set isMatchingFilter property of articles with other intensity to false', () => {
-      let articlesWithIntensity = renderedComponent
-          .state
-          .articles
-          .filter(article => article.intensity !== 3);
-      expect(articlesWithIntensity.every(article => !article.isMatchingFilter)).to.equal(true);
+    it('should display articles with non-matching intensity grayed-out', () => {
+      let articleDetails = Array.from(TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-details'));
+      var articleInfosWithIntensity = articleDetails
+          .map((article) => article.getDOMNode())
+          .filter((article) => {
+            return +article.querySelector('.intensity-value').textContent !== 3;
+          });
+      expect(articleInfosWithIntensity.every(article => article.className === 'article-details grayed-out')).to.equal(true);
     });
 
     it('should disable all other intensity filter items', () => {
