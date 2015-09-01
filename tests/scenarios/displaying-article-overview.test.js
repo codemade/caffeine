@@ -39,7 +39,7 @@ describe('displaying article overview', () => {
 
     it('should display articles from server', () => {
       var expected = articles.map((article) => {
-        article.active = true;
+        article.isMatchingFilter = true;
         return article;
       });
       expect(component.state.articles).to.deep.equal(expected);

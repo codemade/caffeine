@@ -3,12 +3,13 @@ var dispatcher = require('./flux/dispatcher.js');
 var actionIdentifiers = require('./action-identifiers.js');
 var Store = require('./flux/store.js');
 var Maybe = require('./maybe.js');
+const MAXIMUM_POSSIBLE_INTENSITY = 13;
 
 class ArticleStore extends Store {
   constructor(){
     super();
-    this.intensityFilter = null;
-    this.maybeSelectedArticle = new Maybe(null);
+    this.intensityFilter = Maybe.Not;
+    this.maybeSelectedArticle = Maybe.Not;
     dispatcher.register(this.onActionDispatched.bind(this));
   }
 
@@ -20,7 +21,7 @@ class ArticleStore extends Store {
     var articles = utils.clone(this.data.articles);
 
     var result = articles.map((article) => {
-      article.active = this.articleMatchesFilter(article);
+      article.isMatchingFilter = this.articleMatchesFilter(article);
       return article;
     });
     return result;
@@ -31,8 +32,29 @@ class ArticleStore extends Store {
   }
 
   articleMatchesFilter(article){
-    if(this.intensityFilter === null) return true;
-    return article.intensity === this.intensityFilter;
+    if(!this.intensityFilter.hasValue) return true;
+    return article.intensity === this.intensityFilter.value;
+  }
+
+  getMaximumPossibleIntensity(){
+    return MAXIMUM_POSSIBLE_INTENSITY;
+  }
+
+  getAvailableIntensities(){
+    let intensities = [];
+    if(this.intensityFilter.hasValue) {
+      intensities.push(this.intensityFilter.value);
+      return intensities;
+    }
+
+    if(!this.data || !this.data.articles) return intensities;
+
+    return this.data.articles.reduce((acc, current) => {
+      if(acc.indexOf(current.intensity) === -1){
+        acc.push(current.intensity);
+      }
+      return acc;
+    }, intensities);
   }
 
   onInitialize(data) {
@@ -41,7 +63,9 @@ class ArticleStore extends Store {
   }
 
   onFilterByIntensity(intensity) {
-    this.intensityFilter = intensity;
+    this.intensityFilter = this.intensityFilter.hasValue && this.intensityFilter.value === intensity
+      ? Maybe.Not
+      : new Maybe(intensity);
     this.emitChange('changed');
   }
 

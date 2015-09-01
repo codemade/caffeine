@@ -34,7 +34,7 @@ div.article-details {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4c4c4c', endColorstr='#131313', GradientType=0 );
 }
 
-div.article-details.inactive{
+div.article-details.grayed-out{
   opacity:0.3;
 }
 
@@ -57,4 +57,42 @@ span.dot-off {
   width:4px;
   height:4px;
   border:1px solid #aaaaaa;
+}
+
+div.intensity-filter {
+  padding:16px;
+  width: 300px;
+  height: 50px;
+  text-align: center;
+  background-color: #292727;
+}
+
+div.intensity-filter > div.legend {
+  font-size:12px;
+  padding-bottom:4px;
+}
+
+span.intensity-filter-item {
+  display:inline-block;
+  text-align:center;
+  cursor:pointer;
+  background:transparent url('../assets/intensity-filter.png') no-repeat center 0;
+  font-size:9px;
+  padding-top:16px;
+  width:16px;
+  margin-left:1px;
+  margin-right:1px;
+}
+
+span.intensity-filter-item:hover {
+  -moz-opacity:.6;
+  opacity:.6;
+  filter:alpha(opacity=60);
+}
+
+span.intensity-filter-item.unavailable {
+  cursor:default;
+  -moz-opacity:.1;
+  opacity:.1;
+  filter:alpha(opacity=10);
 }

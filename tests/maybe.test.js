@@ -1,7 +1,7 @@
 var chai = require('chai');
 var expect = chai.expect;
 
-describe('maybe', () => {
+describe('Maybe', () => {
   let Maybe = require('../app/maybe.js');
 
   describe('constructing with undefined', () => {
@@ -38,7 +38,15 @@ describe('maybe', () => {
     it('should have value to deep equal that value object', () => {
       let value = {id: 42, name: 'john'};
       let maybe = new Maybe(value);
-      expect(maybe.value).to.deep.equal(value);      
+      expect(maybe.value).to.deep.equal(value);
+    });
+  });
+
+  describe('Maybe.Not()', () => {
+    it('should be an instance of Maybe constructed with undefined', () => {
+      let expected = new Maybe();
+      let actual = Maybe.Not;
+      expect(actual).to.deep.equal(expected);
     });
   });
 });
