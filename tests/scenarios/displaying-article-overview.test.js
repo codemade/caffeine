@@ -1,9 +1,10 @@
 var expect = require('chai').expect;
 var React = require('react/addons');
-var renderTarget, component;
+var TestUtils = React.addons.TestUtils;
+var renderTarget, renderedComponent;
 
-xdescribe('displaying article overview', () => {
-  var categories = [{id:1}, {id:2}];
+describe('displaying article overview', () => {
+  var categories = [{id:1, name:'first category'}, {id:2, name:'second category'}];
   var articles = [{id:3, intensity: 3}, {id:4, intensity: 8}];
 
   beforeEach(() => {
@@ -23,26 +24,27 @@ xdescribe('displaying article overview', () => {
     var actionCreator = new ActionCreator(dataAccess);
     var ArticleStore = require('../../app/article-store.js');
     var store = new ArticleStore();
-    var renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
-    component = renderedComponent;
+    renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
   });
 
   afterEach(() => {
     React.unmountComponentAtNode(renderTarget);
-    component = null;
+    renderedComponent = null;
   });
 
   describe('server has some categories and articles', () => {
     it('should display categories from server', () => {
-      expect(component.state.categories).to.deep.equal(categories);
+      let actualCategoryNames = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'category').map((category) => category.getDOMNode().textContent);
+      let expectedCategoryNames = categories.map((category) => category.name);
+      expect(actualCategoryNames).to.deep.equal(expectedCategoryNames);
     });
 
-    it('should display articles from server', () => {
-      var expected = articles.map((article) => {
-        article.isMatchingFilter = true;
-        return article;
-      });
-      expect(component.state.articles).to.deep.equal(expected);
-    });
+    // it('should display articles from server', () => {
+    //   var expected = articles.map((article) => {
+    //     article.isMatchingFilter = true;
+    //     return article;
+    //   });
+    //   expect(component.state.articles).to.deep.equal(expected);
+    // });
   });
 });
