@@ -9,8 +9,8 @@ class ArticleCategory extends React.Component {
                       actionCreator={this.props.actionCreator}/>
     });
 
-    return <div className="category">
-            <h3>{this.props.category.name}</h3>
+    return <div className='category'>
+            <h3 className='category-name'>{this.props.category.name}</h3>
             {articles}
           </div>;
   }

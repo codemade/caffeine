@@ -14,7 +14,7 @@ class Article extends React.Component {
     return <div className={className} onClick={this.handleClick.bind(this)}>
             <img src={image} />
             <br />
-            <span>{this.props.article.name}</span>
+            <span className='article-name'>{this.props.article.name}</span>
             <br />
             <span className='intensity-label'>Intensität <span className="intensity-value">{this.props.article.intensity}</span></span>
             <IntensityBar intensity={this.props.article.intensity} />
@@ -24,6 +24,12 @@ class Article extends React.Component {
 };
 
 Article.propTypes = {
-  article: React.PropTypes.object.isRequired
+  article: React.PropTypes.shape({
+    id: React.PropTypes.number.isRequired,
+    name: React.PropTypes.string.isRequired,
+    intensity: React.PropTypes.number.isRequired,
+    price: React.PropTypes.number.isRequired,
+    isMatchingFilter: React.PropTypes.bool.isRequired
+  })
 };
 module.exports = Article;
