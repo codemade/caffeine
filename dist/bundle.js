@@ -566,8 +566,8 @@
 
 	/* istanbul ignore next */
 	App.propTypes = {
-	  store: React.PropTypes.object,
-	  actionCreator: React.PropTypes.object
+	  store: React.PropTypes.object.isRequired,
+	  actionCreator: React.PropTypes.object.isRequired
 	};
 	module.exports = App;
 
@@ -621,7 +621,7 @@
 	})(React.Component);
 
 	ShoppingCartBadge.propTypes = {
-	  shoppingCartInfo: React.PropTypes.object
+	  shoppingCartInfo: React.PropTypes.object.isRequired
 	};
 	module.exports = ShoppingCartBadge;
 
@@ -661,6 +661,7 @@
 	          return article.category === category.id;
 	        });
 	        return React.createElement(ArticleCategory, {
+	          key: category.id,
 	          category: category,
 	          articles: articles,
 	          actionCreator: _this.props.actionCreator });
@@ -685,7 +686,9 @@
 	;
 
 	ArticleList.propTypes = {
-	  actionCreator: React.PropTypes.object
+	  actionCreator: React.PropTypes.object.isRequired,
+	  categories: React.PropTypes.array.isRequired,
+	  articles: React.PropTypes.array.isRequired
 	};
 	module.exports = ArticleList;
 
@@ -721,7 +724,8 @@
 	      var _this = this;
 
 	      var articles = this.props.articles.map(function (article) {
-	        return React.createElement(Article, { article: article,
+	        return React.createElement(Article, { key: article.id,
+	          article: article,
 	          actionCreator: _this.props.actionCreator });
 	      });
 
@@ -744,7 +748,9 @@
 	;
 
 	ArticleCategory.propTypes = {
-	  actionCreator: React.PropTypes.object
+	  actionCreator: React.PropTypes.object.isRequired,
+	  category: React.PropTypes.object.isRequired,
+	  articles: React.PropTypes.array.isRequired
 	};
 	module.exports = ArticleCategory;
 
@@ -824,6 +830,9 @@
 
 	;
 
+	Article.propTypes = {
+	  article: React.PropTypes.object.isRequired
+	};
 	module.exports = Article;
 
 /***/ },
@@ -860,7 +869,8 @@
 	                if (i >= this.props.intensity) {
 	                    className = 'dot-off';
 	                }
-	                dots.push(React.createElement('span', { className: className }));
+	                var key = 'intensity-bar-item-' + i;
+	                dots.push(React.createElement('span', { key: key, className: className }));
 	            }
 	            return React.createElement(
 	                'div',
@@ -873,6 +883,9 @@
 	    return IntensityBar;
 	})(React.Component);
 
+	IntensityBar.propTypes = {
+	    intensity: React.PropTypes.number.isRequired
+	};
 	module.exports = IntensityBar;
 
 /***/ },
@@ -934,8 +947,8 @@
 	})(React.Component);
 
 	ArticleInformation.propTypes = {
-	  actionCreator: React.PropTypes.object,
-	  article: React.PropTypes.object
+	  actionCreator: React.PropTypes.object.isRequired,
+	  article: React.PropTypes.object.isRequired
 	};
 
 	module.exports = ArticleInformation;
