@@ -9,6 +9,7 @@ class ArticleList extends React.Component {
           return article.category === category.id;
         });
       return <ArticleCategory
+                key={category.id}
                 category={category}
                 articles={articles}
                 actionCreator={this.props.actionCreator} />
@@ -22,6 +23,8 @@ class ArticleList extends React.Component {
 };
 
 ArticleList.propTypes = {
-  actionCreator: React.PropTypes.object
+  actionCreator: React.PropTypes.object.isRequired,
+  categories: React.PropTypes.array.isRequired,
+  articles: React.PropTypes.array.isRequired
 };
 module.exports = ArticleList;

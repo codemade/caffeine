@@ -18,8 +18,8 @@ class ArticleInformation extends React.Component {
 }
 
 ArticleInformation.propTypes = {
-  actionCreator: React.PropTypes.object,
-  article: React.PropTypes.object
+  actionCreator: React.PropTypes.object.isRequired,
+  article: React.PropTypes.object.isRequired
 }
 
 module.exports = ArticleInformation;
