@@ -979,7 +979,7 @@
 	        };
 	        intensityFilterItems.push(React.createElement(
 	          'span',
-	          { className: className, onClick: selectIntensity },
+	          { key: intensity, className: className, onClick: selectIntensity },
 	          intensity
 	        ));
 	      };
