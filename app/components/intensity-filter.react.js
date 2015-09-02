@@ -22,7 +22,8 @@ class IntensityFilter extends React.Component {
   }
 }
 IntensityFilter.propTypes = {
-  maximumIntensity: React.PropTypes.Number,
-  availableIntensities: React.PropTypes.Array
+  actionCreator: React.PropTypes.object.isRequired,
+  maximumIntensity: React.PropTypes.number.isRequired,
+  availableIntensities: React.PropTypes.array.isRequired
 };
 module.exports = IntensityFilter;
