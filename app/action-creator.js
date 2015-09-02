@@ -27,6 +27,14 @@ class ActionCreator {
       articleId: articleId
     });
   }
+
+  addArticleToShoppingCart(articleId, amount) {
+    dispatcher.dispatch({
+      type: actionIdentifiers.shoppingCart.addArticle,
+      articleId: articleId,
+      amount: amount
+    });
+  }
 };
 
 module.exports = ActionCreator;

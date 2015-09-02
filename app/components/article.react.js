@@ -23,4 +23,7 @@ class Article extends React.Component {
   }
 };
 
+Article.propTypes = {
+  article: React.PropTypes.object.isRequired
+};
 module.exports = Article;

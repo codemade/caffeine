@@ -8,6 +8,7 @@ const MAXIMUM_POSSIBLE_INTENSITY = 13;
 class ArticleStore extends Store {
   constructor(){
     super();
+    this.shoppingCart = {};
     this.intensityFilter = Maybe.Not;
     this.maybeSelectedArticle = Maybe.Not;
     dispatcher.register(this.onActionDispatched.bind(this));
@@ -57,6 +58,21 @@ class ArticleStore extends Store {
     }, intensities);
   }
 
+  getShoppingCartBadgeInformation() {
+    let shoppingCartInfo = { articleCount: 0, totalPrice: 0 };
+    if(!this.data || !this.data.articles) return shoppingCartInfo;
+
+    return this.data.articles.reduce((acc, article) => {
+      let amount = this.shoppingCart[article.id];
+
+      if(amount) {
+        acc.articleCount += amount;
+        acc.totalPrice += article.price * amount / 100;
+      }
+      return acc;
+    }, shoppingCartInfo);
+  }
+
   onInitialize(data) {
     this.data = data;
     this.emitChange('changed');
@@ -77,6 +93,13 @@ class ArticleStore extends Store {
     this.emitChange('changed');
   }
 
+  onAddArticleToShoppingCart(articleId, amount) {
+    let previousAmount = this.shoppingCart[articleId];
+    let currentAmount = previousAmount ? previousAmount + amount : amount;
+    this.shoppingCart[articleId] = currentAmount;
+    this.emitChange('changed');
+  }
+
   onActionDispatched(action) {
     switch(action.type) {
       case actionIdentifiers.articleList.initialize:
@@ -88,6 +111,8 @@ class ArticleStore extends Store {
       case actionIdentifiers.articleList.selectArticle:
         this.onSelectArticle(action.articleId);
         break;
+      case actionIdentifiers.shoppingCart.addArticle:
+        this.onAddArticleToShoppingCart(action.articleId, action.amount);
       default:
         // nothing to do here
     }

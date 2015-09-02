@@ -9,7 +9,8 @@ class IntensityBar extends React.Component {
             if(i >= this.props.intensity) {
                 className = 'dot-off';
             }
-            dots.push(<span className={className}></span>);
+            let key = 'intensity-bar-item-' + i;
+            dots.push(<span key={key} className={className}></span>);
         }
         return <div className="intensity-bar">
         {dots}
@@ -17,4 +18,7 @@ class IntensityBar extends React.Component {
     }
 }
 
+IntensityBar.propTypes = {
+  intensity: React.PropTypes.number.isRequired
+};
 module.exports = IntensityBar;

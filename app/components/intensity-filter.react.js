@@ -12,7 +12,7 @@ class IntensityFilter extends React.Component {
         ? 'intensity-filter-item'
         : 'intensity-filter-item unavailable';
       let selectIntensity = () => { this.props.actionCreator.filterByIntensity(intensity)};
-      intensityFilterItems.push(<span className={className} onClick={selectIntensity}>{intensity}</span>)
+      intensityFilterItems.push(<span key={intensity} className={className} onClick={selectIntensity}>{intensity}</span>)
     }
 
     return <div className="intensity-filter">
@@ -22,7 +22,8 @@ class IntensityFilter extends React.Component {
   }
 }
 IntensityFilter.propTypes = {
-  maximumIntensity: React.PropTypes.Number,
-  availableIntensities: React.PropTypes.Array
+  actionCreator: React.PropTypes.object.isRequired,
+  maximumIntensity: React.PropTypes.number.isRequired,
+  availableIntensities: React.PropTypes.array.isRequired
 };
 module.exports = IntensityFilter;

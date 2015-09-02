@@ -36,7 +36,7 @@ describe('selecting an article', () => {
   });
 
   it('should show details for article', () => {
-    var title = articleInformationComponent.getDOMNode();
-    expect(title.innerHTML).to.equal('Ristretto');
+    var articleName = TestUtils.scryRenderedDOMComponentsWithClass(articleInformationComponent, 'article-name')[0].getDOMNode();
+    expect(articleName.innerHTML).to.equal('Ristretto');
   });
 });
