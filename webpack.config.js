@@ -11,11 +11,6 @@ module.exports = {
     publicPath: 'dist/'
     },
     plugins: [new webpack.optimize.CommonsChunkPlugin('main', null, false)],
-    resolve: {
-        alias: {
-          'react': node_dir + '/react/dist/react.min.js'
-        }
-    },
     module: {
         noParse: [node_dir + '/react/dist/react.min.js'],
         loaders: [
