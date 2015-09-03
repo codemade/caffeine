@@ -20831,6 +20831,7 @@
 	var RouterMixin = __webpack_require__(166).RouterMixin;
 	var ArticlesControllerView = __webpack_require__(174);
 	var ShoppingCartControllerView = __webpack_require__(182);
+	var navigate = __webpack_require__(166).navigate;
 
 	var App = React.createClass({
 	  displayName: 'App',
@@ -20845,7 +20846,7 @@
 	    return currentRoute;
 	  },
 	  articles: function articles() {
-	    return React.createElement(ArticlesControllerView, { store: this.props.store, actionCreator: this.props.actionCreator });
+	    return React.createElement(ArticlesControllerView, { store: this.props.store, actionCreator: this.props.actionCreator, navigate: navigate });
 	  },
 	  shoppingCart: function shoppingCart() {
 	    return React.createElement(ShoppingCartControllerView, null);
