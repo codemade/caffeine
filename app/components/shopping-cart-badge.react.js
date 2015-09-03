@@ -1,12 +1,11 @@
 let React = require('react');
-var navigate = require('react-mini-router').navigate;
 
 class ShoppingCartBadge extends React.Component {
   render() {
 
     var navigateToShoppingCart = () => {
-      navigate('/shopping-cart');
-    };
+      this.props.navigate('/shopping-cart');
+    }
 
     return <div className='shopping-cart-badge' onClick={navigateToShoppingCart}>
       Shopping Cart
