@@ -10,7 +10,7 @@ describe('selecting an article', () => {
   var articles = [{id:3, intensity: 3, category:1, name:'Ristretto'}, {id:4, intensity: 8, category:1, name:'Volluto'}];
 
   beforeEach(() => {
-    var ComponentClass = require('../../app/components/app.react.js');
+    var ComponentClass = require('../../app/components/articles-controller-view.react.js');
     renderTarget = document.getElementsByTagName('body')[0];
 
     var dataAccess = {

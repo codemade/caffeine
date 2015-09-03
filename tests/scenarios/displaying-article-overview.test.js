@@ -8,7 +8,7 @@ describe('displaying article overview', () => {
   var articles = [{id: 3, name: 'first article', intensity: 3, price: 42, isMatchingFilter: true, category: 1}, {id: 4, name: 'second article', intensity: 8, price: 38, isMatchingFilter: true, category:2}];
 
   beforeEach(() => {
-    var ComponentClass = require('../../app/components/app.react.js');
+    var ComponentClass = require('../../app/components/articles-controller-view.react.js');
     renderTarget = document.getElementsByTagName('body')[0];
 
     var dataAccess = {

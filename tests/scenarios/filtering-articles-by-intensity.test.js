@@ -11,7 +11,7 @@ describe('filtering articles by intensity', () => {
   let maximumIntensity, store;
 
   beforeEach(() => {
-    let ComponentClass = require('../../app/components/app.react.js');
+    let ComponentClass = require('../../app/components/articles-controller-view.react.js');
     renderTarget = document.getElementsByTagName('body')[0];
 
     let dataAccess = {
