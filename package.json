@@ -10,8 +10,11 @@
     "browser-sync": "node ./node_modules/browser-sync/bin/browser-sync.js start --files dist/bundle.js --proxy http://localhost:8000",
     "build": "node ./node_modules/webpack/bin/webpack --watch",
     "develop": "npm run build & npm run local-ws & npm run browser-sync",
-    "test": "mocha tests --require ./bootstrap-jsdom.js --recursive --compilers js:babel/register",
-    "test:watch": "mocha tests --require ./bootstrap-jsdom.js --watch --recursive --compilers js:babel/register",
+    "mocha": "mocha tests --require ./bootstrap-jsdom.js --recursive --compilers js:babel/register",
+    "mocha:watch": "mocha tests --require ./bootstrap-jsdom.js --watch --recursive --compilers js:babel/register && node ./node_modules",
+    "eslint": "node ./node_modules/.bin/eslint app tests",
+    "test": "npm run mocha && npm run eslint",
+    "test:watch": "npm run mocha:watch",
     "coveralls": "node ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha tests --report lcovonly -- --require ./bootstrap-jsdom.js --recursive --compilers js:babel/register && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
     "start": "npm run develop"
   },
