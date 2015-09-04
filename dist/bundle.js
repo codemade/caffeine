@@ -21405,8 +21405,6 @@
 	  return DataAccess;
 	})();
 
-	;
-
 	module.exports = DataAccess;
 
 /***/ },
