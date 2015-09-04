@@ -5,13 +5,13 @@ let Store = require('../../app/article-store.js');
 let TestUtils = React.addons.TestUtils;
 let renderedComponent;
 let renderTarget, firstArticleComponent;
-let shoppingCartBadge, articleInformationComponent;
+let shoppingCartBadge;
 
 describe('adding an article to the shopping cart', () => {
-  let categories = [{id:1}, {id:2}];
+  let categories = [{id: 1}, {id: 2}];
   let articles = [
-    {id:3, intensity: 3, category:1, name:'Ristretto', price: 39},
-    {id:4, intensity: 8, category:1, name:'Volluto', price: 42}
+    {id: 3, intensity: 3, category: 1, name: 'Ristretto', price: 39},
+    {id: 4, intensity: 8, category: 1, name: 'Volluto', price: 42}
   ];
 
   beforeEach(() => {
@@ -33,7 +33,6 @@ describe('adding an article to the shopping cart', () => {
     renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
     firstArticleComponent = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-details')[0];
     React.addons.TestUtils.Simulate.click(firstArticleComponent);
-    articleInformationComponent = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-information')[0];
     shoppingCartBadge = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-badge')[0];
   });
 
