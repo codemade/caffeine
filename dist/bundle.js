@@ -22252,7 +22252,7 @@
 	      return React.createElement(
 	        'div',
 	        { className: 'shopping-cart' },
-	        'blaaaa'
+	        'Shopping-Cart-View'
 	      );
 	    }
 	  }]);
