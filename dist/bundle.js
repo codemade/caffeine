@@ -20856,6 +20856,8 @@
 	    };
 	  }
 
+	  /* istanbul ignore next */
+
 	  _createClass(App, [{
 	    key: 'handleDataChanged',
 	    value: function handleDataChanged() {
@@ -20915,9 +20917,6 @@
 	  return App;
 	})(React.Component);
 
-	;
-
-	/* istanbul ignore next */
 	App.propTypes = {
 	  store: React.PropTypes.object.isRequired,
 	  actionCreator: React.PropTypes.object.isRequired
