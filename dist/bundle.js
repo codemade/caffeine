@@ -21044,8 +21044,6 @@
 	  return ArticleList;
 	})(React.Component);
 
-	;
-
 	ArticleList.propTypes = {
 	  actionCreator: React.PropTypes.object.isRequired,
 	  categories: React.PropTypes.array.isRequired,
