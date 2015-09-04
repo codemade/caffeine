@@ -6,8 +6,11 @@ var TestUtils = React.addons.TestUtils;
 var renderTarget, firstArticleComponent, articleInformationComponent;
 
 describe('selecting an article', () => {
-  var categories = [{id:1}, {id:2}];
-  var articles = [{id:3, intensity: 3, category:1, name:'Ristretto'}, {id:4, intensity: 8, category:1, name:'Volluto'}];
+  var categories = [{id: 1}, {id: 2}];
+  var articles = [
+    {id: 3, intensity: 3, category: 1, name: 'Ristretto'},
+    {id: 4, intensity: 8, category: 1, name: 'Volluto'}
+  ];
 
   beforeEach(() => {
     var ComponentClass = require('../../app/components/app.react.js');
