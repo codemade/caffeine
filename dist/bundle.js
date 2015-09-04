@@ -20679,7 +20679,7 @@
 	  store.listeners[eventIdentifier] = store.listeners[eventIdentifier].filter(function (listener) {
 	    return listener.id !== listenerId;
 	  });
-	};
+	}
 
 	var Store = (function () {
 	  function Store() {
