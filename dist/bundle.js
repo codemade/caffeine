@@ -21106,8 +21106,6 @@
 	  return ArticleCategory;
 	})(React.Component);
 
-	;
-
 	ArticleCategory.propTypes = {
 	  actionCreator: React.PropTypes.object.isRequired,
 	  category: React.PropTypes.object.isRequired,
