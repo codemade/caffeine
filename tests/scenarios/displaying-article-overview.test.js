@@ -3,8 +3,8 @@ var React = require('react/addons');
 var renderTarget, component;
 
 describe('displaying article overview', () => {
-  var categories = [{id:1}, {id:2}];
-  var articles = [{id:3, intensity: 3}, {id:4, intensity: 8}];
+  var categories = [{id: 1}, {id: 2}];
+  var articles = [{id: 3, intensity: 3}, {id: 4, intensity: 8}];
 
   beforeEach(() => {
     var ComponentClass = require('../../app/components/app.react.js');
