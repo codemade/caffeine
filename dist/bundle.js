@@ -20588,6 +20588,7 @@
 	          break;
 	        case actionIdentifiers.shoppingCart.addArticle:
 	          this.onAddArticleToShoppingCart(action.articleId, action.amount);
+	          break;
 	        default:
 	        // nothing to do here
 	      }

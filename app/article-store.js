@@ -6,7 +6,7 @@ var Maybe = require('./maybe.js');
 const MAXIMUM_POSSIBLE_INTENSITY = 13;
 
 class ArticleStore extends Store {
-  constructor(){
+  constructor() {
     super();
     this.shoppingCart = {};
     this.intensityFilter = Maybe.Not;
@@ -32,26 +32,26 @@ class ArticleStore extends Store {
     return this.maybeSelectedArticle;
   }
 
-  articleMatchesFilter(article){
-    if(!this.intensityFilter.hasValue) return true;
+  articleMatchesFilter(article) {
+    if (!this.intensityFilter.hasValue) return true;
     return article.intensity === this.intensityFilter.value;
   }
 
-  getMaximumPossibleIntensity(){
+  getMaximumPossibleIntensity() {
     return MAXIMUM_POSSIBLE_INTENSITY;
   }
 
-  getAvailableIntensities(){
+  getAvailableIntensities() {
     let intensities = [];
-    if(this.intensityFilter.hasValue) {
+    if (this.intensityFilter.hasValue) {
       intensities.push(this.intensityFilter.value);
       return intensities;
     }
 
-    if(!this.data || !this.data.articles) return intensities;
+    if (!this.data || !this.data.articles) return intensities;
 
     return this.data.articles.reduce((acc, current) => {
-      if(acc.indexOf(current.intensity) === -1){
+      if (acc.indexOf(current.intensity) === -1) {
         acc.push(current.intensity);
       }
       return acc;
@@ -60,12 +60,12 @@ class ArticleStore extends Store {
 
   getShoppingCartBadgeInformation() {
     let shoppingCartInfo = { articleCount: 0, totalPrice: 0 };
-    if(!this.data || !this.data.articles) return shoppingCartInfo;
+    if (!this.data || !this.data.articles) return shoppingCartInfo;
 
     return this.data.articles.reduce((acc, article) => {
       let amount = this.shoppingCart[article.id];
 
-      if(amount) {
+      if (amount) {
         acc.articleCount += amount;
         acc.totalPrice += article.price * amount / 100;
       }
@@ -101,7 +101,7 @@ class ArticleStore extends Store {
   }
 
   onActionDispatched(action) {
-    switch(action.type) {
+    switch (action.type) {
       case actionIdentifiers.articleList.initialize:
         this.onInitialize(action.data);
         break;
@@ -113,6 +113,7 @@ class ArticleStore extends Store {
         break;
       case actionIdentifiers.shoppingCart.addArticle:
         this.onAddArticleToShoppingCart(action.articleId, action.amount);
+        break;
       default:
         // nothing to do here
     }
