@@ -36,14 +36,7 @@ describe('Navigate to shopping-cart route', () => {
   afterEach(() => {
     React.unmountComponentAtNode(renderTarget);
     renderedComponent = null;
-
-    /*
-      Reset router to default-route, because in this scenario an explicit route-change to /shopping-cart route is triggered.
-      Otherwise it will affect other tests, because router-mixin is a singleton and holds state of changed route made via navigate().
-    */
-
   });
-
 
   describe('by clicking on the shopping-cart-badge', () => {
     it('displays the shopping-cart', function() {
@@ -52,5 +45,4 @@ describe('Navigate to shopping-cart route', () => {
       expect(navigateSpy).to.have.been.called;
     });
   });
-
 });
