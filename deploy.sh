@@ -14,8 +14,8 @@ cp -r dist out/dist
 # go to the out directory and create a *new* Git repo
 cd out
 git init
-git config user.name "codemade travis-ci deployer"
-git config user.email "codemades@gmail.com"
+git config user.name "chrkhl"
+git config user.email "kuehlchristian@icloud.com"
 
 git remote add upstream "https://$GH_TOKEN@github.com/codemade/caffeine.git"
 git fetch upstream
