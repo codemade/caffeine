@@ -15,8 +15,8 @@ cp -r assets out/assets
 # go to the out directory and create a *new* Git repo
 cd out
 git init
-git config user.name "chrkhl"
-git config user.email "kuehlchristian@icloud.com"
+git config user.name "travis-ci deployer"
+git config user.email "travis-ci-deployer@codemade.js.org"
 
 git remote add upstream "https://$GH_TOKEN@github.com/codemade/caffeine.git"
 git fetch upstream
