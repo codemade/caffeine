@@ -20965,7 +20965,7 @@
 	      return React.createElement(
 	        'div',
 	        { className: 'shopping-cart-badge' },
-	        'Shopping Cart',
+	        'Shopping Cart Overview',
 	        React.createElement(
 	          'div',
 	          { className: 'article-count' },
