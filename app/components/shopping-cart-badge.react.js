@@ -12,5 +12,5 @@ class ShoppingCartBadge extends React.Component {
 
 ShoppingCartBadge.propTypes = {
   shoppingCartInfo: React.PropTypes.object.isRequired
-}
+};
 module.exports = ShoppingCartBadge;
