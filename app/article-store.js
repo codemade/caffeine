@@ -1,8 +1,8 @@
-var utils = require('./utils.js');
-var dispatcher = require('./flux/dispatcher.js');
-var actionIdentifiers = require('./action-identifiers.js');
-var Store = require('./flux/store.js');
-var Maybe = require('./maybe.js');
+let utils = require('./utils.js');
+let dispatcher = require('./flux/dispatcher.js');
+let actionIdentifiers = require('./action-identifiers.js');
+let Store = require('./flux/store.js');
+let Maybe = require('./maybe.js');
 const MAXIMUM_POSSIBLE_INTENSITY = 13;
 
 class ArticleStore extends Store {
@@ -19,9 +19,9 @@ class ArticleStore extends Store {
   }
 
   getArticles() {
-    var articles = utils.clone(this.data.articles);
+    let articles = utils.clone(this.data.articles);
 
-    var result = articles.map((article) => {
+    let result = articles.map((article) => {
       article.isMatchingFilter = this.articleMatchesFilter(article);
       return article;
     });

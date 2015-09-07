@@ -1,17 +1,17 @@
-var expect = require('chai').expect;
-var React = require('react/addons');
-var ActionCreator = require('../../app/action-creator.js');
-var Store = require('../../app/article-store.js');
-var TestUtils = React.addons.TestUtils;
-var renderTarget, renderedComponent;
+let expect = require('chai').expect;
+let React = require('react/addons');
+let ActionCreator = require('../../app/action-creator.js');
+let Store = require('../../app/article-store.js');
+let TestUtils = React.addons.TestUtils;
+let renderTarget, renderedComponent;
 
 describe('filtering articles by intensity', () => {
   let categories = [{id:1}, {id:2}];
-  var articles = [{id:3, intensity: 3, category:1, name:'Ristretto'}, {id:4, intensity: 8, category:1, name:'Volluto'}];
+  let articles = [{id:3, intensity: 3, category:1, name:'Ristretto'}, {id:4, intensity: 8, category:1, name:'Volluto'}];
   let maximumIntensity, store;
 
   beforeEach(() => {
-    let ComponentClass = require('../../app/components/app.react.js');
+    let ComponentClass = require('../../app/components/articles-controller-view.react.js');
     renderTarget = document.getElementsByTagName('body')[0];
 
     let dataAccess = {
@@ -65,7 +65,7 @@ describe('filtering articles by intensity', () => {
 
     it('should display articles with matching intensity as default', () => {
       let articleDetails = Array.from(TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-details'));
-      var articleInfosWithIntensity = articleDetails
+      let articleInfosWithIntensity = articleDetails
           .map((article) => article.getDOMNode())
           .filter((article) => {
             return +article.querySelector('.intensity-value').textContent === 3;
@@ -75,7 +75,7 @@ describe('filtering articles by intensity', () => {
 
     it('should display articles with non-matching intensity grayed-out', () => {
       let articleDetails = Array.from(TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-details'));
-      var articleInfosWithIntensity = articleDetails
+      let articleInfosWithIntensity = articleDetails
           .map((article) => article.getDOMNode())
           .filter((article) => {
             return +article.querySelector('.intensity-value').textContent !== 3;
@@ -84,7 +84,7 @@ describe('filtering articles by intensity', () => {
     });
 
     it('should disable all other intensity filter items', () => {
-      var availableIntensities = [3];
+      let availableIntensities = [3];
       expectUnavailableIntensitiesAreDisplayedAsUnavailable(availableIntensities);
     });
 

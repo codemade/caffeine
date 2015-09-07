@@ -1,10 +1,10 @@
-var React = require('react');
-var ArticleCategory = require('./article-category.react.js');
+let React = require('react');
+let ArticleCategory = require('./article-category.react.js');
 
 class ArticleList extends React.Component {
   render(){
-    var categories = this.props.categories.map((category) => {
-      var articles = this.props.articles
+    let categories = this.props.categories.map((category) => {
+      let articles = this.props.articles
         .filter((article) => {
           return article.category === category.id;
         });

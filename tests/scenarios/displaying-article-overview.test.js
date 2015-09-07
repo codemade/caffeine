@@ -1,16 +1,17 @@
-var expect = require('chai').expect;
-var React = require('react/addons');
-var renderTarget, component;
+let expect = require('chai').expect;
+let React = require('react/addons');
+let TestUtils = React.addons.TestUtils;
+let renderTarget, renderedComponent;
 
 describe('displaying article overview', () => {
-  var categories = [{id:1}, {id:2}];
-  var articles = [{id:3, intensity: 3}, {id:4, intensity: 8}];
+  let categories = [{id: 1, name: 'first category'}, {id: 2, name:'second category'}];
+  let articles = [{id: 3, name: 'first article', intensity: 3, price: 42, isMatchingFilter: true, category: 1}, {id: 4, name: 'second article', intensity: 8, price: 38, isMatchingFilter: true, category:2}];
 
   beforeEach(() => {
-    var ComponentClass = require('../../app/components/app.react.js');
+    let ComponentClass = require('../../app/components/articles-controller-view.react.js');
     renderTarget = document.getElementsByTagName('body')[0];
 
-    var dataAccess = {
+    let dataAccess = {
       getCategoriesAndArticles: () => {
         return {
           categories: categories,
@@ -19,30 +20,30 @@ describe('displaying article overview', () => {
       }
     };
 
-    var ActionCreator = require('../../app/action-creator.js');
-    var actionCreator = new ActionCreator(dataAccess);
-    var ArticleStore = require('../../app/article-store.js');
-    var store = new ArticleStore();
-    var renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
-    component = renderedComponent;
+    let ActionCreator = require('../../app/action-creator.js');
+    let actionCreator = new ActionCreator(dataAccess);
+    let ArticleStore = require('../../app/article-store.js');
+    let store = new ArticleStore();
+    renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
+
   });
 
   afterEach(() => {
     React.unmountComponentAtNode(renderTarget);
-    component = null;
+    renderedComponent = null;
   });
 
   describe('server has some categories and articles', () => {
     it('should display categories from server', () => {
-      expect(component.state.categories).to.deep.equal(categories);
+      let actualCategoryNames = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'category-name').map((category) => category.getDOMNode().textContent);
+      let expectedCategoryNames = categories.map((category) => category.name);
+      expect(actualCategoryNames).to.deep.equal(expectedCategoryNames);
     });
 
     it('should display articles from server', () => {
-      var expected = articles.map((article) => {
-        article.isMatchingFilter = true;
-        return article;
-      });
-      expect(component.state.articles).to.deep.equal(expected);
+      let actualArticleNames = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-name').map((article) => article.getDOMNode().textContent);
+      let expectedArticleNames = articles.map((article) => article.name);
+      expect(actualArticleNames).to.deep.equal(expectedArticleNames);
     });
   });
 });

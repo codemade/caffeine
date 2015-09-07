@@ -1,19 +1,19 @@
-var chai = require('chai');
-var expect = chai.expect;
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
+let chai = require('chai');
+let expect = chai.expect;
+let sinon = require('sinon');
+let sinonChai = require('sinon-chai');
 chai.use(sinonChai);
 
 describe('dispatcher', () => {
-  var dispatcher;
+  let dispatcher;
   beforeEach(function() {
     dispatcher = require('../../app/flux/dispatcher.js');
   });
 
   it('should execute all subscriber callbacks', function() {
-    var callbackA = sinon.spy();
-    var callbackB = sinon.spy();
-    var payload = {pay: 'load'};
+    let callbackA = sinon.spy();
+    let callbackB = sinon.spy();
+    let payload = {pay: 'load'};
 
     dispatcher.register(callbackA);
     dispatcher.register(callbackB);

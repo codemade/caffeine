@@ -1,5 +1,5 @@
-var React = require('react');
-var IntensityBar = require('./intensity-bar.react.js');
+let React = require('react');
+let IntensityBar = require('./intensity-bar.react.js');
 
 class Article extends React.Component {
   handleClick() {
@@ -7,14 +7,14 @@ class Article extends React.Component {
   }
 
   render(){
-    var article = this.props.article;
-    var image = 'assets/60x60/article_' + article.id + '.png';
-    var className = article.isMatchingFilter ? "article-details" : "article-details grayed-out";
+    let article = this.props.article;
+    let image = 'assets/60x60/article_' + article.id + '.png';
+    let className = article.isMatchingFilter ? "article-details" : "article-details grayed-out";
 
     return <div className={className} onClick={this.handleClick.bind(this)}>
             <img src={image} />
             <br />
-            <span>{this.props.article.name}</span>
+            <span className='article-name'>{this.props.article.name}</span>
             <br />
             <span className='intensity-label'>Intensität <span className="intensity-value">{this.props.article.intensity}</span></span>
             <IntensityBar intensity={this.props.article.intensity} />
@@ -24,6 +24,12 @@ class Article extends React.Component {
 };
 
 Article.propTypes = {
-  article: React.PropTypes.object.isRequired
+  article: React.PropTypes.shape({
+    id: React.PropTypes.number.isRequired,
+    name: React.PropTypes.string.isRequired,
+    intensity: React.PropTypes.number.isRequired,
+    price: React.PropTypes.number.isRequired,
+    isMatchingFilter: React.PropTypes.bool.isRequired
+  })
 };
 module.exports = Article;

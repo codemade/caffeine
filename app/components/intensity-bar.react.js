@@ -1,11 +1,10 @@
-var React = require('react');
-
+let React = require('react');
 
 class IntensityBar extends React.Component {
     render(){
-        var dots = [];
-        var className = 'dot-on';
-        for(var i = 0; i < 12; i++){
+        let dots = [];
+        let className = 'dot-on';
+        for(let i = 0; i < 12; i++){
             if(i >= this.props.intensity) {
                 className = 'dot-off';
             }
