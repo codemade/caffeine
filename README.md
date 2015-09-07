@@ -5,5 +5,5 @@ coffee store made with react, flux and node
 [![js-standard-style](https://img.shields.io/badge/code%20style-standard-brightgreen.svg?style=flat)](https://github.com/feross/standard)
 
 # Continuous Delivery
-The caffeine website is deployed to the gh-pages branch (https://github.com/codemade/caffeine/tree/gh-pages )after a successful build. The deployment will only be performed on commits (merges) into the (original, means not forked) master branch.
+The caffeine website is deployed to the gh-pages branch (https://github.com/codemade/caffeine/tree/gh-pages) after a successful build. The deployment will only be performed on commits (merges) into the (original, means not forked) master branch.
 The deployed website is accessible via this url: http://codemade.js.org/caffeine/.
