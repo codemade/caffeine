@@ -1,4 +1,4 @@
-var actionIdentifiers = {
+let actionIdentifiers = {
   articleList: {
     initialize: 'articleList.initialize',
     filterByIntensity: 'articleList.filterByIntensity',

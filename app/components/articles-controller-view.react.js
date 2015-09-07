@@ -1,9 +1,9 @@
-var React = require('react');
-var ShoppingCartBadge = require('./shopping-cart-badge.react.js');
-var ArticleList = require('./article-list.react.js');
-var ArticleInformation = require('./article-information.react.js');
-var IntensityFilter = require('./intensity-filter.react.js');
-var Maybe = require('../maybe.js');
+let React = require('react');
+let ShoppingCartBadge = require('./shopping-cart-badge.react.js');
+let ArticleList = require('./article-list.react.js');
+let ArticleInformation = require('./article-information.react.js');
+let IntensityFilter = require('./intensity-filter.react.js');
+let Maybe = require('../maybe.js');
 
 class ArticlesControllerView extends React.Component {
   constructor(props) {

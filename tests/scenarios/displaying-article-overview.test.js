@@ -1,17 +1,17 @@
-var expect = require('chai').expect;
-var React = require('react/addons');
-var TestUtils = React.addons.TestUtils;
-var renderTarget, renderedComponent;
+let expect = require('chai').expect;
+let React = require('react/addons');
+let TestUtils = React.addons.TestUtils;
+let renderTarget, renderedComponent;
 
 describe('displaying article overview', () => {
-  var categories = [{id: 1, name: 'first category'}, {id: 2, name:'second category'}];
-  var articles = [{id: 3, name: 'first article', intensity: 3, price: 42, isMatchingFilter: true, category: 1}, {id: 4, name: 'second article', intensity: 8, price: 38, isMatchingFilter: true, category:2}];
+  let categories = [{id: 1, name: 'first category'}, {id: 2, name:'second category'}];
+  let articles = [{id: 3, name: 'first article', intensity: 3, price: 42, isMatchingFilter: true, category: 1}, {id: 4, name: 'second article', intensity: 8, price: 38, isMatchingFilter: true, category:2}];
 
   beforeEach(() => {
-    var ComponentClass = require('../../app/components/articles-controller-view.react.js');
+    let ComponentClass = require('../../app/components/articles-controller-view.react.js');
     renderTarget = document.getElementsByTagName('body')[0];
 
-    var dataAccess = {
+    let dataAccess = {
       getCategoriesAndArticles: () => {
         return {
           categories: categories,
@@ -20,10 +20,10 @@ describe('displaying article overview', () => {
       }
     };
 
-    var ActionCreator = require('../../app/action-creator.js');
-    var actionCreator = new ActionCreator(dataAccess);
-    var ArticleStore = require('../../app/article-store.js');
-    var store = new ArticleStore();
+    let ActionCreator = require('../../app/action-creator.js');
+    let actionCreator = new ActionCreator(dataAccess);
+    let ArticleStore = require('../../app/article-store.js');
+    let store = new ArticleStore();
     renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
 
   });

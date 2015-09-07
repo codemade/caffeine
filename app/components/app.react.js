@@ -11,7 +11,7 @@ const App = React.createClass({
     '/shopping-cart': 'shoppingCart'
   },
   render() {
-    var currentRoute = this.renderCurrentRoute();
+    let currentRoute = this.renderCurrentRoute();
     return currentRoute;
   },
   articles() {

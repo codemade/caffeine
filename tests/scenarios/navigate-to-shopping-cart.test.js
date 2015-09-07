@@ -1,16 +1,16 @@
-var React = require('react');
-var TestUtils = React.addons.TestUtils;
-var chai = require('chai');
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
-var expect = chai.expect;
+let React = require('react');
+let TestUtils = React.addons.TestUtils;
+let chai = require('chai');
+let sinon = require('sinon');
+let sinonChai = require('sinon-chai');
+let expect = chai.expect;
 chai.use(sinonChai);
-var renderTarget, renderedComponent;
-var navigateSpy;
+let renderTarget, renderedComponent;
+let navigateSpy;
 
 describe('Navigate to shopping-cart route', () => {
-  var categories = [{id: 1, name: 'first category'}, {id: 2, name:'second category'}];
-  var articles = [{id: 3, name: 'first article', intensity: 3, price: 42, isMatchingFilter: true, category: 1}, {id: 4, name: 'second article', intensity: 8, price: 38, isMatchingFilter: true, category:2}];
+  let categories = [{id: 1, name: 'first category'}, {id: 2, name:'second category'}];
+  let articles = [{id: 3, name: 'first article', intensity: 3, price: 42, isMatchingFilter: true, category: 1}, {id: 4, name: 'second article', intensity: 8, price: 38, isMatchingFilter: true, category:2}];
   beforeEach(function() {
 
     let ComponentClass = require('../../app/components/articles-controller-view.react.js');
@@ -25,10 +25,10 @@ describe('Navigate to shopping-cart route', () => {
       }
     };
 
-    var ActionCreator = require('../../app/action-creator.js');
-    var actionCreator = new ActionCreator(dataAccess);
-    var ArticleStore = require('../../app/article-store.js');
-    var store = new ArticleStore();
+    let ActionCreator = require('../../app/action-creator.js');
+    let actionCreator = new ActionCreator(dataAccess);
+    let ArticleStore = require('../../app/article-store.js');
+    let store = new ArticleStore();
     navigateSpy = sinon.spy();
     renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store} navigate={navigateSpy} />, renderTarget);
   });
