@@ -2,7 +2,8 @@ let React = require('react');
 let ArticleCategory = require('./article-category.react.js');
 
 class ArticleList extends React.Component {
-  render(){
+
+  render() {
     let categories = this.props.categories.map((category) => {
       let articles = this.props.articles
         .filter((article) => {
@@ -12,7 +13,7 @@ class ArticleList extends React.Component {
                 key={category.id}
                 category={category}
                 articles={articles}
-                actionCreator={this.props.actionCreator} />
+                actionCreator={this.props.actionCreator} />;
     });
 
     return <div>
@@ -20,7 +21,7 @@ class ArticleList extends React.Component {
             {categories}
           </div>;
   }
-};
+}
 
 ArticleList.propTypes = {
   actionCreator: React.PropTypes.object.isRequired,

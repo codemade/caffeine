@@ -10,7 +10,7 @@ class Dispatcher {
   dispatch(payload) {
     this.callbacks.forEach((callback) => {
       callback(payload);
-    })
+    });
   }
 }
 

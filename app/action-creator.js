@@ -2,7 +2,7 @@ let dispatcher = require('./flux/dispatcher.js');
 let actionIdentifiers = require('./action-identifiers.js');
 
 class ActionCreator {
-  constructor(api){
+  constructor(api) {
     this.api = api;
   }
 
@@ -35,6 +35,6 @@ class ActionCreator {
       amount: amount
     });
   }
-};
+}
 
 module.exports = ActionCreator;

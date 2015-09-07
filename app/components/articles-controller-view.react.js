@@ -16,7 +16,7 @@ class ArticlesControllerView extends React.Component {
     };
   }
 
-  handleDataChanged(){
+  handleDataChanged() {
     this.setState(
       {
         categories: this.props.store.getCategories(),
@@ -40,7 +40,7 @@ class ArticlesControllerView extends React.Component {
     this.props.actionCreator.filterByIntensity(intensity);
   }
 
-  render(){
+  render() {
     let articleInformation;
     if (this.state.selectedArticle.hasValue) {
       articleInformation = <ArticleInformation actionCreator={this.props.actionCreator} article={this.state.selectedArticle.value}/>;
@@ -60,7 +60,7 @@ class ArticlesControllerView extends React.Component {
             {articleInformation}
           </div>;
   }
-};
+}
 
 ArticlesControllerView.propTypes = {
   store: React.PropTypes.object.isRequired,

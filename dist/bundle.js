@@ -20588,6 +20588,7 @@
 	          break;
 	        case actionIdentifiers.shoppingCart.addArticle:
 	          this.onAddArticleToShoppingCart(action.articleId, action.amount);
+	          break;
 	        default:
 	        // nothing to do here
 	      }
@@ -20678,7 +20679,7 @@
 	  store.listeners[eventIdentifier] = store.listeners[eventIdentifier].filter(function (listener) {
 	    return listener.id !== listenerId;
 	  });
-	};
+	}
 
 	var Store = (function () {
 	  function Store() {
@@ -20816,8 +20817,6 @@
 
 	  return ActionCreator;
 	})();
-
-	;
 
 	module.exports = ActionCreator;
 
@@ -21748,8 +21747,6 @@
 	  return ArticlesControllerView;
 	})(React.Component);
 
-	;
-
 	ArticlesControllerView.propTypes = {
 	  store: React.PropTypes.object.isRequired,
 	  actionCreator: React.PropTypes.object.isRequired
@@ -21874,8 +21871,6 @@
 	  return ArticleList;
 	})(React.Component);
 
-	;
-
 	ArticleList.propTypes = {
 	  actionCreator: React.PropTypes.object.isRequired,
 	  categories: React.PropTypes.array.isRequired,
@@ -21936,8 +21931,6 @@
 	  return ArticleCategory;
 	})(React.Component);
 
-	;
-
 	ArticleCategory.propTypes = {
 	  actionCreator: React.PropTypes.object.isRequired,
 	  category: React.PropTypes.object.isRequired,
@@ -21981,7 +21974,7 @@
 	    value: function render() {
 	      var article = this.props.article;
 	      var image = 'assets/60x60/article_' + article.id + '.png';
-	      var className = article.isMatchingFilter ? "article-details" : "article-details grayed-out";
+	      var className = article.isMatchingFilter ? 'article-details' : 'article-details grayed-out';
 
 	      return React.createElement(
 	        'div',
@@ -22019,8 +22012,6 @@
 	  return Article;
 	})(React.Component);
 
-	;
-
 	Article.propTypes = {
 	  article: React.PropTypes.shape({
 	    id: React.PropTypes.number.isRequired,
@@ -22049,39 +22040,39 @@
 	var React = __webpack_require__(2);
 
 	var IntensityBar = (function (_React$Component) {
-	    _inherits(IntensityBar, _React$Component);
+	  _inherits(IntensityBar, _React$Component);
 
-	    function IntensityBar() {
-	        _classCallCheck(this, IntensityBar);
+	  function IntensityBar() {
+	    _classCallCheck(this, IntensityBar);
 
-	        _get(Object.getPrototypeOf(IntensityBar.prototype), 'constructor', this).apply(this, arguments);
-	    }
+	    _get(Object.getPrototypeOf(IntensityBar.prototype), 'constructor', this).apply(this, arguments);
+	  }
 
-	    _createClass(IntensityBar, [{
-	        key: 'render',
-	        value: function render() {
-	            var dots = [];
-	            var className = 'dot-on';
-	            for (var i = 0; i < 12; i++) {
-	                if (i >= this.props.intensity) {
-	                    className = 'dot-off';
-	                }
-	                var key = 'intensity-bar-item-' + i;
-	                dots.push(React.createElement('span', { key: key, className: className }));
-	            }
-	            return React.createElement(
-	                'div',
-	                { className: 'intensity-bar' },
-	                dots
-	            );
+	  _createClass(IntensityBar, [{
+	    key: 'render',
+	    value: function render() {
+	      var dots = [];
+	      var className = 'dot-on';
+	      for (var i = 0; i < 12; i++) {
+	        if (i >= this.props.intensity) {
+	          className = 'dot-off';
 	        }
-	    }]);
+	        var key = 'intensity-bar-item-' + i;
+	        dots.push(React.createElement('span', { key: key, className: className }));
+	      }
+	      return React.createElement(
+	        'div',
+	        { className: 'intensity-bar' },
+	        dots
+	      );
+	    }
+	  }]);
 
-	    return IntensityBar;
+	  return IntensityBar;
 	})(React.Component);
 
 	IntensityBar.propTypes = {
-	    intensity: React.PropTypes.number.isRequired
+	  intensity: React.PropTypes.number.isRequired
 	};
 	module.exports = IntensityBar;
 
@@ -22286,8 +22277,6 @@
 
 	  return DataAccess;
 	})();
-
-	;
 
 	module.exports = DataAccess;
 

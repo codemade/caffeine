@@ -6,8 +6,11 @@ let TestUtils = React.addons.TestUtils;
 let renderTarget, articleInformationComponent;
 
 describe('no article is selected', () => {
-  let categories = [{id:1}, {id:2}];
-  let articles = [{id:3, intensity: 3, category:1, name:'Ristretto'}, {id:4, intensity: 8, category:1, name:'Volluto'}];
+  let categories = [{id: 1}, {id: 2}];
+  let articles = [
+    {id: 3, intensity: 3, category: 1, name: 'Ristretto'},
+    {id: 4, intensity: 8, category: 1, name: 'Volluto'}
+  ];
 
   beforeEach(() => {
     let ComponentClass = require('../../app/components/articles-controller-view.react.js');

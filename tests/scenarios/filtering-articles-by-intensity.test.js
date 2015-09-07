@@ -6,8 +6,11 @@ let TestUtils = React.addons.TestUtils;
 let renderTarget, renderedComponent;
 
 describe('filtering articles by intensity', () => {
-  let categories = [{id:1}, {id:2}];
-  let articles = [{id:3, intensity: 3, category:1, name:'Ristretto'}, {id:4, intensity: 8, category:1, name:'Volluto'}];
+  let categories = [{id: 1}, {id: 2}];
+  let articles = [
+    {id: 3, intensity: 3, category: 1, name: 'Ristretto'},
+    {id: 4, intensity: 8, category: 1, name: 'Volluto'}
+  ];
   let maximumIntensity, store;
 
   beforeEach(() => {
@@ -42,7 +45,7 @@ describe('filtering articles by intensity', () => {
           : 'intensity-filter-item unavailable';
         return intensityItem.getDOMNode().className !== expectedClassName;
       });
-      expect(itemsWithWrongClassName.length).to.equal(0);
+    expect(itemsWithWrongClassName.length).to.equal(0);
   };
 
   describe('intensity filter component', () => {

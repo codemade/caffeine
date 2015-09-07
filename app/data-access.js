@@ -1,7 +1,7 @@
 class DataAccess {
-  getCategoriesAndArticles(){
+  getCategoriesAndArticles() {
     return require('./article-data.js');
   }
-};
+}
 
 module.exports = DataAccess;

@@ -2,11 +2,11 @@ let React = require('react');
 let Article = require('./article.react.js');
 
 class ArticleCategory extends React.Component {
-  render(){
+  render() {
     let articles = this.props.articles.map((article) => {
       return <Article key={article.id}
                       article={article}
-                      actionCreator={this.props.actionCreator}/>
+                      actionCreator={this.props.actionCreator}/>;
     });
 
     return <div className='category'>
@@ -14,7 +14,7 @@ class ArticleCategory extends React.Component {
             {articles}
           </div>;
   }
-};
+}
 
 ArticleCategory.propTypes = {
   actionCreator: React.PropTypes.object.isRequired,

@@ -16,7 +16,6 @@ describe('store', () => {
       let callbackA = sinon.spy();
       let callbackB = sinon.spy();
       let callbackC = sinon.spy();
-      let payload = {pay: 'load'};
       let changeEvent = 'somethingChanged';
 
       store.addChangeListener(changeEvent, callbackA);
@@ -35,11 +34,10 @@ describe('store', () => {
         let callbackA = sinon.spy();
         let callbackB = sinon.spy();
         let callbackC = sinon.spy();
-        let payload = {pay: 'load'};
         let changeEvent = 'somethingChanged';
 
         let deregisterA = store.addChangeListener(changeEvent, callbackA);
-        let deregisterB = store.addChangeListener(changeEvent, callbackB);
+        store.addChangeListener(changeEvent, callbackB);
         let deregisterC = store.addChangeListener(changeEvent, callbackC);
 
         deregisterA();
