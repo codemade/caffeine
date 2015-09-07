@@ -3,8 +3,13 @@ language: node_js
 node_js:
   - iojs-v2.3.1
 
-before_install:
-  npm install -g istanbul mocha
+before_install: npm install -g istanbul mocha
 
-after_script:
-  - npm run coveralls
+script: npm run test && npm run coveralls
+
+after_success:
+  - test $TRAVIS_PULL_REQUEST == "false" && test $TRAVIS_BRANCH == "master" && bash ./deploy.sh
+
+env:
+  global:
+    secure: anE4Fk6fWUBe7Ip/BY9GH7rrpIgIT+SmkOJeLdVtwnB+tLi+W9F+rtLJxXVk0sMVtxVwApdwLohYZilZhFDe2hMlvQyzVCec3yqe0If+PGmO3enjcepjIJlSJphkygtEiyyJruY0dkeKzJwIWME0FGHghydTdYm/2Ny2TmabexNvN4xYf4yt8qTfQ1iUQ4W2Ggsbr64NAKj0kbyT/8aO/aiGTm3ySaX8yYwJpaEI9SXywyR0/ygRup3xtRBlQi5JjsZ4SLW3mbOWv4O/KwNqYvEUu7XnyIGVZH+zkP/DV6ik1+WWmVarG+qB6wSuBy+IZEgUF+lP5PEVvGD2Y9sLETJMCR2CmiGyfdGdk9FwWNIK/swBFCYvwxFrjLgqwR9EkaLeJyNZhQpKMxpLoqGzMJdoY4E1R88Vn16vx4hFBR2jb7IruS3YnMqLRG2HMcBpBQSr2TDk0var0NFTEZ+Z1/cL3qIuHaEOXdQFuFEMCtHxuQoUBe78sendc0VJ972sYwBRLH1ruBrR2NLJTsdZJbWCraxQelg+u42jREgU0474hz1FKT+D+jQrzWI8SB9WIJraDT9RNxZrsGQOk47mcOMt+Yi6KK8VNOtKyLRLtEPw48q9fqOonkVMOH9r333q3+M0yN2gM208XS5YA5SzSLct7/p9eu2PhhMxUyE7MTU=

@@ -21790,7 +21790,7 @@
 	      return React.createElement(
 	        'div',
 	        { className: 'shopping-cart-badge', onClick: navigateToShoppingCart },
-	        'Shopping Cart',
+	        'Shopping Cart Overview',
 	        React.createElement(
 	          'div',
 	          { className: 'article-count' },
