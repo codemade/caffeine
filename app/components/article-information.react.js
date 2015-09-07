@@ -1,9 +1,9 @@
-var React = require('react');
+let React = require('react');
 
 class ArticleInformation extends React.Component {
   render() {
     let styles = {
-      border:'1px solid white'
+      border: '1px solid white'
     };
 
     let addToCart = () => {
@@ -20,6 +20,6 @@ class ArticleInformation extends React.Component {
 ArticleInformation.propTypes = {
   actionCreator: React.PropTypes.object.isRequired,
   article: React.PropTypes.object.isRequired
-}
+};
 
 module.exports = ArticleInformation;

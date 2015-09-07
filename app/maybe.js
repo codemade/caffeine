@@ -1,8 +1,8 @@
 let hasValue = (value) => {
-  if(typeof value === 'undefined') return false;
-  if(value === null) return false;
+  if (typeof value === 'undefined') return false;
+  if (value === null) return false;
   return true;
-}
+};
 
 class Maybe {
   constructor(value) {

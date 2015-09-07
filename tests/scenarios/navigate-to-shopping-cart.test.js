@@ -1,9 +1,14 @@
-let expect = require('chai').expect;
-let React = require('react/addons');
+let React = require('react');
 let TestUtils = React.addons.TestUtils;
+let chai = require('chai');
+let sinon = require('sinon');
+let sinonChai = require('sinon-chai');
+let expect = chai.expect;
+chai.use(sinonChai);
 let renderTarget, renderedComponent;
+let navigateSpy;
 
-describe('displaying article overview', () => {
+describe('Navigate to shopping-cart route', () => {
   let categories = [
     {id: 1, name: 'first category'},
     {id: 2, name: 'second category'}
@@ -12,8 +17,7 @@ describe('displaying article overview', () => {
     {id: 3, name: 'first article', intensity: 3, price: 42, isMatchingFilter: true, category: 1},
     {id: 4, name: 'second article', intensity: 8, price: 38, isMatchingFilter: true, category: 2}
   ];
-
-  beforeEach(() => {
+  beforeEach(function() {
     let ComponentClass = require('../../app/components/articles-controller-view.react.js');
     renderTarget = document.getElementsByTagName('body')[0];
 
@@ -30,7 +34,8 @@ describe('displaying article overview', () => {
     let actionCreator = new ActionCreator(dataAccess);
     let ArticleStore = require('../../app/article-store.js');
     let store = new ArticleStore();
-    renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
+    navigateSpy = sinon.spy();
+    renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store} navigate={navigateSpy} />, renderTarget);
   });
 
   afterEach(() => {
@@ -38,17 +43,11 @@ describe('displaying article overview', () => {
     renderedComponent = null;
   });
 
-  describe('server has some categories and articles', () => {
-    it('should display categories from server', () => {
-      let actualCategoryNames = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'category-name').map((category) => category.getDOMNode().textContent);
-      let expectedCategoryNames = categories.map((category) => category.name);
-      expect(actualCategoryNames).to.deep.equal(expectedCategoryNames);
-    });
-
-    it('should display articles from server', () => {
-      let actualArticleNames = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-name').map((article) => article.getDOMNode().textContent);
-      let expectedArticleNames = articles.map((article) => article.name);
-      expect(actualArticleNames).to.deep.equal(expectedArticleNames);
+  describe('by clicking on the shopping-cart-badge', () => {
+    it('displays the shopping-cart', function() {
+      let shoppingCartBadge = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-badge')[0];
+      TestUtils.Simulate.click(shoppingCartBadge);
+      expect(navigateSpy).to.have.been.called;
     });
   });
 });
