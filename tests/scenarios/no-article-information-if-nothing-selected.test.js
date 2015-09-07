@@ -1,22 +1,22 @@
-var expect = require('chai').expect;
-var React = require('react/addons');
-var ActionCreator = require('../../app/action-creator.js');
-var Store = require('../../app/article-store.js');
-var TestUtils = React.addons.TestUtils;
-var renderTarget, articleInformationComponent;
+let expect = require('chai').expect;
+let React = require('react/addons');
+let ActionCreator = require('../../app/action-creator.js');
+let Store = require('../../app/article-store.js');
+let TestUtils = React.addons.TestUtils;
+let renderTarget, articleInformationComponent;
 
 describe('no article is selected', () => {
-  var categories = [{id: 1}, {id: 2}];
-  var articles = [
+  let categories = [{id: 1}, {id: 2}];
+  let articles = [
     {id: 3, intensity: 3, category: 1, name: 'Ristretto'},
     {id: 4, intensity: 8, category: 1, name: 'Volluto'}
   ];
 
   beforeEach(() => {
-    var ComponentClass = require('../../app/components/app.react.js');
+    let ComponentClass = require('../../app/components/articles-controller-view.react.js');
     renderTarget = document.getElementsByTagName('body')[0];
 
-    var dataAccess = {
+    let dataAccess = {
       getCategoriesAndArticles: () => {
         return {
           categories: categories,
@@ -25,10 +25,10 @@ describe('no article is selected', () => {
       }
     };
 
-    var actionCreator = new ActionCreator(dataAccess);
-    var store = new Store(actionCreator);
+    let actionCreator = new ActionCreator(dataAccess);
+    let store = new Store(actionCreator);
 
-    var renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
+    let renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
     articleInformationComponent = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-information')[0];
   });
 
@@ -37,7 +37,7 @@ describe('no article is selected', () => {
   });
 
   it('no article information is displayed', () => {
-    var title = articleInformationComponent;
+    let title = articleInformationComponent;
     expect(title).to.equal(undefined);
   });
 });

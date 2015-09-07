@@ -20826,6 +20826,838 @@
 
 	'use strict';
 
+	var React = __webpack_require__(2);
+	var RouterMixin = __webpack_require__(166).RouterMixin;
+	var ArticlesControllerView = __webpack_require__(174);
+	var ShoppingCartControllerView = __webpack_require__(182);
+	var navigate = __webpack_require__(166).navigate;
+
+	var App = React.createClass({
+	  displayName: 'App',
+
+	  mixins: [RouterMixin],
+	  routes: {
+	    '/': 'articles',
+	    '/shopping-cart': 'shoppingCart'
+	  },
+	  render: function render() {
+	    var currentRoute = this.renderCurrentRoute();
+	    return currentRoute;
+	  },
+	  articles: function articles() {
+	    return React.createElement(ArticlesControllerView, { store: this.props.store, actionCreator: this.props.actionCreator, navigate: navigate });
+	  },
+	  shoppingCart: function shoppingCart() {
+	    return React.createElement(ShoppingCartControllerView, null);
+	  }
+	});
+
+	module.exports = App;
+
+/***/ },
+/* 166 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = {
+	    RouterMixin: __webpack_require__(167),
+	    navigate: __webpack_require__(172)
+	};
+
+/***/ },
+/* 167 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var React = __webpack_require__(2),
+	    EventListener = __webpack_require__(128),
+	    getEventTarget = __webpack_require__(99),
+	    pathToRegexp = __webpack_require__(168),
+	    urllite = __webpack_require__(170),
+	    detect = __webpack_require__(171);
+
+	var PropValidation = {
+	    path: React.PropTypes.string,
+	    root: React.PropTypes.string,
+	    useHistory: React.PropTypes.bool
+	};
+
+	module.exports = {
+
+	    propTypes: PropValidation,
+
+	    contextTypes: PropValidation,
+
+	    childContextTypes: PropValidation,
+
+	    getChildContext: function() {
+	        return {
+	            path: this.state.path,
+	            root: this.state.root,
+	            useHistory: this.state.useHistory
+	        }
+	    },
+
+	    getDefaultProps: function() {
+	        return {
+	            routes: {}
+	        };
+	    },
+
+	    getInitialState: function() {
+	        return {
+	            path: getInitialPath(this),
+	            root: this.props.root || this.context.path || '',
+	            useHistory: (this.props.history || this.context.useHistory) && detect.hasPushState
+	        };
+	    },
+
+	    componentWillMount: function() {
+	        this.setState({ _routes: processRoutes(this.state.root, this.routes, this) });
+	    },
+
+	    componentDidMount: function() {
+	        var _events = this._events = [];
+
+	        _events.push(EventListener.listen(this.getDOMNode(), 'click', this.handleClick));
+
+	        if (this.state.useHistory) {
+	            _events.push(EventListener.listen(window, 'popstate', this.onPopState));
+	        } else {
+	            if (window.location.hash.indexOf('#!') === -1) {
+	                window.location.hash = '#!/';
+	            }
+
+	            _events.push(EventListener.listen(window, 'hashchange', this.onPopState));
+	        }
+	    },
+
+	    componentWillUnmount: function() {
+	        this._events.forEach(function(listener) {
+	           listener.remove();
+	        });
+	    },
+
+	    onPopState: function() {
+	        var url = urllite(window.location.href),
+	            hash = url.hash || '',
+	            path = this.state.useHistory ? url.pathname : hash.slice(2);
+
+	        if (path.length === 0) path = '/';
+
+	        this.setState({ path: path + url.search });
+	    },
+
+	    renderCurrentRoute: function() {
+	        var path = this.state.path,
+	            url = urllite(path),
+	            queryParams = parseSearch(url.search);
+
+	        var parsedPath = url.pathname;
+
+	        if (!parsedPath || parsedPath.length === 0) parsedPath = '/';
+
+	        var matchedRoute = this.matchRoute(parsedPath);
+
+	        if (matchedRoute) {
+	            return matchedRoute.handler.apply(this, matchedRoute.params.concat(queryParams));
+	        } else if (this.notFound) {
+	            return this.notFound(parsedPath, queryParams);
+	        } else {
+	            throw new Error('No route matched path: ' + parsedPath);
+	        }
+	    },
+
+	    handleClick: function(evt) {
+	        var self = this,
+	            url = getHref(evt);
+
+	        if (url && self.matchRoute(url.pathname)) {
+	            evt.preventDefault();
+
+	            // See: http://facebook.github.io/react/docs/interactivity-and-dynamic-uis.html
+	            // Give any component event listeners a chance to fire in the current event loop,
+	            // since they happen at the end of the bubbling phase. (Allows an onClick prop to
+	            // work correctly on the event target <a/> component.)
+	            setTimeout(function() {
+	                var pathWithSearch = url.pathname + (url.search || '');
+	                if (pathWithSearch.length === 0) pathWithSearch = '/';
+
+	                if (self.state.useHistory) {
+	                    window.history.pushState({}, '', pathWithSearch);
+	                } else {
+	                    window.location.hash = '!' + pathWithSearch;
+	                }
+
+	                self.setState({ path: pathWithSearch});
+	            }, 0);
+	        }
+	    },
+
+	    matchRoute: function(path) {
+	        if (!path) {
+	            return false;
+	        }
+
+	        var matchedRoute = {};
+
+	        this.state._routes.some(function(route) {
+	            var matches = route.pattern.exec(path);
+
+	            if (matches) {
+	                matchedRoute.handler = route.handler;
+	                matchedRoute.params = matches.slice(1, route.params.length + 1);
+
+	                return true;
+	            }
+
+	            return false;
+	        });
+
+	        return matchedRoute.handler ? matchedRoute : false;
+	    }
+
+	};
+
+	function getInitialPath(component) {
+	    var path = component.props.path || component.context.path,
+	        hash,
+	        url;
+
+	    if (!path && detect.canUseDOM) {
+	        url = urllite(window.location.href);
+
+	        if (component.props.history) {
+	            path = url.pathname + url.search;
+	        } else if (url.hash) {
+	            hash = urllite(url.hash.slice(2));
+	            path = hash.pathname + hash.search;
+	        }
+	    }
+
+	    return path || '/';
+	}
+
+	function getHref(evt) {
+	    if (evt.defaultPrevented) {
+	        return;
+	    }
+
+	    if (evt.metaKey || evt.ctrlKey || evt.shiftKey) {
+	        return;
+	    }
+
+	    if (evt.button !== 0) {
+	        return;
+	    }
+
+	    var elt = getEventTarget(evt);
+
+	    // Since a click could originate from a child element of the <a> tag,
+	    // walk back up the tree to find it.
+	    while (elt && elt.nodeName !== 'A') {
+	        elt = elt.parentNode;
+	    }
+
+	    if (!elt) {
+	        return;
+	    }
+
+	    if (elt.target && elt.target !== '_self') {
+	        return;
+	    }
+
+	    if (!!elt.attributes.download) {
+	        return;
+	    }
+
+	    var linkURL = urllite(elt.href);
+	    var windowURL = urllite(window.location.href);
+
+	    if (linkURL.protocol !== windowURL.protocol || linkURL.host !== windowURL.host) {
+	        return;
+	    }
+
+	    return linkURL;
+	}
+
+	function processRoutes(root, routes, component) {
+	    var patterns = [],
+	        path, pattern, keys, handler, handlerFn;
+
+	    for (path in routes) {
+	        if (routes.hasOwnProperty(path)) {
+	            keys = [];
+	            pattern = pathToRegexp(root + path, keys);
+	            handler = routes[path];
+	            handlerFn = component[handler];
+
+	            patterns.push({ pattern: pattern, params: keys, handler: handlerFn });
+	        }
+	    }
+
+	    return patterns;
+	}
+
+	function parseSearch(str) {
+	    var parsed = {};
+
+	    if (str.indexOf('?') === 0) str = str.slice(1);
+
+	    var pairs = str.split('&');
+
+	    pairs.forEach(function(pair) {
+	        var keyVal = pair.split('=');
+
+	        parsed[decodeURIComponent(keyVal[0])] = decodeURIComponent(keyVal[1]);
+	    });
+
+	    return parsed;
+	}
+
+
+/***/ },
+/* 168 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var isarray = __webpack_require__(169)
+
+	/**
+	 * Expose `pathToRegexp`.
+	 */
+	module.exports = pathToRegexp
+	module.exports.parse = parse
+	module.exports.compile = compile
+	module.exports.tokensToFunction = tokensToFunction
+	module.exports.tokensToRegExp = tokensToRegExp
+
+	/**
+	 * The main path matching regexp utility.
+	 *
+	 * @type {RegExp}
+	 */
+	var PATH_REGEXP = new RegExp([
+	  // Match escaped characters that would otherwise appear in future matches.
+	  // This allows the user to escape special characters that won't transform.
+	  '(\\\\.)',
+	  // Match Express-style parameters and un-named parameters with a prefix
+	  // and optional suffixes. Matches appear as:
+	  //
+	  // "/:test(\\d+)?" => ["/", "test", "\d+", undefined, "?", undefined]
+	  // "/route(\\d+)"  => [undefined, undefined, undefined, "\d+", undefined, undefined]
+	  // "/*"            => ["/", undefined, undefined, undefined, undefined, "*"]
+	  '([\\/.])?(?:(?:\\:(\\w+)(?:\\(((?:\\\\.|[^()])+)\\))?|\\(((?:\\\\.|[^()])+)\\))([+*?])?|(\\*))'
+	].join('|'), 'g')
+
+	/**
+	 * Parse a string for the raw tokens.
+	 *
+	 * @param  {String} str
+	 * @return {Array}
+	 */
+	function parse (str) {
+	  var tokens = []
+	  var key = 0
+	  var index = 0
+	  var path = ''
+	  var res
+
+	  while ((res = PATH_REGEXP.exec(str)) != null) {
+	    var m = res[0]
+	    var escaped = res[1]
+	    var offset = res.index
+	    path += str.slice(index, offset)
+	    index = offset + m.length
+
+	    // Ignore already escaped sequences.
+	    if (escaped) {
+	      path += escaped[1]
+	      continue
+	    }
+
+	    // Push the current path onto the tokens.
+	    if (path) {
+	      tokens.push(path)
+	      path = ''
+	    }
+
+	    var prefix = res[2]
+	    var name = res[3]
+	    var capture = res[4]
+	    var group = res[5]
+	    var suffix = res[6]
+	    var asterisk = res[7]
+
+	    var repeat = suffix === '+' || suffix === '*'
+	    var optional = suffix === '?' || suffix === '*'
+	    var delimiter = prefix || '/'
+	    var pattern = capture || group || (asterisk ? '.*' : '[^' + delimiter + ']+?')
+
+	    tokens.push({
+	      name: name || key++,
+	      prefix: prefix || '',
+	      delimiter: delimiter,
+	      optional: optional,
+	      repeat: repeat,
+	      pattern: escapeGroup(pattern)
+	    })
+	  }
+
+	  // Match any characters still remaining.
+	  if (index < str.length) {
+	    path += str.substr(index)
+	  }
+
+	  // If the path exists, push it onto the end.
+	  if (path) {
+	    tokens.push(path)
+	  }
+
+	  return tokens
+	}
+
+	/**
+	 * Compile a string to a template function for the path.
+	 *
+	 * @param  {String}   str
+	 * @return {Function}
+	 */
+	function compile (str) {
+	  return tokensToFunction(parse(str))
+	}
+
+	/**
+	 * Expose a method for transforming tokens into the path function.
+	 */
+	function tokensToFunction (tokens) {
+	  // Compile all the tokens into regexps.
+	  var matches = new Array(tokens.length)
+
+	  // Compile all the patterns before compilation.
+	  for (var i = 0; i < tokens.length; i++) {
+	    if (typeof tokens[i] === 'object') {
+	      matches[i] = new RegExp('^' + tokens[i].pattern + '$')
+	    }
+	  }
+
+	  return function (obj) {
+	    var path = ''
+	    var data = obj || {}
+
+	    for (var i = 0; i < tokens.length; i++) {
+	      var token = tokens[i]
+
+	      if (typeof token === 'string') {
+	        path += token
+
+	        continue
+	      }
+
+	      var value = data[token.name]
+	      var segment
+
+	      if (value == null) {
+	        if (token.optional) {
+	          continue
+	        } else {
+	          throw new TypeError('Expected "' + token.name + '" to be defined')
+	        }
+	      }
+
+	      if (isarray(value)) {
+	        if (!token.repeat) {
+	          throw new TypeError('Expected "' + token.name + '" to not repeat, but received "' + value + '"')
+	        }
+
+	        if (value.length === 0) {
+	          if (token.optional) {
+	            continue
+	          } else {
+	            throw new TypeError('Expected "' + token.name + '" to not be empty')
+	          }
+	        }
+
+	        for (var j = 0; j < value.length; j++) {
+	          segment = encodeURIComponent(value[j])
+
+	          if (!matches[i].test(segment)) {
+	            throw new TypeError('Expected all "' + token.name + '" to match "' + token.pattern + '", but received "' + segment + '"')
+	          }
+
+	          path += (j === 0 ? token.prefix : token.delimiter) + segment
+	        }
+
+	        continue
+	      }
+
+	      segment = encodeURIComponent(value)
+
+	      if (!matches[i].test(segment)) {
+	        throw new TypeError('Expected "' + token.name + '" to match "' + token.pattern + '", but received "' + segment + '"')
+	      }
+
+	      path += token.prefix + segment
+	    }
+
+	    return path
+	  }
+	}
+
+	/**
+	 * Escape a regular expression string.
+	 *
+	 * @param  {String} str
+	 * @return {String}
+	 */
+	function escapeString (str) {
+	  return str.replace(/([.+*?=^!:${}()[\]|\/])/g, '\\$1')
+	}
+
+	/**
+	 * Escape the capturing group by escaping special characters and meaning.
+	 *
+	 * @param  {String} group
+	 * @return {String}
+	 */
+	function escapeGroup (group) {
+	  return group.replace(/([=!:$\/()])/g, '\\$1')
+	}
+
+	/**
+	 * Attach the keys as a property of the regexp.
+	 *
+	 * @param  {RegExp} re
+	 * @param  {Array}  keys
+	 * @return {RegExp}
+	 */
+	function attachKeys (re, keys) {
+	  re.keys = keys
+	  return re
+	}
+
+	/**
+	 * Get the flags for a regexp from the options.
+	 *
+	 * @param  {Object} options
+	 * @return {String}
+	 */
+	function flags (options) {
+	  return options.sensitive ? '' : 'i'
+	}
+
+	/**
+	 * Pull out keys from a regexp.
+	 *
+	 * @param  {RegExp} path
+	 * @param  {Array}  keys
+	 * @return {RegExp}
+	 */
+	function regexpToRegexp (path, keys) {
+	  // Use a negative lookahead to match only capturing groups.
+	  var groups = path.source.match(/\((?!\?)/g)
+
+	  if (groups) {
+	    for (var i = 0; i < groups.length; i++) {
+	      keys.push({
+	        name: i,
+	        prefix: null,
+	        delimiter: null,
+	        optional: false,
+	        repeat: false,
+	        pattern: null
+	      })
+	    }
+	  }
+
+	  return attachKeys(path, keys)
+	}
+
+	/**
+	 * Transform an array into a regexp.
+	 *
+	 * @param  {Array}  path
+	 * @param  {Array}  keys
+	 * @param  {Object} options
+	 * @return {RegExp}
+	 */
+	function arrayToRegexp (path, keys, options) {
+	  var parts = []
+
+	  for (var i = 0; i < path.length; i++) {
+	    parts.push(pathToRegexp(path[i], keys, options).source)
+	  }
+
+	  var regexp = new RegExp('(?:' + parts.join('|') + ')', flags(options))
+
+	  return attachKeys(regexp, keys)
+	}
+
+	/**
+	 * Create a path regexp from string input.
+	 *
+	 * @param  {String} path
+	 * @param  {Array}  keys
+	 * @param  {Object} options
+	 * @return {RegExp}
+	 */
+	function stringToRegexp (path, keys, options) {
+	  var tokens = parse(path)
+	  var re = tokensToRegExp(tokens, options)
+
+	  // Attach keys back to the regexp.
+	  for (var i = 0; i < tokens.length; i++) {
+	    if (typeof tokens[i] !== 'string') {
+	      keys.push(tokens[i])
+	    }
+	  }
+
+	  return attachKeys(re, keys)
+	}
+
+	/**
+	 * Expose a function for taking tokens and returning a RegExp.
+	 *
+	 * @param  {Array}  tokens
+	 * @param  {Array}  keys
+	 * @param  {Object} options
+	 * @return {RegExp}
+	 */
+	function tokensToRegExp (tokens, options) {
+	  options = options || {}
+
+	  var strict = options.strict
+	  var end = options.end !== false
+	  var route = ''
+	  var lastToken = tokens[tokens.length - 1]
+	  var endsWithSlash = typeof lastToken === 'string' && /\/$/.test(lastToken)
+
+	  // Iterate over the tokens and create our regexp string.
+	  for (var i = 0; i < tokens.length; i++) {
+	    var token = tokens[i]
+
+	    if (typeof token === 'string') {
+	      route += escapeString(token)
+	    } else {
+	      var prefix = escapeString(token.prefix)
+	      var capture = token.pattern
+
+	      if (token.repeat) {
+	        capture += '(?:' + prefix + capture + ')*'
+	      }
+
+	      if (token.optional) {
+	        if (prefix) {
+	          capture = '(?:' + prefix + '(' + capture + '))?'
+	        } else {
+	          capture = '(' + capture + ')?'
+	        }
+	      } else {
+	        capture = prefix + '(' + capture + ')'
+	      }
+
+	      route += capture
+	    }
+	  }
+
+	  // In non-strict mode we allow a slash at the end of match. If the path to
+	  // match already ends with a slash, we remove it for consistency. The slash
+	  // is valid at the end of a path match, not in the middle. This is important
+	  // in non-ending mode, where "/test/" shouldn't match "/test//route".
+	  if (!strict) {
+	    route = (endsWithSlash ? route.slice(0, -2) : route) + '(?:\\/(?=$))?'
+	  }
+
+	  if (end) {
+	    route += '$'
+	  } else {
+	    // In non-ending mode, we need the capturing groups to match as much as
+	    // possible by using a positive lookahead to the end or next path segment.
+	    route += strict && endsWithSlash ? '' : '(?=\\/|$)'
+	  }
+
+	  return new RegExp('^' + route, flags(options))
+	}
+
+	/**
+	 * Normalize the given path string, returning a regular expression.
+	 *
+	 * An empty array can be passed in for the keys, which will hold the
+	 * placeholder key descriptions. For example, using `/user/:id`, `keys` will
+	 * contain `[{ name: 'id', delimiter: '/', optional: false, repeat: false }]`.
+	 *
+	 * @param  {(String|RegExp|Array)} path
+	 * @param  {Array}                 [keys]
+	 * @param  {Object}                [options]
+	 * @return {RegExp}
+	 */
+	function pathToRegexp (path, keys, options) {
+	  keys = keys || []
+
+	  if (!isarray(keys)) {
+	    options = keys
+	    keys = []
+	  } else if (!options) {
+	    options = {}
+	  }
+
+	  if (path instanceof RegExp) {
+	    return regexpToRegexp(path, keys, options)
+	  }
+
+	  if (isarray(path)) {
+	    return arrayToRegexp(path, keys, options)
+	  }
+
+	  return stringToRegexp(path, keys, options)
+	}
+
+
+/***/ },
+/* 169 */
+/***/ function(module, exports) {
+
+	module.exports = Array.isArray || function (arr) {
+	  return Object.prototype.toString.call(arr) == '[object Array]';
+	};
+
+
+/***/ },
+/* 170 */
+/***/ function(module, exports) {
+
+	(function() {
+	  var URL, URL_PATTERN, defaults, urllite,
+	    __hasProp = {}.hasOwnProperty;
+
+	  URL_PATTERN = /^(?:(?:([^:\/?\#]+:)\/+|(\/\/))(?:([a-z0-9-\._~%]+)(?::([a-z0-9-\._~%]+))?@)?(([a-z0-9-\._~%!$&'()*+,;=]+)(?::([0-9]+))?)?)?([^?\#]*?)(\?[^\#]*)?(\#.*)?$/;
+
+	  urllite = function(raw, opts) {
+	    return urllite.URL.parse(raw, opts);
+	  };
+
+	  urllite.URL = URL = (function() {
+	    function URL(props) {
+	      var k, v, _ref;
+	      for (k in defaults) {
+	        if (!__hasProp.call(defaults, k)) continue;
+	        v = defaults[k];
+	        this[k] = (_ref = props[k]) != null ? _ref : v;
+	      }
+	      this.host || (this.host = this.hostname && this.port ? "" + this.hostname + ":" + this.port : this.hostname ? this.hostname : '');
+	      this.origin || (this.origin = this.protocol ? "" + this.protocol + "//" + this.host : '');
+	      this.isAbsolutePathRelative = !this.host && this.pathname.charAt(0) === '/';
+	      this.isPathRelative = !this.host && this.pathname.charAt(0) !== '/';
+	      this.isRelative = this.isSchemeRelative || this.isAbsolutePathRelative || this.isPathRelative;
+	      this.isAbsolute = !this.isRelative;
+	    }
+
+	    URL.parse = function(raw) {
+	      var m, pathname, protocol;
+	      m = raw.toString().match(URL_PATTERN);
+	      pathname = m[8] || '';
+	      protocol = m[1];
+	      return new urllite.URL({
+	        protocol: protocol,
+	        username: m[3],
+	        password: m[4],
+	        hostname: m[6],
+	        port: m[7],
+	        pathname: protocol && pathname.charAt(0) !== '/' ? "/" + pathname : pathname,
+	        search: m[9],
+	        hash: m[10],
+	        isSchemeRelative: m[2] != null
+	      });
+	    };
+
+	    return URL;
+
+	  })();
+
+	  defaults = {
+	    protocol: '',
+	    username: '',
+	    password: '',
+	    host: '',
+	    hostname: '',
+	    port: '',
+	    pathname: '',
+	    search: '',
+	    hash: '',
+	    origin: '',
+	    isSchemeRelative: false
+	  };
+
+	  module.exports = urllite;
+
+	}).call(this);
+
+
+/***/ },
+/* 171 */
+/***/ function(module, exports) {
+
+	var canUseDOM = !!(
+	    typeof window !== 'undefined' &&
+	    window.document &&
+	    window.document.createElement
+	);
+
+	module.exports = {
+	    canUseDOM: canUseDOM,
+	    hasPushState: canUseDOM && window.history && 'pushState' in window.history,
+	    hasHashbang: function() {
+	        return canUseDOM && window.location.hash.indexOf('#!') === 0;
+	    },
+	    hasEventConstructor: function() {
+	        return typeof window.Event == "function";
+	    }
+	};
+
+
+/***/ },
+/* 172 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var detect = __webpack_require__(171);
+	var event = __webpack_require__(173);
+
+	module.exports = function triggerUrl(url, silent) {
+	    if (detect.hasHashbang()) {
+	        window.location.hash = '#!' + url;
+	    } else if (detect.hasPushState) {
+	        window.history.pushState({}, '', url);
+	        if (!silent) {
+	            window.dispatchEvent(event.createEvent('popstate'));
+	        }
+	    } else {
+	        console.error("Browser does not support pushState, and hash is missing a hashbang prefix!");
+	    }
+	};
+
+
+/***/ },
+/* 173 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var detect = __webpack_require__(171);
+
+	module.exports = {
+	    createEvent: function(name) {
+	        if (detect.hasEventConstructor()) {
+	            return new window.Event(name);
+	        } else {
+	            var event = document.createEvent('Event');
+	            event.initEvent(name, true, false);
+	            return event;
+	        }
+	    }
+	};
+
+
+/***/ },
+/* 174 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
@@ -20841,13 +21673,13 @@
 	var IntensityFilter = __webpack_require__(181);
 	var Maybe = __webpack_require__(163);
 
-	var App = (function (_React$Component) {
-	  _inherits(App, _React$Component);
+	var ArticlesControllerView = (function (_React$Component) {
+	  _inherits(ArticlesControllerView, _React$Component);
 
-	  function App(props) {
-	    _classCallCheck(this, App);
+	  function ArticlesControllerView(props) {
+	    _classCallCheck(this, ArticlesControllerView);
 
-	    _get(Object.getPrototypeOf(App.prototype), 'constructor', this).call(this, props);
+	    _get(Object.getPrototypeOf(ArticlesControllerView.prototype), 'constructor', this).call(this, props);
 	    this.state = {
 	      categories: [],
 	      articles: [],
@@ -20856,9 +21688,7 @@
 	    };
 	  }
 
-	  /* istanbul ignore next */
-
-	  _createClass(App, [{
+	  _createClass(ArticlesControllerView, [{
 	    key: 'handleDataChanged',
 	    value: function handleDataChanged() {
 	      this.setState({
@@ -20908,31 +21738,24 @@
 	        React.createElement(ArticleList, { categories: this.state.categories,
 	          articles: this.state.articles,
 	          actionCreator: this.props.actionCreator }),
-	        React.createElement(ShoppingCartBadge, { shoppingCartInfo: this.state.shoppingCartInfo }),
+	        React.createElement(ShoppingCartBadge, { shoppingCartInfo: this.state.shoppingCartInfo, navigate: this.props.navigate }),
 	        articleInformation
 	      );
 	    }
 	  }]);
 
-	  return App;
+	  return ArticlesControllerView;
 	})(React.Component);
 
-	App.propTypes = {
+	;
+
+	ArticlesControllerView.propTypes = {
 	  store: React.PropTypes.object.isRequired,
 	  actionCreator: React.PropTypes.object.isRequired
 	};
-	module.exports = App;
+	module.exports = ArticlesControllerView;
 
 /***/ },
-/* 166 */,
-/* 167 */,
-/* 168 */,
-/* 169 */,
-/* 170 */,
-/* 171 */,
-/* 172 */,
-/* 173 */,
-/* 174 */,
 /* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -20960,9 +21783,15 @@
 	  _createClass(ShoppingCartBadge, [{
 	    key: 'render',
 	    value: function render() {
+	      var _this = this;
+
+	      var navigateToShoppingCart = function navigateToShoppingCart() {
+	        _this.props.navigate('/shopping-cart');
+	      };
+
 	      return React.createElement(
 	        'div',
-	        { className: 'shopping-cart-badge' },
+	        { className: 'shopping-cart-badge', onClick: navigateToShoppingCart },
 	        'Shopping Cart',
 	        React.createElement(
 	          'div',
@@ -21093,7 +21922,7 @@
 	        { className: 'category' },
 	        React.createElement(
 	          'h3',
-	          null,
+	          { className: 'category-name' },
 	          this.props.category.name
 	        ),
 	        articles
@@ -21156,7 +21985,7 @@
 	        React.createElement('br', null),
 	        React.createElement(
 	          'span',
-	          null,
+	          { className: 'article-name' },
 	          this.props.article.name
 	        ),
 	        React.createElement('br', null),
@@ -21186,7 +22015,13 @@
 	})(React.Component);
 
 	Article.propTypes = {
-	  article: React.PropTypes.object.isRequired
+	  article: React.PropTypes.shape({
+	    id: React.PropTypes.number.isRequired,
+	    name: React.PropTypes.string.isRequired,
+	    intensity: React.PropTypes.number.isRequired,
+	    price: React.PropTypes.number.isRequired,
+	    isMatchingFilter: React.PropTypes.bool.isRequired
+	  })
 	};
 	module.exports = Article;
 
@@ -21380,7 +22215,47 @@
 	module.exports = IntensityFilter;
 
 /***/ },
-/* 182 */,
+/* 182 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = __webpack_require__(2);
+
+	var ShoppingCartControllerView = (function (_React$Component) {
+	  _inherits(ShoppingCartControllerView, _React$Component);
+
+	  function ShoppingCartControllerView() {
+	    _classCallCheck(this, ShoppingCartControllerView);
+
+	    _get(Object.getPrototypeOf(ShoppingCartControllerView.prototype), 'constructor', this).apply(this, arguments);
+	  }
+
+	  _createClass(ShoppingCartControllerView, [{
+	    key: 'render',
+	    value: function render() {
+	      return React.createElement(
+	        'div',
+	        { className: 'shopping-cart' },
+	        'Shopping-Cart-View'
+	      );
+	    }
+	  }]);
+
+	  return ShoppingCartControllerView;
+	})(React.Component);
+
+	module.exports = ShoppingCartControllerView;
+
+/***/ },
 /* 183 */
 /***/ function(module, exports, __webpack_require__) {
 

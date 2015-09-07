@@ -1,5 +1,5 @@
-var chai = require('chai');
-var expect = chai.expect;
+let chai = require('chai');
+let expect = chai.expect;
 
 describe('Maybe', () => {
   let Maybe = require('../app/maybe.js');

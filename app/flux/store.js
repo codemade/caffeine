@@ -10,7 +10,7 @@ class Store {
   }
 
   addChangeListener(eventIdentifier, listener) {
-    var listenerWithId = { execute: listener, id: this.highestListenerId };
+    let listenerWithId = { execute: listener, id: this.highestListenerId };
     this.highestListenerId++;
 
     if (!this.listeners[eventIdentifier]) {
@@ -22,7 +22,7 @@ class Store {
   }
 
   emitChange(eventIdentifier) {
-    var listenersForEvent = this.listeners[eventIdentifier];
+    let listenersForEvent = this.listeners[eventIdentifier];
     if (listenersForEvent) {
       listenersForEvent.forEach((listener) => {
         listener.execute();

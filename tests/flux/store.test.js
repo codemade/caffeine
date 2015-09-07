@@ -1,22 +1,23 @@
-var chai = require('chai');
-var expect = chai.expect;
-var sinon = require('sinon');
-var sinonChai = require('sinon-chai');
+let chai = require('chai');
+let expect = chai.expect;
+let sinon = require('sinon');
+let sinonChai = require('sinon-chai');
 chai.use(sinonChai);
 
 describe('store', () => {
-  var store;
+  let store;
   beforeEach(function() {
-    var Store = require('../../app/flux/store.js');
+    let Store = require('../../app/flux/store.js');
     store = new Store();
   });
 
   describe('emitting an event', () => {
     it('should execute all change listeners registered for that event', () => {
-      var callbackA = sinon.spy();
-      var callbackB = sinon.spy();
-      var callbackC = sinon.spy();
-      var changeEvent = 'somethingChanged';
+      let callbackA = sinon.spy();
+      let callbackB = sinon.spy();
+      let callbackC = sinon.spy();
+      let payload = {pay: 'load'};
+      let changeEvent = 'somethingChanged';
 
       store.addChangeListener(changeEvent, callbackA);
       store.addChangeListener(changeEvent, callbackB);
@@ -31,14 +32,14 @@ describe('store', () => {
 
     describe('after change listener deregistered', () => {
       it('should not execute deregistered listener', () => {
-        var callbackA = sinon.spy();
-        var callbackB = sinon.spy();
-        var callbackC = sinon.spy();
-        var changeEvent = 'somethingChanged';
+        let callbackA = sinon.spy();
+        let callbackB = sinon.spy();
+        let callbackC = sinon.spy();
+        let changeEvent = 'somethingChanged';
 
-        var deregisterA = store.addChangeListener(changeEvent, callbackA);
+        let deregisterA = store.addChangeListener(changeEvent, callbackA);
         store.addChangeListener(changeEvent, callbackB);
-        var deregisterC = store.addChangeListener(changeEvent, callbackC);
+        let deregisterC = store.addChangeListener(changeEvent, callbackC);
 
         deregisterA();
         deregisterC();
