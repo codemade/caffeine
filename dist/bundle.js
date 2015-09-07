@@ -21747,8 +21747,6 @@
 	  return ArticlesControllerView;
 	})(React.Component);
 
-	;
-
 	ArticlesControllerView.propTypes = {
 	  store: React.PropTypes.object.isRequired,
 	  actionCreator: React.PropTypes.object.isRequired

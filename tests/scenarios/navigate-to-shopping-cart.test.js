@@ -9,10 +9,15 @@ let renderTarget, renderedComponent;
 let navigateSpy;
 
 describe('Navigate to shopping-cart route', () => {
-  let categories = [{id: 1, name: 'first category'}, {id: 2, name:'second category'}];
-  let articles = [{id: 3, name: 'first article', intensity: 3, price: 42, isMatchingFilter: true, category: 1}, {id: 4, name: 'second article', intensity: 8, price: 38, isMatchingFilter: true, category:2}];
+  let categories = [
+    {id: 1, name: 'first category'},
+    {id: 2, name: 'second category'}
+  ];
+  let articles = [
+    {id: 3, name: 'first article', intensity: 3, price: 42, isMatchingFilter: true, category: 1},
+    {id: 4, name: 'second article', intensity: 8, price: 38, isMatchingFilter: true, category: 2}
+  ];
   beforeEach(function() {
-
     let ComponentClass = require('../../app/components/articles-controller-view.react.js');
     renderTarget = document.getElementsByTagName('body')[0];
 

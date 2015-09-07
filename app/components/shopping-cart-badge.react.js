@@ -2,10 +2,9 @@ let React = require('react');
 
 class ShoppingCartBadge extends React.Component {
   render() {
-
     let navigateToShoppingCart = () => {
       this.props.navigate('/shopping-cart');
-    }
+    };
 
     return <div className='shopping-cart-badge' onClick={navigateToShoppingCart}>
       Shopping Cart

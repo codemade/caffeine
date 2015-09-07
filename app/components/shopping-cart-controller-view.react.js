@@ -1,7 +1,7 @@
 let React = require('react');
 
 class ShoppingCartControllerView extends React.Component {
-  render(){
+  render() {
     return <div className='shopping-cart'>Shopping-Cart-View</div>;
   }
 }

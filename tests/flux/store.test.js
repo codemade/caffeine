@@ -16,7 +16,6 @@ describe('store', () => {
       let callbackA = sinon.spy();
       let callbackB = sinon.spy();
       let callbackC = sinon.spy();
-      let payload = {pay: 'load'};
       let changeEvent = 'somethingChanged';
 
       store.addChangeListener(changeEvent, callbackA);
