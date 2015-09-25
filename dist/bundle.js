@@ -22063,7 +22063,7 @@
 	          'span',
 	          { className: 'article-price' },
 	          'Preis ',
-	          this.props.article.price,
+	          this.props.article.price / 100,
 	          ' €'
 	        )
 	      );
