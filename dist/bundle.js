@@ -22456,12 +22456,15 @@
 	  _createClass(ShoppingCartItem, [{
 	    key: 'render',
 	    value: function render() {
+	      var image = 'assets/60x60/article_' + this.props.article.id + '.png';
+
 	      return React.createElement(
 	        'div',
 	        { className: 'shopping-cart-item' },
 	        React.createElement(
 	          'div',
 	          null,
+	          React.createElement('img', { src: image }),
 	          this.props.article.name
 	        ),
 	        React.createElement(
