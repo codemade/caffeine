@@ -1,7 +1,6 @@
 let React = require('react');
 let TestUtils = React.addons.TestUtils;
 let chai = require('chai');
-let sinon = require('sinon');
 let sinonChai = require('sinon-chai');
 let expect = chai.expect;
 chai.use(sinonChai);

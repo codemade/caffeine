@@ -20871,7 +20871,7 @@
 	    return React.createElement(ArticlesControllerView, { store: this.props.store, actionCreator: this.props.actionCreator, navigate: navigate });
 	  },
 	  shoppingCart: function shoppingCart() {
-	    return React.createElement(ShoppingCartControllerView, null);
+	    return React.createElement(ShoppingCartControllerView, { store: this.props.store, actionCreator: this.props.actionCreator });
 	  }
 	});
 
@@ -22269,6 +22269,11 @@
 	      this.setState({
 	        shoppingCartItems: this.props.store.getShoppingCartContent()
 	      });
+	    }
+	  }, {
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      this.handleDataChanged();
 	    }
 	  }, {
 	    key: 'componentDidMount',
