@@ -13,14 +13,14 @@ class ShoppingCartItem extends React.Component {
       };
 
       return <div className='shopping-cart-item'>
-        <div><img src={image} />{this.props.article.name}</div>
-        <div>{this.props.article.price / 100}</div>
+        <div className='content'><img src={image} />{this.props.article.name}</div>
+        <div className='content'>{this.props.article.price / 100}</div>
         <div>
-          <span>{this.props.article.amount}</span>
+          <span className='content'>{this.props.article.amount}</span>
           <button className='addToCart' onClick={addToCart}>+</button>
           <button className='removeFromCart' onClick={removeFromCart}>-</button>
         </div>
-        <div>{this.props.article.amount * this.props.article.price / 100}</div>
+        <div className='content'>{this.props.article.amount * this.props.article.price / 100}</div>
       </div>;
     }
 }

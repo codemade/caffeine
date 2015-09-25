@@ -51,8 +51,9 @@ describe('Displaying the shopping cart overview', () => {
 
     it('should display empty footer', () => {
       let shoppingCartFooter = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-footer')[0].getDOMNode();
-      expect(shoppingCartFooter.children[2].textContent).to.equal('0');
-      expect(shoppingCartFooter.children[3].textContent).to.equal('0');
+      let actual = Array.from(shoppingCartFooter.querySelectorAll('div')).map((cell) => cell.textContent);
+      let expected = ['', '', '0', '0'];
+      expect(actual).to.deep.equal(expected);
     });
   });
 
@@ -64,28 +65,23 @@ describe('Displaying the shopping cart overview', () => {
 
     it('should display name, amount and price of first article', () => {
       let shoppingCartItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item')[0].getDOMNode();
-      expect(shoppingCartItem.children[0].textContent).to.equal('first article');
-      expect(shoppingCartItem.children[1].textContent).to.equal('0.42');
-      expect(shoppingCartItem.children[2].children[0].textContent).to.equal('20');
-      expect(shoppingCartItem.children[3].textContent).to.equal('8.4');
+      let actual = Array.from(shoppingCartItem.querySelectorAll('.content')).map((cell) => cell.textContent);
+      let expected = ['first article', '0.42', '20', '8.4'];
+      expect(actual).to.deep.equal(expected);
     });
 
     it('should display name, amount and price of second article', () => {
       let shoppingCartItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item')[1].getDOMNode();
-      expect(shoppingCartItem.children[0].textContent).to.equal('second article');
-      expect(shoppingCartItem.children[1].textContent).to.equal('0.38');
-      expect(shoppingCartItem.children[2].children[0].textContent).to.equal('30');
-      expect(shoppingCartItem.children[3].textContent).to.equal('11.4');
+      let actual = Array.from(shoppingCartItem.querySelectorAll('.content')).map((cell) => cell.textContent);
+      let expected = ['second article', '0.38', '30', '11.4'];
+      expect(actual).to.deep.equal(expected);
     });
 
-    it('should display footer with total amount', () => {
+    it('should display footer with total amount and total price', () => {
       let shoppingCartFooter = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-footer')[0].getDOMNode();
-      expect(shoppingCartFooter.children[2].textContent).to.equal('50');
-    });
-
-    it('should display footer with total price', () => {
-      let shoppingCartFooter = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-footer')[0].getDOMNode();
-      expect(shoppingCartFooter.children[3].textContent).to.equal('19.8');
+      let actual = Array.from(shoppingCartFooter.querySelectorAll('div')).map((cell) => cell.textContent);
+      let expected = ['', '', '50', '19.8'];
+      expect(actual).to.deep.equal(expected);
     });
 
     it('should not display packaging size warning', () => {
@@ -98,12 +94,14 @@ describe('Displaying the shopping cart overview', () => {
 
       beforeEach(() => {
         shoppingCartItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item')[0].getDOMNode();
-        addButton = shoppingCartItem.children[2].children[1];
+        addButton = shoppingCartItem.querySelector('.addToCart');
         React.addons.TestUtils.Simulate.click(addButton);
       });
 
       it('should increase article amount by 10', () => {
-        expect(shoppingCartItem.children[2].children[0].textContent).to.equal('30');
+        let actual = Array.from(shoppingCartItem.querySelectorAll('.content')).map((cell) => cell.textContent);
+        let expected = ['first article', '0.42', '30', '12.6'];
+        expect(actual).to.deep.equal(expected);
       });
 
       it('should display packaging size warning', () => {
@@ -117,13 +115,15 @@ describe('Displaying the shopping cart overview', () => {
 
       beforeEach(() => {
         shoppingCartItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item')[0].getDOMNode();
-        minusButton = shoppingCartItem.children[2].children[2];
+        minusButton = shoppingCartItem.querySelector('.removeFromCart');
       });
 
       describe('Once', () => {
         it('should decrease article amount by 10', () => {
           React.addons.TestUtils.Simulate.click(minusButton);
-          expect(shoppingCartItem.children[2].children[0].textContent).to.equal('10');
+          let actual = Array.from(shoppingCartItem.querySelectorAll('.content')).map((cell) => cell.textContent);
+          let expected = ['first article', '0.42', '10', '4.2'];
+          expect(actual).to.deep.equal(expected);
         });
       });
 

@@ -22449,13 +22449,13 @@
 	        { className: 'shopping-cart-item' },
 	        React.createElement(
 	          'div',
-	          null,
+	          { className: 'content' },
 	          React.createElement('img', { src: image }),
 	          this.props.article.name
 	        ),
 	        React.createElement(
 	          'div',
-	          null,
+	          { className: 'content' },
 	          this.props.article.price / 100
 	        ),
 	        React.createElement(
@@ -22463,7 +22463,7 @@
 	          null,
 	          React.createElement(
 	            'span',
-	            null,
+	            { className: 'content' },
 	            this.props.article.amount
 	          ),
 	          React.createElement(
@@ -22479,7 +22479,7 @@
 	        ),
 	        React.createElement(
 	          'div',
-	          null,
+	          { className: 'content' },
 	          this.props.article.amount * this.props.article.price / 100
 	        )
 	      );
