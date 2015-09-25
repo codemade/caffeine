@@ -94,27 +94,34 @@ describe('Displaying the shopping cart overview', () => {
     });
 
     describe('Clicking the add button of an article', () => {
-      it('should increase article amount by 10', () => {
-        let shoppingCartItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item')[0].getDOMNode();
-        let addButton = shoppingCartItem.children[2].children[1];
+      let shoppingCartItem, addButton;
+
+      beforeEach(() => {
+        shoppingCartItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item')[0].getDOMNode();
+        addButton = shoppingCartItem.children[2].children[1];
         React.addons.TestUtils.Simulate.click(addButton);
+      });
+
+      it('should increase article amount by 10', () => {
         expect(shoppingCartItem.children[2].children[0].textContent).to.equal('30');
       });
 
       it('should display packaging size warning', () => {
-        let shoppingCartItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item')[0].getDOMNode();
-        let addButton = shoppingCartItem.children[2].children[1];
-        React.addons.TestUtils.Simulate.click(addButton);
         let warnings = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-warning');
         expect(warnings.length).to.equal(1);
       });
     });
 
     describe('Clicking the minus button of first article', () => {
+      let shoppingCartItem, minusButton;
+
+      beforeEach(() => {
+        shoppingCartItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item')[0].getDOMNode();
+        minusButton = shoppingCartItem.children[2].children[2];
+      });
+
       describe('Once', () => {
         it('should decrease article amount by 10', () => {
-          let shoppingCartItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item')[0].getDOMNode();
-          let minusButton = shoppingCartItem.children[2].children[2];
           React.addons.TestUtils.Simulate.click(minusButton);
           expect(shoppingCartItem.children[2].children[0].textContent).to.equal('10');
         });
@@ -122,8 +129,6 @@ describe('Displaying the shopping cart overview', () => {
 
       describe('Twice', () => {
         it('should remove article from shopping cart', () => {
-          let shoppingCartItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item')[0].getDOMNode();
-          let minusButton = shoppingCartItem.children[2].children[2];
           React.addons.TestUtils.Simulate.click(minusButton);
           React.addons.TestUtils.Simulate.click(minusButton);
           let shoppingCartItems = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item');
