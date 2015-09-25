@@ -22250,6 +22250,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var React = __webpack_require__(2);
+	var ShoppingCartItem = __webpack_require__(185);
 
 	var ShoppingCartControllerView = (function (_React$Component) {
 	  _inherits(ShoppingCartControllerView, _React$Component);
@@ -22289,25 +22290,7 @@
 	    key: 'render',
 	    value: function render() {
 	      var items = this.state.shoppingCartItems.map(function (item) {
-	        return React.createElement(
-	          'div',
-	          { className: 'shopping-cart-item' },
-	          React.createElement(
-	            'span',
-	            null,
-	            item.name
-	          ),
-	          React.createElement(
-	            'span',
-	            null,
-	            item.amount
-	          ),
-	          React.createElement(
-	            'span',
-	            null,
-	            item.price
-	          )
-	        );
+	        return React.createElement(ShoppingCartItem, { article: item });
 	      });
 	      return React.createElement(
 	        'div',
@@ -22383,6 +22366,64 @@
 	  confections: confections,
 	  articles: articles
 	};
+
+/***/ },
+/* 185 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = __webpack_require__(2);
+
+	var ShoppingCartItem = (function (_React$Component) {
+	  _inherits(ShoppingCartItem, _React$Component);
+
+	  function ShoppingCartItem() {
+	    _classCallCheck(this, ShoppingCartItem);
+
+	    _get(Object.getPrototypeOf(ShoppingCartItem.prototype), 'constructor', this).apply(this, arguments);
+	  }
+
+	  _createClass(ShoppingCartItem, [{
+	    key: 'render',
+	    value: function render() {
+	      return React.createElement(
+	        'div',
+	        { className: 'shopping-cart-item' },
+	        React.createElement(
+	          'div',
+	          { className: 'name' },
+	          this.props.article.name
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'amount' },
+	          this.props.article.amount
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'price' },
+	          this.props.article.price
+	        )
+	      );
+	    }
+	  }]);
+
+	  return ShoppingCartItem;
+	})(React.Component);
+
+	ShoppingCartItem.propTypes = {
+	  article: React.PropTypes.object.isRequired
+	};
+	module.exports = ShoppingCartItem;
 
 /***/ }
 /******/ ]);

@@ -1,4 +1,5 @@
 let React = require('react');
+let ShoppingCartItem = require('./shopping-cart-item.react.js');
 
 class ShoppingCartControllerView extends React.Component {
   constructor(props) {
@@ -30,11 +31,7 @@ class ShoppingCartControllerView extends React.Component {
 
   render() {
     let items = this.state.shoppingCartItems.map((item) => {
-      return <div className='shopping-cart-item'>
-        <span>{item.name}</span>
-        <span>{item.amount}</span>
-        <span>{item.price}</span>
-      </div>;
+      return <ShoppingCartItem article={item} />;
     });
     return <div className='shopping-cart'>
       <h1>Shopping-Cart-View</h1>
