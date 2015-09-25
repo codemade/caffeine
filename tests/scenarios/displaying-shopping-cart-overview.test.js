@@ -51,15 +51,20 @@ describe('Displaying the shopping cart overview', () => {
     });
   });
 
-  describe('when several articles added to shopping cart', () => {
+  describe('when two different articles added to shopping cart', () => {
     beforeEach(() => {
       actionCreator.addArticleToShoppingCart(3, 5);
       actionCreator.addArticleToShoppingCart(4, 3);
     });
 
-    it('should display all added articles', () => {
-      let shoppingCartItems = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item');
-      expect(shoppingCartItems).not.to.deep.equal([]);
+    it('should display name of first article', () => {
+      let shoppingCartItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item')[0];
+      expect(shoppingCartItem.getDOMNode().textContent).to.equal('first article');
+    });
+
+    it('should display name of second article', () => {
+      let shoppingCartItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item')[1];
+      expect(shoppingCartItem.getDOMNode().textContent).to.equal('second article');
     });
   });
 });

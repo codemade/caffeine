@@ -74,7 +74,23 @@ class ArticleStore extends Store {
   }
 
   getShoppingCartContent() {
-    return [];
+    let shoppingCartContent = [];
+
+    if (!this.data || !this.data.articles) return shoppingCartContent;
+
+    return this.data.articles.reduce((acc, article) => {
+      let amount = this.shoppingCart[article.id];
+
+      if (amount) {
+        acc.push({
+          id: article.id,
+          name: article.name,
+          amount: amount,
+          price: article.price
+        });
+      }
+      return acc;
+    }, shoppingCartContent);
   }
 
   onInitialize(data) {
