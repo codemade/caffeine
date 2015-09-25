@@ -49,9 +49,10 @@ describe('Displaying the shopping cart overview', () => {
       expect(shoppingCartItems).to.deep.equal([]);
     });
 
-    xit('should not display footer', () => {
-      let shoppingCartFooters = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-footer');
-      expect(shoppingCartFooters).to.deep.equal([]);
+    it('should display empty footer', () => {
+      let shoppingCartFooter = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-footer')[0].getDOMNode();
+      expect(shoppingCartFooter.children[2].textContent).to.equal('0');
+      expect(shoppingCartFooter.children[3].textContent).to.equal('0');
     });
   });
 

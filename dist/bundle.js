@@ -22311,6 +22311,23 @@
 	        return React.createElement(ShoppingCartItem, { article: item });
 	      });
 
+	      var footer = React.createElement(
+	        'div',
+	        { className: 'shopping-cart-footer' },
+	        React.createElement('div', null),
+	        React.createElement('div', null),
+	        React.createElement(
+	          'div',
+	          null,
+	          this.state.shoppingCartContent.totalAmount
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
+	          this.state.shoppingCartContent.totalPrice / 100
+	        )
+	      );
+
 	      return React.createElement(
 	        'div',
 	        { className: 'shopping-cart' },
@@ -22344,22 +22361,7 @@
 	          )
 	        ),
 	        items,
-	        React.createElement(
-	          'div',
-	          { className: 'shopping-cart-footer' },
-	          React.createElement('div', null),
-	          React.createElement('div', null),
-	          React.createElement(
-	            'div',
-	            null,
-	            this.state.shoppingCartContent.totalAmount
-	          ),
-	          React.createElement(
-	            'div',
-	            null,
-	            this.state.shoppingCartContent.totalPrice / 100
-	          )
-	        )
+	        footer
 	      );
 	    }
 	  }]);
