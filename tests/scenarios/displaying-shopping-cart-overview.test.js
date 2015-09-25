@@ -96,5 +96,27 @@ describe('Displaying the shopping cart overview', () => {
         expect(shoppingCartItem.children[2].children[0].textContent).to.equal('30');
       });
     });
+
+    describe('Clicking the minus button of first article', () => {
+      describe('Once', () => {
+        it('should decrease article amount by 10', () => {
+          let shoppingCartItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item')[0].getDOMNode();
+          let minusButton = shoppingCartItem.children[2].children[2];
+          React.addons.TestUtils.Simulate.click(minusButton);
+          expect(shoppingCartItem.children[2].children[0].textContent).to.equal('10');
+        });
+      });
+
+      describe('Twice', () => {
+        it('should remove article from shopping cart', () => {
+          let shoppingCartItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item')[0].getDOMNode();
+          let minusButton = shoppingCartItem.children[2].children[2];
+          React.addons.TestUtils.Simulate.click(minusButton);
+          React.addons.TestUtils.Simulate.click(minusButton);
+          let shoppingCartItems = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item');
+          expect(shoppingCartItems.length).to.equal(1);
+        });
+      });
+    });
   });
 });

@@ -35,6 +35,14 @@ class ActionCreator {
       amount: amount
     });
   }
+
+  removeArticleFromShoppingCart(articleId, amount) {
+    dispatcher.dispatch({
+      type: actionIdentifiers.shoppingCart.removeArticle,
+      articleId: articleId,
+      amount: amount
+    });
+  }
 }
 
 module.exports = ActionCreator;

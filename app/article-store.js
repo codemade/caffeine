@@ -130,6 +130,14 @@ class ArticleStore extends Store {
     this.emitChange('changed');
   }
 
+  onRemoveArticleFromShoppingCart(articleId, amount) {
+    let previousAmount = this.shoppingCart[articleId];
+    let currentAmount = previousAmount - amount;
+    this.shoppingCart[articleId] = currentAmount;
+    if (currentAmount <= 0) delete this.shoppingCart[articleId];
+    this.emitChange('changed');
+  }
+
   onActionDispatched(action) {
     switch (action.type) {
       case actionIdentifiers.articleList.initialize:
@@ -143,6 +151,9 @@ class ArticleStore extends Store {
         break;
       case actionIdentifiers.shoppingCart.addArticle:
         this.onAddArticleToShoppingCart(action.articleId, action.amount);
+        break;
+      case actionIdentifiers.shoppingCart.removeArticle:
+        this.onRemoveArticleFromShoppingCart(action.articleId, action.amount);
         break;
       default:
         // nothing to do here

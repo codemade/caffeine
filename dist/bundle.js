@@ -20611,6 +20611,15 @@
 	      this.emitChange('changed');
 	    }
 	  }, {
+	    key: 'onRemoveArticleFromShoppingCart',
+	    value: function onRemoveArticleFromShoppingCart(articleId, amount) {
+	      var previousAmount = this.shoppingCart[articleId];
+	      var currentAmount = previousAmount - amount;
+	      this.shoppingCart[articleId] = currentAmount;
+	      if (currentAmount <= 0) delete this.shoppingCart[articleId];
+	      this.emitChange('changed');
+	    }
+	  }, {
 	    key: 'onActionDispatched',
 	    value: function onActionDispatched(action) {
 	      switch (action.type) {
@@ -20625,6 +20634,9 @@
 	          break;
 	        case actionIdentifiers.shoppingCart.addArticle:
 	          this.onAddArticleToShoppingCart(action.articleId, action.amount);
+	          break;
+	        case actionIdentifiers.shoppingCart.removeArticle:
+	          this.onRemoveArticleFromShoppingCart(action.articleId, action.amount);
 	          break;
 	        default:
 	        // nothing to do here
@@ -20696,7 +20708,8 @@
 	    selectArticle: 'articleList.selectArticle'
 	  },
 	  shoppingCart: {
-	    addArticle: 'shoppingCart.addArticle'
+	    addArticle: 'shoppingCart.addArticle',
+	    removeArticle: 'shoppingCart.removeArticle'
 	  }
 	};
 
@@ -20846,6 +20859,15 @@
 	    value: function addArticleToShoppingCart(articleId, amount) {
 	      dispatcher.dispatch({
 	        type: actionIdentifiers.shoppingCart.addArticle,
+	        articleId: articleId,
+	        amount: amount
+	      });
+	    }
+	  }, {
+	    key: 'removeArticleFromShoppingCart',
+	    value: function removeArticleFromShoppingCart(articleId, amount) {
+	      dispatcher.dispatch({
+	        type: actionIdentifiers.shoppingCart.removeArticle,
 	        articleId: articleId,
 	        amount: amount
 	      });
@@ -22466,6 +22488,10 @@
 	        _this.props.actionCreator.addArticleToShoppingCart(_this.props.article.id, 10);
 	      };
 
+	      var removeFromCart = function removeFromCart() {
+	        _this.props.actionCreator.removeArticleFromShoppingCart(_this.props.article.id, 10);
+	      };
+
 	      return React.createElement(
 	        'div',
 	        { className: 'shopping-cart-item' },
@@ -22492,6 +22518,11 @@
 	            'button',
 	            { className: 'addToCart', onClick: addToCart },
 	            '+'
+	          ),
+	          React.createElement(
+	            'button',
+	            { className: 'removeFromCart', onClick: removeFromCart },
+	            '-'
 	          )
 	        ),
 	        React.createElement(

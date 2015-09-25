@@ -8,12 +8,17 @@ class ShoppingCartItem extends React.Component {
         this.props.actionCreator.addArticleToShoppingCart(this.props.article.id, 10);
       };
 
+      let removeFromCart = () => {
+        this.props.actionCreator.removeArticleFromShoppingCart(this.props.article.id, 10);
+      };
+
       return <div className='shopping-cart-item'>
         <div><img src={image} />{this.props.article.name}</div>
         <div>{this.props.article.price / 100}</div>
         <div>
           <span>{this.props.article.amount}</span>
           <button className='addToCart' onClick={addToCart}>+</button>
+          <button className='removeFromCart' onClick={removeFromCart}>-</button>
         </div>
         <div>{this.props.article.amount * this.props.article.price / 100}</div>
       </div>;
