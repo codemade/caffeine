@@ -20539,7 +20539,7 @@
 
 	        if (amount) {
 	          acc.articleCount += amount;
-	          acc.totalPrice += article.price * amount / 100;
+	          acc.totalPrice += article.price * amount;
 	        }
 	        return acc;
 	      }, shoppingCartInfo);
@@ -21860,7 +21860,7 @@
 	        React.createElement(
 	          'div',
 	          { className: 'total-price' },
-	          this.props.shoppingCartInfo.totalPrice
+	          this.props.shoppingCartInfo.totalPrice / 100
 	        )
 	      );
 	    }
