@@ -20,6 +20,10 @@ class ShoppingCartControllerView extends React.Component {
     this.deregisterChangeListener = this.props.store.addChangeListener('changed', this.handleDataChanged.bind(this));
   }
 
+  componentWillUnmount() {
+    this.deregisterChangeListener();
+  }
+
   render() {
     return <div className='shopping-cart'>Shopping-Cart-View</div>;
   }
