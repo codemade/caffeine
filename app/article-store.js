@@ -74,11 +74,15 @@ class ArticleStore extends Store {
   }
 
   getShoppingCartContent() {
-    let shoppingCartContent = [];
+    let shoppingCartContent = {
+      totalAmount: 0,
+      totalPrice: 0,
+      items: []
+    };
 
     if (!this.data || !this.data.articles) return shoppingCartContent;
 
-    return this.data.articles.reduce((acc, article) => {
+    let items = this.data.articles.reduce((acc, article) => {
       let amount = this.shoppingCart[article.id];
 
       if (amount) {
@@ -86,11 +90,17 @@ class ArticleStore extends Store {
           id: article.id,
           name: article.name,
           amount: amount,
-          price: article.price
+          price: article.price,
+          totalPrice: amount * article.price
         });
       }
       return acc;
-    }, shoppingCartContent);
+    }, []);
+
+    shoppingCartContent.items = items;
+    shoppingCartContent.totalAmount = items.reduce((sum, item) => sum + item.amount, 0);
+    shoppingCartContent.totalPrice = items.reduce((sum, item) => sum + item.totalPrice, 0);
+    return shoppingCartContent;
   }
 
   onInitialize(data) {

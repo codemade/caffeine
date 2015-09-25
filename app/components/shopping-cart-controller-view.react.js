@@ -5,14 +5,18 @@ class ShoppingCartControllerView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      shoppingCartItems: []
+      shoppingCartContent: {
+        totalAmount: 0,
+        totalPrice: 0,
+        items: []
+      }
     };
   }
 
   handleDataChanged() {
     this.setState(
       {
-        shoppingCartItems: this.props.store.getShoppingCartContent()
+        shoppingCartContent: this.props.store.getShoppingCartContent()
       }
     );
   }
@@ -30,19 +34,9 @@ class ShoppingCartControllerView extends React.Component {
   }
 
   render() {
-    let items = this.state.shoppingCartItems.map((item) => {
+    let items = this.state.shoppingCartContent.items.map((item) => {
       return <ShoppingCartItem article={item} />;
     });
-
-    let totalAmount = this.state.shoppingCartItems.reduce((acc, item) => {
-      acc += item.amount;
-      return acc;
-    }, 0);
-
-    let totalPrice = this.state.shoppingCartItems.reduce((acc, item) => {
-      acc += item.amount * item.price / 100;
-      return acc;
-    }, 0);
 
     return <div className='shopping-cart'>
       <h1>Shopping-Cart-View</h1>
@@ -56,8 +50,8 @@ class ShoppingCartControllerView extends React.Component {
       <div className='shopping-cart-footer'>
         <div></div>
         <div></div>
-        <div>{totalAmount}</div>
-        <div>{totalPrice}</div>
+        <div>{this.state.shoppingCartContent.totalAmount}</div>
+        <div>{this.state.shoppingCartContent.totalPrice / 100}</div>
       </div>
     </div>;
   }

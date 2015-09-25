@@ -20549,11 +20549,15 @@
 	    value: function getShoppingCartContent() {
 	      var _this3 = this;
 
-	      var shoppingCartContent = [];
+	      var shoppingCartContent = {
+	        totalAmount: 0,
+	        totalPrice: 0,
+	        items: []
+	      };
 
 	      if (!this.data || !this.data.articles) return shoppingCartContent;
 
-	      return this.data.articles.reduce(function (acc, article) {
+	      var items = this.data.articles.reduce(function (acc, article) {
 	        var amount = _this3.shoppingCart[article.id];
 
 	        if (amount) {
@@ -20561,11 +20565,21 @@
 	            id: article.id,
 	            name: article.name,
 	            amount: amount,
-	            price: article.price
+	            price: article.price,
+	            totalPrice: amount * article.price
 	          });
 	        }
 	        return acc;
-	      }, shoppingCartContent);
+	      }, []);
+
+	      shoppingCartContent.items = items;
+	      shoppingCartContent.totalAmount = items.reduce(function (sum, item) {
+	        return sum + item.amount;
+	      }, 0);
+	      shoppingCartContent.totalPrice = items.reduce(function (sum, item) {
+	        return sum + item.totalPrice;
+	      }, 0);
+	      return shoppingCartContent;
 	    }
 	  }, {
 	    key: 'onInitialize',
@@ -22260,7 +22274,11 @@
 
 	    _get(Object.getPrototypeOf(ShoppingCartControllerView.prototype), 'constructor', this).call(this, props);
 	    this.state = {
-	      shoppingCartItems: []
+	      shoppingCartContent: {
+	        totalAmount: 0,
+	        totalPrice: 0,
+	        items: []
+	      }
 	    };
 	  }
 
@@ -22268,7 +22286,7 @@
 	    key: 'handleDataChanged',
 	    value: function handleDataChanged() {
 	      this.setState({
-	        shoppingCartItems: this.props.store.getShoppingCartContent()
+	        shoppingCartContent: this.props.store.getShoppingCartContent()
 	      });
 	    }
 	  }, {
@@ -22289,19 +22307,9 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var items = this.state.shoppingCartItems.map(function (item) {
+	      var items = this.state.shoppingCartContent.items.map(function (item) {
 	        return React.createElement(ShoppingCartItem, { article: item });
 	      });
-
-	      var totalAmount = this.state.shoppingCartItems.reduce(function (acc, item) {
-	        acc += item.amount;
-	        return acc;
-	      }, 0);
-
-	      var totalPrice = this.state.shoppingCartItems.reduce(function (acc, item) {
-	        acc += item.amount * item.price / 100;
-	        return acc;
-	      }, 0);
 
 	      return React.createElement(
 	        'div',
@@ -22344,12 +22352,12 @@
 	          React.createElement(
 	            'div',
 	            null,
-	            totalAmount
+	            this.state.shoppingCartContent.totalAmount
 	          ),
 	          React.createElement(
 	            'div',
 	            null,
-	            totalPrice
+	            this.state.shoppingCartContent.totalPrice / 100
 	          )
 	        )
 	      );
