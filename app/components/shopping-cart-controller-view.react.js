@@ -35,7 +35,7 @@ class ShoppingCartControllerView extends React.Component {
 
   render() {
     let items = this.state.shoppingCartContent.items.map((item) => {
-      return <ShoppingCartItem article={item} />;
+      return <ShoppingCartItem article={item} actionCreator={this.props.actionCreator} />;
     });
 
     let footer = <div className='shopping-cart-footer'>

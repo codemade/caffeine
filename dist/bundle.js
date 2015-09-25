@@ -22307,8 +22307,10 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this = this;
+
 	      var items = this.state.shoppingCartContent.items.map(function (item) {
-	        return React.createElement(ShoppingCartItem, { article: item });
+	        return React.createElement(ShoppingCartItem, { article: item, actionCreator: _this.props.actionCreator });
 	      });
 
 	      var footer = React.createElement(
@@ -22456,7 +22458,13 @@
 	  _createClass(ShoppingCartItem, [{
 	    key: 'render',
 	    value: function render() {
+	      var _this = this;
+
 	      var image = 'assets/60x60/article_' + this.props.article.id + '.png';
+
+	      var addToCart = function addToCart() {
+	        _this.props.actionCreator.addArticleToShoppingCart(_this.props.article.id, 10);
+	      };
 
 	      return React.createElement(
 	        'div',
@@ -22475,7 +22483,16 @@
 	        React.createElement(
 	          'div',
 	          null,
-	          this.props.article.amount
+	          React.createElement(
+	            'span',
+	            null,
+	            this.props.article.amount
+	          ),
+	          React.createElement(
+	            'button',
+	            { className: 'addToCart', onClick: addToCart },
+	            '+'
+	          )
 	        ),
 	        React.createElement(
 	          'div',
