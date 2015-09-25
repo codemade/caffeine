@@ -35,6 +35,12 @@ class ShoppingCartControllerView extends React.Component {
     });
     return <div className='shopping-cart'>
       <h1>Shopping-Cart-View</h1>
+      <div className='shopping-cart-header'>
+        <div>Artikel</div>
+        <div>Einzelpreis</div>
+        <div>Anzahl</div>
+        <div>Gesamtpreis</div>
+      </div>
       {items}
     </div>;
   }

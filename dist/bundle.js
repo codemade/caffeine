@@ -22300,6 +22300,30 @@
 	          null,
 	          'Shopping-Cart-View'
 	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'shopping-cart-header' },
+	          React.createElement(
+	            'div',
+	            null,
+	            'Artikel'
+	          ),
+	          React.createElement(
+	            'div',
+	            null,
+	            'Einzelpreis'
+	          ),
+	          React.createElement(
+	            'div',
+	            null,
+	            'Anzahl'
+	          ),
+	          React.createElement(
+	            'div',
+	            null,
+	            'Gesamtpreis'
+	          )
+	        ),
 	        items
 	      );
 	    }
@@ -22400,18 +22424,23 @@
 	        { className: 'shopping-cart-item' },
 	        React.createElement(
 	          'div',
-	          { className: 'name' },
+	          null,
 	          this.props.article.name
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'amount' },
+	          null,
+	          this.props.article.price / 100
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
 	          this.props.article.amount
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'price' },
-	          this.props.article.price
+	          null,
+	          this.props.article.amount * this.props.article.price / 100
 	        )
 	      );
 	    }

@@ -3,9 +3,10 @@ let React = require('react');
 class ShoppingCartItem extends React.Component {
     render() {
       return <div className='shopping-cart-item'>
-        <div className='name'>{this.props.article.name}</div>
-        <div className='amount'>{this.props.article.amount}</div>
-        <div className='price'>{this.props.article.price}</div>
+        <div>{this.props.article.name}</div>
+        <div>{this.props.article.price / 100}</div>
+        <div>{this.props.article.amount}</div>
+        <div>{this.props.article.amount * this.props.article.price / 100}</div>
       </div>;
     }
 }

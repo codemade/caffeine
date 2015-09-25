@@ -101,3 +101,19 @@ div.shopping-cart-badge {
   border:1px solid white;
   background-color:gray;
 }
+
+div.shopping-cart {
+  display:table;
+}
+
+div.shopping-cart-header,
+div.shopping-cart-item {
+  display:table-row;
+}
+
+div.shopping-cart-header div,
+div.shopping-cart-item div {
+  display:table-cell;
+  border:1px solid white;
+  padding:6px;
+}
