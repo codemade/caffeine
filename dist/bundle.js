@@ -22337,6 +22337,31 @@
 	        return React.createElement(ShoppingCartItem, { article: item, actionCreator: _this.props.actionCreator });
 	      });
 
+	      var header = React.createElement(
+	        'div',
+	        { className: 'shopping-cart-header' },
+	        React.createElement(
+	          'div',
+	          null,
+	          'Artikel'
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
+	          'Einzelpreis'
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
+	          'Anzahl'
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
+	          'Gesamtpreis'
+	        )
+	      );
+
 	      var footer = React.createElement(
 	        'div',
 	        { className: 'shopping-cart-footer' },
@@ -22370,30 +22395,11 @@
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'shopping-cart-header' },
-	          React.createElement(
-	            'div',
-	            null,
-	            'Artikel'
-	          ),
-	          React.createElement(
-	            'div',
-	            null,
-	            'Einzelpreis'
-	          ),
-	          React.createElement(
-	            'div',
-	            null,
-	            'Anzahl'
-	          ),
-	          React.createElement(
-	            'div',
-	            null,
-	            'Gesamtpreis'
-	          )
+	          { className: 'shopping-cart-content' },
+	          header,
+	          items,
+	          footer
 	        ),
-	        items,
-	        footer,
 	        warning
 	      );
 	    }

@@ -102,7 +102,7 @@ div.shopping-cart-badge {
   background-color:gray;
 }
 
-div.shopping-cart {
+div.shopping-cart-content {
   display:table;
 }
 
@@ -121,7 +121,6 @@ div.shopping-cart-footer div {
 }
 
 div.shopping-cart-warning {
-  display:block;
   padding:12px;
   margin:12px;
   border:2px solid #faebcc;

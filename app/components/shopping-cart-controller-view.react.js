@@ -38,6 +38,13 @@ class ShoppingCartControllerView extends React.Component {
       return <ShoppingCartItem article={item} actionCreator={this.props.actionCreator} />;
     });
 
+    let header = <div className='shopping-cart-header'>
+      <div>Artikel</div>
+      <div>Einzelpreis</div>
+      <div>Anzahl</div>
+      <div>Gesamtpreis</div>
+    </div>;
+
     let footer = <div className='shopping-cart-footer'>
         <div></div>
         <div></div>
@@ -51,14 +58,11 @@ class ShoppingCartControllerView extends React.Component {
 
     return <div className='shopping-cart'>
       <h1>Shopping-Cart-View</h1>
-      <div className='shopping-cart-header'>
-        <div>Artikel</div>
-        <div>Einzelpreis</div>
-        <div>Anzahl</div>
-        <div>Gesamtpreis</div>
+      <div className='shopping-cart-content'>
+        {header}
+        {items}
+        {footer}
       </div>
-      {items}
-      {footer}
       {warning}
     </div>;
   }
