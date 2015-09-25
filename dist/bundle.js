@@ -57,7 +57,7 @@
 	var ArticleStore = __webpack_require__(158);
 	var ActionCreator = __webpack_require__(164);
 	var App = __webpack_require__(165);
-	var DataAccess = __webpack_require__(183);
+	var DataAccess = __webpack_require__(184);
 
 	var dataAccess = new DataAccess();
 	var actionCreator = new ActionCreator(dataAccess);
@@ -22288,7 +22288,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var React = __webpack_require__(2);
-	var ShoppingCartItem = __webpack_require__(185);
+	var ShoppingCartItem = __webpack_require__(183);
 
 	var ShoppingCartControllerView = (function (_React$Component) {
 	  _inherits(ShoppingCartControllerView, _React$Component);
@@ -22412,63 +22412,6 @@
 
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-	var DataAccess = (function () {
-	  function DataAccess() {
-	    _classCallCheck(this, DataAccess);
-	  }
-
-	  _createClass(DataAccess, [{
-	    key: 'getCategoriesAndArticles',
-	    value: function getCategoriesAndArticles() {
-	      return __webpack_require__(184);
-	    }
-	  }]);
-
-	  return DataAccess;
-	})();
-
-	module.exports = DataAccess;
-
-/***/ },
-/* 184 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	var categories = [{ id: 1, name: 'Intenso' }, { id: 2, name: 'Espresso' }, { id: 3, name: 'Pure Origin' }, { id: 4, name: 'Lungo' }, { id: 5, name: 'Decaffeinato' }, { id: 6, name: 'Variations' }];
-
-	var confections = [{ size: 25, name: 'Ristretto' }, { size: 40, name: 'Espresso' }, { size: 110, name: 'Lungo' }];
-
-	var articles = [
-	// Intenso
-	{ id: 1, intensity: 12, category: 1, price: 39, confections: [25, 40], name: 'Kazaar' }, { id: 2, intensity: 10, category: 1, price: 35, confections: [25, 40], name: 'Ristretto' }, { id: 3, intensity: 11, category: 1, price: 39, confections: [25, 40], name: 'Dharkan' }, { id: 4, intensity: 8, category: 1, price: 35, confections: [25, 40], name: 'Roma' }, { id: 5, intensity: 9, category: 1, price: 35, confections: [25, 40], name: 'Arpeggio' },
-	// Espresso
-	{ id: 6, intensity: 3, category: 2, price: 35, confections: [25], name: 'Cosi' }, { id: 7, intensity: 5, category: 2, price: 35, confections: [25], name: 'Capriccio' }, { id: 8, intensity: 4, category: 2, price: 35, confections: [25], name: 'Volluto' }, { id: 9, intensity: 6, category: 2, price: 35, confections: [25], name: 'Livanto' },
-	// Pure Origin
-	{ id: 10, intensity: 10, category: 3, price: 39, confections: [25, 40], name: 'Indriya from India' }, { id: 11, intensity: 3, category: 3, price: 39, confections: [110], name: 'Bukeela ka Ethiopia' }, { id: 12, intensity: 4, category: 3, price: 39, confections: [40], name: 'Dulsão do Brasil' }, { id: 13, intensity: 6, category: 3, price: 39, confections: [40], name: 'Rosabaya de Colombia' },
-	// Lungo
-	{ id: 14, intensity: 4, category: 4, price: 37, confections: [110], name: 'Vivalto Lungo' }, { id: 15, intensity: 4, category: 4, price: 37, confections: [110], name: 'Linizio Lungo' }, { id: 16, intensity: 8, category: 4, price: 37, confections: [110], name: 'Fortissio Lungo' },
-	// Decaffeinato
-	{ id: 17, intensity: 4, category: 5, price: 37, confections: [40], name: 'Volluto Decaffeinato' }, { id: 18, intensity: 7, category: 5, price: 37, confections: [40], name: 'Decaffeinato Intenso' }, { id: 19, intensity: 4, category: 5, price: 39, confections: [110], name: 'Vivalto Lungo Decaffeinato' }, { id: 20, intensity: 9, category: 5, price: 37, confections: [25, 110], name: 'Arpeggio Decaffeinato' },
-	// Variations
-	{ id: 21, intensity: 6, category: 6, price: 42, confections: [40], name: 'Caramelito' }, { id: 22, intensity: 6, category: 6, price: 42, confections: [40], name: 'Vanilio' }, { id: 23, intensity: 6, category: 6, price: 42, confections: [40], name: 'Ciocattino' }];
-
-	module.exports = {
-	  categories: categories,
-	  confections: confections,
-	  articles: articles
-	};
-
-/***/ },
-/* 185 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
@@ -22550,6 +22493,63 @@
 	  article: React.PropTypes.object.isRequired
 	};
 	module.exports = ShoppingCartItem;
+
+/***/ },
+/* 184 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	var DataAccess = (function () {
+	  function DataAccess() {
+	    _classCallCheck(this, DataAccess);
+	  }
+
+	  _createClass(DataAccess, [{
+	    key: 'getCategoriesAndArticles',
+	    value: function getCategoriesAndArticles() {
+	      return __webpack_require__(185);
+	    }
+	  }]);
+
+	  return DataAccess;
+	})();
+
+	module.exports = DataAccess;
+
+/***/ },
+/* 185 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var categories = [{ id: 1, name: 'Intenso' }, { id: 2, name: 'Espresso' }, { id: 3, name: 'Pure Origin' }, { id: 4, name: 'Lungo' }, { id: 5, name: 'Decaffeinato' }, { id: 6, name: 'Variations' }];
+
+	var confections = [{ size: 25, name: 'Ristretto' }, { size: 40, name: 'Espresso' }, { size: 110, name: 'Lungo' }];
+
+	var articles = [
+	// Intenso
+	{ id: 1, intensity: 12, category: 1, price: 39, confections: [25, 40], name: 'Kazaar' }, { id: 2, intensity: 10, category: 1, price: 35, confections: [25, 40], name: 'Ristretto' }, { id: 3, intensity: 11, category: 1, price: 39, confections: [25, 40], name: 'Dharkan' }, { id: 4, intensity: 8, category: 1, price: 35, confections: [25, 40], name: 'Roma' }, { id: 5, intensity: 9, category: 1, price: 35, confections: [25, 40], name: 'Arpeggio' },
+	// Espresso
+	{ id: 6, intensity: 3, category: 2, price: 35, confections: [25], name: 'Cosi' }, { id: 7, intensity: 5, category: 2, price: 35, confections: [25], name: 'Capriccio' }, { id: 8, intensity: 4, category: 2, price: 35, confections: [25], name: 'Volluto' }, { id: 9, intensity: 6, category: 2, price: 35, confections: [25], name: 'Livanto' },
+	// Pure Origin
+	{ id: 10, intensity: 10, category: 3, price: 39, confections: [25, 40], name: 'Indriya from India' }, { id: 11, intensity: 3, category: 3, price: 39, confections: [110], name: 'Bukeela ka Ethiopia' }, { id: 12, intensity: 4, category: 3, price: 39, confections: [40], name: 'Dulsão do Brasil' }, { id: 13, intensity: 6, category: 3, price: 39, confections: [40], name: 'Rosabaya de Colombia' },
+	// Lungo
+	{ id: 14, intensity: 4, category: 4, price: 37, confections: [110], name: 'Vivalto Lungo' }, { id: 15, intensity: 4, category: 4, price: 37, confections: [110], name: 'Linizio Lungo' }, { id: 16, intensity: 8, category: 4, price: 37, confections: [110], name: 'Fortissio Lungo' },
+	// Decaffeinato
+	{ id: 17, intensity: 4, category: 5, price: 37, confections: [40], name: 'Volluto Decaffeinato' }, { id: 18, intensity: 7, category: 5, price: 37, confections: [40], name: 'Decaffeinato Intenso' }, { id: 19, intensity: 4, category: 5, price: 39, confections: [110], name: 'Vivalto Lungo Decaffeinato' }, { id: 20, intensity: 9, category: 5, price: 37, confections: [25, 110], name: 'Arpeggio Decaffeinato' },
+	// Variations
+	{ id: 21, intensity: 6, category: 6, price: 42, confections: [40], name: 'Caramelito' }, { id: 22, intensity: 6, category: 6, price: 42, confections: [40], name: 'Vanilio' }, { id: 23, intensity: 6, category: 6, price: 42, confections: [40], name: 'Ciocattino' }];
+
+	module.exports = {
+	  categories: categories,
+	  confections: confections,
+	  articles: articles
+	};
 
 /***/ }
 /******/ ]);

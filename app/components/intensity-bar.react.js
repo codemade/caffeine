@@ -2,19 +2,19 @@ let React = require('react');
 
 class IntensityBar extends React.Component {
   render() {
-      let dots = [];
-      let className = 'dot-on';
-      for (let i = 0; i < 12; i++) {
-        if (i >= this.props.intensity) {
-          className = 'dot-off';
-        }
-        let key = 'intensity-bar-item-' + i;
-        dots.push(<span key={key} className={className}></span>);
+    let dots = [];
+    let className = 'dot-on';
+    for (let i = 0; i < 12; i++) {
+      if (i >= this.props.intensity) {
+        className = 'dot-off';
       }
-      return <div className="intensity-bar">
-      {dots}
-      </div>;
+      let key = 'intensity-bar-item-' + i;
+      dots.push(<span key={key} className={className}></span>);
     }
+    return <div className="intensity-bar">
+      {dots}
+    </div>;
+  }
 }
 
 IntensityBar.propTypes = {
