@@ -16,6 +16,10 @@ class ShoppingCartControllerView extends React.Component {
     );
   }
 
+  componentWillMount() {
+    this.handleDataChanged();
+  }
+
   componentDidMount() {
     this.deregisterChangeListener = this.props.store.addChangeListener('changed', this.handleDataChanged.bind(this));
   }
