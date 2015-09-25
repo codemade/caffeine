@@ -77,6 +77,7 @@ class ArticleStore extends Store {
     let shoppingCartContent = {
       totalAmount: 0,
       totalPrice: 0,
+      packagingSizeInvalid: false,
       items: []
     };
 
@@ -100,6 +101,7 @@ class ArticleStore extends Store {
     shoppingCartContent.items = items;
     shoppingCartContent.totalAmount = items.reduce((sum, item) => sum + item.amount, 0);
     shoppingCartContent.totalPrice = items.reduce((sum, item) => sum + item.totalPrice, 0);
+    shoppingCartContent.packagingSizeInvalid = shoppingCartContent.totalAmount % 50 !== 0;
     return shoppingCartContent;
   }
 

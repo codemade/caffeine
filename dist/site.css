@@ -119,3 +119,12 @@ div.shopping-cart-footer div {
   border:1px solid white;
   padding:6px;
 }
+
+div.shopping-cart-warning {
+  display:block;
+  padding:12px;
+  margin:12px;
+  border:2px solid #faebcc;
+  color: #8a6d3b;
+  background-color:#fcf8e3;
+}

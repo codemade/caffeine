@@ -56,7 +56,7 @@ describe('Displaying the shopping cart overview', () => {
     });
   });
 
-  describe('when two different articles added to shopping cart', () => {
+  describe('when two different articles with total amount of 50 added to shopping cart', () => {
     beforeEach(() => {
       actionCreator.addArticleToShoppingCart(3, 20);
       actionCreator.addArticleToShoppingCart(4, 30);
@@ -88,12 +88,25 @@ describe('Displaying the shopping cart overview', () => {
       expect(shoppingCartFooter.children[3].textContent).to.equal('19.8');
     });
 
+    it('should not display packaging size warning', () => {
+      let warnings = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-warning');
+      expect(warnings.length).to.equal(0);
+    });
+
     describe('Clicking the add button of an article', () => {
       it('should increase article amount by 10', () => {
         let shoppingCartItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item')[0].getDOMNode();
         let addButton = shoppingCartItem.children[2].children[1];
         React.addons.TestUtils.Simulate.click(addButton);
         expect(shoppingCartItem.children[2].children[0].textContent).to.equal('30');
+      });
+
+      it('should display packaging size warning', () => {
+        let shoppingCartItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item')[0].getDOMNode();
+        let addButton = shoppingCartItem.children[2].children[1];
+        React.addons.TestUtils.Simulate.click(addButton);
+        let warnings = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-warning');
+        expect(warnings.length).to.equal(1);
       });
     });
 

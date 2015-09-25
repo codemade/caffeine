@@ -20552,6 +20552,7 @@
 	      var shoppingCartContent = {
 	        totalAmount: 0,
 	        totalPrice: 0,
+	        packagingSizeInvalid: false,
 	        items: []
 	      };
 
@@ -20579,6 +20580,7 @@
 	      shoppingCartContent.totalPrice = items.reduce(function (sum, item) {
 	        return sum + item.totalPrice;
 	      }, 0);
+	      shoppingCartContent.packagingSizeInvalid = shoppingCartContent.totalAmount % 50 !== 0;
 	      return shoppingCartContent;
 	    }
 	  }, {
@@ -22352,6 +22354,12 @@
 	        )
 	      );
 
+	      var warning = this.state.shoppingCartContent.packagingSizeInvalid ? React.createElement(
+	        'div',
+	        { className: 'shopping-cart-warning' },
+	        'Gesamtmenge muss ein Vielfaches von 50 sein!'
+	      ) : '';
+
 	      return React.createElement(
 	        'div',
 	        { className: 'shopping-cart' },
@@ -22385,7 +22393,8 @@
 	          )
 	        ),
 	        items,
-	        footer
+	        footer,
+	        warning
 	      );
 	    }
 	  }]);

@@ -45,6 +45,10 @@ class ShoppingCartControllerView extends React.Component {
         <div>{this.state.shoppingCartContent.totalPrice / 100}</div>
       </div>;
 
+    let warning = this.state.shoppingCartContent.packagingSizeInvalid
+      ? <div className='shopping-cart-warning'>Gesamtmenge muss ein Vielfaches von 50 sein!</div>
+      : '';
+
     return <div className='shopping-cart'>
       <h1>Shopping-Cart-View</h1>
       <div className='shopping-cart-header'>
@@ -55,6 +59,7 @@ class ShoppingCartControllerView extends React.Component {
       </div>
       {items}
       {footer}
+      {warning}
     </div>;
   }
 }
