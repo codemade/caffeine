@@ -57,14 +57,18 @@ describe('Displaying the shopping cart overview', () => {
       actionCreator.addArticleToShoppingCart(4, 3);
     });
 
-    it('should display name of first article', () => {
-      let shoppingCartItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item')[0];
-      expect(shoppingCartItem.getDOMNode().textContent).to.equal('first article');
+    it('should display name, amount and price of first article', () => {
+      let shoppingCartItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item')[0].getDOMNode();
+      expect(shoppingCartItem.children[0].textContent).to.equal('first article');
+      expect(shoppingCartItem.children[1].textContent).to.equal('5');
+      expect(shoppingCartItem.children[2].textContent).to.equal('42');
     });
 
-    it('should display name of second article', () => {
-      let shoppingCartItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item')[1];
-      expect(shoppingCartItem.getDOMNode().textContent).to.equal('second article');
+    it('should display name, amount and price of second article', () => {
+      let shoppingCartItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item')[1].getDOMNode();
+      expect(shoppingCartItem.children[0].textContent).to.equal('second article');
+      expect(shoppingCartItem.children[1].textContent).to.equal('3');
+      expect(shoppingCartItem.children[2].textContent).to.equal('38');
     });
   });
 });

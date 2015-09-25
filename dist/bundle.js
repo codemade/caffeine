@@ -20545,6 +20545,29 @@
 	      }, shoppingCartInfo);
 	    }
 	  }, {
+	    key: 'getShoppingCartContent',
+	    value: function getShoppingCartContent() {
+	      var _this3 = this;
+
+	      var shoppingCartContent = [];
+
+	      if (!this.data || !this.data.articles) return shoppingCartContent;
+
+	      return this.data.articles.reduce(function (acc, article) {
+	        var amount = _this3.shoppingCart[article.id];
+
+	        if (amount) {
+	          acc.push({
+	            id: article.id,
+	            name: article.name,
+	            amount: amount,
+	            price: article.price
+	          });
+	        }
+	        return acc;
+	      }, shoppingCartContent);
+	    }
+	  }, {
 	    key: 'onInitialize',
 	    value: function onInitialize(data) {
 	      this.data = data;
@@ -22231,19 +22254,65 @@
 	var ShoppingCartControllerView = (function (_React$Component) {
 	  _inherits(ShoppingCartControllerView, _React$Component);
 
-	  function ShoppingCartControllerView() {
+	  function ShoppingCartControllerView(props) {
 	    _classCallCheck(this, ShoppingCartControllerView);
 
-	    _get(Object.getPrototypeOf(ShoppingCartControllerView.prototype), 'constructor', this).apply(this, arguments);
+	    _get(Object.getPrototypeOf(ShoppingCartControllerView.prototype), 'constructor', this).call(this, props);
+	    this.state = {
+	      shoppingCartItems: []
+	    };
 	  }
 
 	  _createClass(ShoppingCartControllerView, [{
+	    key: 'handleDataChanged',
+	    value: function handleDataChanged() {
+	      this.setState({
+	        shoppingCartItems: this.props.store.getShoppingCartContent()
+	      });
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.deregisterChangeListener = this.props.store.addChangeListener('changed', this.handleDataChanged.bind(this));
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      this.deregisterChangeListener();
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var items = this.state.shoppingCartItems.map(function (item) {
+	        return React.createElement(
+	          'div',
+	          { className: 'shopping-cart-item' },
+	          React.createElement(
+	            'span',
+	            null,
+	            item.name
+	          ),
+	          React.createElement(
+	            'span',
+	            null,
+	            item.amount
+	          ),
+	          React.createElement(
+	            'span',
+	            null,
+	            item.price
+	          )
+	        );
+	      });
 	      return React.createElement(
 	        'div',
 	        { className: 'shopping-cart' },
-	        'Shopping-Cart-View'
+	        React.createElement(
+	          'h1',
+	          null,
+	          'Shopping-Cart-View'
+	        ),
+	        items
 	      );
 	    }
 	  }]);

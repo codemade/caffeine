@@ -26,7 +26,11 @@ class ShoppingCartControllerView extends React.Component {
 
   render() {
     let items = this.state.shoppingCartItems.map((item) => {
-      return <div className='shopping-cart-item'>{item.name}</div>;
+      return <div className='shopping-cart-item'>
+        <span>{item.name}</span>
+        <span>{item.amount}</span>
+        <span>{item.price}</span>
+      </div>;
     });
     return <div className='shopping-cart'>
       <h1>Shopping-Cart-View</h1>
