@@ -57,7 +57,7 @@
 	var ArticleStore = __webpack_require__(158);
 	var ActionCreator = __webpack_require__(164);
 	var App = __webpack_require__(165);
-	var DataAccess = __webpack_require__(183);
+	var DataAccess = __webpack_require__(184);
 
 	var dataAccess = new DataAccess();
 	var actionCreator = new ActionCreator(dataAccess);
@@ -22254,7 +22254,8 @@
 	module.exports = ShoppingCartControllerView;
 
 /***/ },
-/* 183 */
+/* 183 */,
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22271,7 +22272,7 @@
 	  _createClass(DataAccess, [{
 	    key: 'getCategoriesAndArticles',
 	    value: function getCategoriesAndArticles() {
-	      return __webpack_require__(184);
+	      return __webpack_require__(185);
 	    }
 	  }]);
 
@@ -22281,7 +22282,7 @@
 	module.exports = DataAccess;
 
 /***/ },
-/* 184 */
+/* 185 */
 /***/ function(module, exports) {
 
 	'use strict';
