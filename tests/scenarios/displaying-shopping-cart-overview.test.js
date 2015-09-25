@@ -44,9 +44,14 @@ describe('Displaying the shopping cart overview', () => {
   });
 
   describe('when no articles added to shopping cart', () => {
-    it('should be empty', () => {
+    it('should display no items', () => {
       let shoppingCartItems = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item');
       expect(shoppingCartItems).to.deep.equal([]);
+    });
+
+    xit('should not display footer', () => {
+      let shoppingCartFooters = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-footer');
+      expect(shoppingCartFooters).to.deep.equal([]);
     });
   });
 
@@ -70,6 +75,16 @@ describe('Displaying the shopping cart overview', () => {
       expect(shoppingCartItem.children[1].textContent).to.equal('0.38');
       expect(shoppingCartItem.children[2].textContent).to.equal('3');
       expect(shoppingCartItem.children[3].textContent).to.equal('1.14');
+    });
+
+    it('should display footer with total amount', () => {
+      let shoppingCartFooter = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-footer')[0].getDOMNode();
+      expect(shoppingCartFooter.children[2].textContent).to.equal('8');
+    });
+
+    it('should display footer with total price', () => {
+      let shoppingCartFooter = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-footer')[0].getDOMNode();
+      expect(shoppingCartFooter.children[3].textContent).to.equal('3.24');
     });
   });
 });

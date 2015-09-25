@@ -107,12 +107,14 @@ div.shopping-cart {
 }
 
 div.shopping-cart-header,
-div.shopping-cart-item {
+div.shopping-cart-item,
+div.shopping-cart-footer {
   display:table-row;
 }
 
 div.shopping-cart-header div,
-div.shopping-cart-item div {
+div.shopping-cart-item div,
+div.shopping-cart-footer div {
   display:table-cell;
   border:1px solid white;
   padding:6px;

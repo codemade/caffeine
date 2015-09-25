@@ -33,6 +33,17 @@ class ShoppingCartControllerView extends React.Component {
     let items = this.state.shoppingCartItems.map((item) => {
       return <ShoppingCartItem article={item} />;
     });
+
+    let totalAmount = this.state.shoppingCartItems.reduce((acc, item) => {
+      acc += item.amount;
+      return acc;
+    }, 0);
+
+    let totalPrice = this.state.shoppingCartItems.reduce((acc, item) => {
+      acc += item.amount * item.price / 100;
+      return acc;
+    }, 0);
+
     return <div className='shopping-cart'>
       <h1>Shopping-Cart-View</h1>
       <div className='shopping-cart-header'>
@@ -42,6 +53,12 @@ class ShoppingCartControllerView extends React.Component {
         <div>Gesamtpreis</div>
       </div>
       {items}
+      <div className='shopping-cart-footer'>
+        <div></div>
+        <div></div>
+        <div>{totalAmount}</div>
+        <div>{totalPrice}</div>
+      </div>
     </div>;
   }
 }

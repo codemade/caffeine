@@ -22292,6 +22292,17 @@
 	      var items = this.state.shoppingCartItems.map(function (item) {
 	        return React.createElement(ShoppingCartItem, { article: item });
 	      });
+
+	      var totalAmount = this.state.shoppingCartItems.reduce(function (acc, item) {
+	        acc += item.amount;
+	        return acc;
+	      }, 0);
+
+	      var totalPrice = this.state.shoppingCartItems.reduce(function (acc, item) {
+	        acc += item.amount * item.price / 100;
+	        return acc;
+	      }, 0);
+
 	      return React.createElement(
 	        'div',
 	        { className: 'shopping-cart' },
@@ -22324,7 +22335,23 @@
 	            'Gesamtpreis'
 	          )
 	        ),
-	        items
+	        items,
+	        React.createElement(
+	          'div',
+	          { className: 'shopping-cart-footer' },
+	          React.createElement('div', null),
+	          React.createElement('div', null),
+	          React.createElement(
+	            'div',
+	            null,
+	            totalAmount
+	          ),
+	          React.createElement(
+	            'div',
+	            null,
+	            totalPrice
+	          )
+	        )
 	      );
 	    }
 	  }]);
