@@ -73,6 +73,10 @@ class ArticleStore extends Store {
     }, shoppingCartInfo);
   }
 
+  getShoppingCartContent() {
+    return [];
+  }
+
   onInitialize(data) {
     this.data = data;
     this.emitChange('changed');
