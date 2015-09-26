@@ -5,15 +5,11 @@ class ShoppingCartControllerView extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      shoppingCartContent: {
-        totalAmount: 0,
-        totalPrice: 0,
-        items: []
-      }
+      shoppingCartContent: props.store.getShoppingCartContent()
     };
   }
 
-  handleDataChanged() {
+  fetchData() {
     this.setState(
       {
         shoppingCartContent: this.props.store.getShoppingCartContent()
@@ -21,12 +17,8 @@ class ShoppingCartControllerView extends React.Component {
     );
   }
 
-  componentWillMount() {
-    this.handleDataChanged();
-  }
-
   componentDidMount() {
-    this.deregisterChangeListener = this.props.store.addChangeListener('changed', this.handleDataChanged.bind(this));
+    this.deregisterChangeListener = this.props.store.addChangeListener('changed', this.fetchData.bind(this));
   }
 
   componentWillUnmount() {
@@ -35,7 +27,7 @@ class ShoppingCartControllerView extends React.Component {
 
   render() {
     let items = this.state.shoppingCartContent.items.map((item) => {
-      return <ShoppingCartItem article={item} actionCreator={this.props.actionCreator} />;
+      return <ShoppingCartItem key={item.id} article={item} actionCreator={this.props.actionCreator} />;
     });
 
     let header = <div className='shopping-cart-header'>
