@@ -2,7 +2,9 @@ let React = require('react');
 
 class ShoppingCartItem extends React.Component {
     render() {
-      let image = 'assets/60x60/article_' + this.props.article.id + '.png';
+      let styles = {
+        backgroundColor: this.props.article.color
+      };
 
       let addToCart = () => {
         this.props.actionCreator.addArticleToShoppingCart(this.props.article.id, 10);
@@ -13,7 +15,7 @@ class ShoppingCartItem extends React.Component {
       };
 
       return <div className='shopping-cart-item'>
-        <div className='content'><img src={image} />{this.props.article.name}</div>
+        <div className='content'><div className="article-image" style={styles}/>{this.props.article.name}</div>
         <div className='content'>{this.props.article.price / 100}</div>
         <div>
           <span className='content'>{this.props.article.amount}</span>
