@@ -20539,10 +20539,49 @@
 
 	        if (amount) {
 	          acc.articleCount += amount;
-	          acc.totalPrice += article.price * amount / 100;
+	          acc.totalPrice += article.price * amount;
 	        }
 	        return acc;
 	      }, shoppingCartInfo);
+	    }
+	  }, {
+	    key: 'getShoppingCartContent',
+	    value: function getShoppingCartContent() {
+	      var _this3 = this;
+
+	      var shoppingCartContent = {
+	        totalAmount: 0,
+	        totalPrice: 0,
+	        packagingSizeInvalid: false,
+	        items: []
+	      };
+
+	      if (!this.data || !this.data.articles) return shoppingCartContent;
+
+	      var items = this.data.articles.reduce(function (acc, article) {
+	        var amount = _this3.shoppingCart[article.id];
+
+	        if (amount) {
+	          acc.push({
+	            id: article.id,
+	            name: article.name,
+	            amount: amount,
+	            price: article.price,
+	            totalPrice: amount * article.price
+	          });
+	        }
+	        return acc;
+	      }, []);
+
+	      shoppingCartContent.items = items;
+	      shoppingCartContent.totalAmount = items.reduce(function (sum, item) {
+	        return sum + item.amount;
+	      }, 0);
+	      shoppingCartContent.totalPrice = items.reduce(function (sum, item) {
+	        return sum + item.totalPrice;
+	      }, 0);
+	      shoppingCartContent.packagingSizeInvalid = shoppingCartContent.totalAmount % 50 !== 0;
+	      return shoppingCartContent;
 	    }
 	  }, {
 	    key: 'onInitialize',
@@ -20574,6 +20613,15 @@
 	      this.emitChange('changed');
 	    }
 	  }, {
+	    key: 'onRemoveArticleFromShoppingCart',
+	    value: function onRemoveArticleFromShoppingCart(articleId, amount) {
+	      var previousAmount = this.shoppingCart[articleId];
+	      var currentAmount = previousAmount - amount;
+	      this.shoppingCart[articleId] = currentAmount;
+	      if (currentAmount <= 0) delete this.shoppingCart[articleId];
+	      this.emitChange('changed');
+	    }
+	  }, {
 	    key: 'onActionDispatched',
 	    value: function onActionDispatched(action) {
 	      switch (action.type) {
@@ -20588,6 +20636,9 @@
 	          break;
 	        case actionIdentifiers.shoppingCart.addArticle:
 	          this.onAddArticleToShoppingCart(action.articleId, action.amount);
+	          break;
+	        case actionIdentifiers.shoppingCart.removeArticle:
+	          this.onRemoveArticleFromShoppingCart(action.articleId, action.amount);
 	          break;
 	        default:
 	        // nothing to do here
@@ -20659,7 +20710,8 @@
 	    selectArticle: 'articleList.selectArticle'
 	  },
 	  shoppingCart: {
-	    addArticle: 'shoppingCart.addArticle'
+	    addArticle: 'shoppingCart.addArticle',
+	    removeArticle: 'shoppingCart.removeArticle'
 	  }
 	};
 
@@ -20813,6 +20865,15 @@
 	        amount: amount
 	      });
 	    }
+	  }, {
+	    key: 'removeArticleFromShoppingCart',
+	    value: function removeArticleFromShoppingCart(articleId, amount) {
+	      dispatcher.dispatch({
+	        type: actionIdentifiers.shoppingCart.removeArticle,
+	        articleId: articleId,
+	        amount: amount
+	      });
+	    }
 	  }]);
 
 	  return ActionCreator;
@@ -20848,7 +20909,7 @@
 	    return React.createElement(ArticlesControllerView, { store: this.props.store, actionCreator: this.props.actionCreator, navigate: navigate });
 	  },
 	  shoppingCart: function shoppingCart() {
-	    return React.createElement(ShoppingCartControllerView, null);
+	    return React.createElement(ShoppingCartControllerView, { store: this.props.store, actionCreator: this.props.actionCreator });
 	  }
 	});
 
@@ -21799,7 +21860,7 @@
 	        React.createElement(
 	          'div',
 	          { className: 'total-price' },
-	          this.props.shoppingCartInfo.totalPrice
+	          this.props.shoppingCartInfo.totalPrice / 100
 	        )
 	      );
 	    }
@@ -22002,7 +22063,7 @@
 	          'span',
 	          { className: 'article-price' },
 	          'Preis ',
-	          this.props.article.price,
+	          this.props.article.price / 100,
 	          ' €'
 	        )
 	      );
@@ -22227,23 +22288,119 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var React = __webpack_require__(2);
+	var ShoppingCartItem = __webpack_require__(183);
 
 	var ShoppingCartControllerView = (function (_React$Component) {
 	  _inherits(ShoppingCartControllerView, _React$Component);
 
-	  function ShoppingCartControllerView() {
+	  function ShoppingCartControllerView(props) {
 	    _classCallCheck(this, ShoppingCartControllerView);
 
-	    _get(Object.getPrototypeOf(ShoppingCartControllerView.prototype), 'constructor', this).apply(this, arguments);
+	    _get(Object.getPrototypeOf(ShoppingCartControllerView.prototype), 'constructor', this).call(this, props);
+	    this.state = {
+	      shoppingCartContent: {
+	        totalAmount: 0,
+	        totalPrice: 0,
+	        items: []
+	      }
+	    };
 	  }
 
 	  _createClass(ShoppingCartControllerView, [{
+	    key: 'handleDataChanged',
+	    value: function handleDataChanged() {
+	      this.setState({
+	        shoppingCartContent: this.props.store.getShoppingCartContent()
+	      });
+	    }
+	  }, {
+	    key: 'componentWillMount',
+	    value: function componentWillMount() {
+	      this.handleDataChanged();
+	    }
+	  }, {
+	    key: 'componentDidMount',
+	    value: function componentDidMount() {
+	      this.deregisterChangeListener = this.props.store.addChangeListener('changed', this.handleDataChanged.bind(this));
+	    }
+	  }, {
+	    key: 'componentWillUnmount',
+	    value: function componentWillUnmount() {
+	      this.deregisterChangeListener();
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
+	      var _this = this;
+
+	      var items = this.state.shoppingCartContent.items.map(function (item) {
+	        return React.createElement(ShoppingCartItem, { article: item, actionCreator: _this.props.actionCreator });
+	      });
+
+	      var header = React.createElement(
+	        'div',
+	        { className: 'shopping-cart-header' },
+	        React.createElement(
+	          'div',
+	          null,
+	          'Artikel'
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
+	          'Einzelpreis'
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
+	          'Anzahl'
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
+	          'Gesamtpreis'
+	        )
+	      );
+
+	      var footer = React.createElement(
+	        'div',
+	        { className: 'shopping-cart-footer' },
+	        React.createElement('div', null),
+	        React.createElement('div', null),
+	        React.createElement(
+	          'div',
+	          null,
+	          this.state.shoppingCartContent.totalAmount
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
+	          this.state.shoppingCartContent.totalPrice / 100
+	        )
+	      );
+
+	      var warning = this.state.shoppingCartContent.packagingSizeInvalid ? React.createElement(
+	        'div',
+	        { className: 'shopping-cart-warning' },
+	        'Gesamtmenge muss ein Vielfaches von 50 sein!'
+	      ) : '';
+
 	      return React.createElement(
 	        'div',
 	        { className: 'shopping-cart' },
-	        'Shopping-Cart-View'
+	        React.createElement(
+	          'h1',
+	          null,
+	          'Shopping-Cart-View'
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'shopping-cart-content' },
+	          header,
+	          items,
+	          footer
+	        ),
+	        warning
 	      );
 	    }
 	  }]);
@@ -22255,6 +22412,96 @@
 
 /***/ },
 /* 183 */,
+/* 184 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
+
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+	var React = __webpack_require__(2);
+
+	var ShoppingCartItem = (function (_React$Component) {
+	  _inherits(ShoppingCartItem, _React$Component);
+
+	  function ShoppingCartItem() {
+	    _classCallCheck(this, ShoppingCartItem);
+
+	    _get(Object.getPrototypeOf(ShoppingCartItem.prototype), 'constructor', this).apply(this, arguments);
+	  }
+
+	  _createClass(ShoppingCartItem, [{
+	    key: 'render',
+	    value: function render() {
+	      var _this = this;
+
+	      var image = 'assets/60x60/article_' + this.props.article.id + '.png';
+
+	      var addToCart = function addToCart() {
+	        _this.props.actionCreator.addArticleToShoppingCart(_this.props.article.id, 10);
+	      };
+
+	      var removeFromCart = function removeFromCart() {
+	        _this.props.actionCreator.removeArticleFromShoppingCart(_this.props.article.id, 10);
+	      };
+
+	      return React.createElement(
+	        'div',
+	        { className: 'shopping-cart-item' },
+	        React.createElement(
+	          'div',
+	          { className: 'content' },
+	          React.createElement('img', { src: image }),
+	          this.props.article.name
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'content' },
+	          this.props.article.price / 100
+	        ),
+	        React.createElement(
+	          'div',
+	          null,
+	          React.createElement(
+	            'span',
+	            { className: 'content' },
+	            this.props.article.amount
+	          ),
+	          React.createElement(
+	            'button',
+	            { className: 'addToCart', onClick: addToCart },
+	            '+'
+	          ),
+	          React.createElement(
+	            'button',
+	            { className: 'removeFromCart', onClick: removeFromCart },
+	            '-'
+	          )
+	        ),
+	        React.createElement(
+	          'div',
+	          { className: 'content' },
+	          this.props.article.amount * this.props.article.price / 100
+	        )
+	      );
+	    }
+	  }]);
+
+	  return ShoppingCartItem;
+	})(React.Component);
+
+	ShoppingCartItem.propTypes = {
+	  article: React.PropTypes.object.isRequired
+	};
+	module.exports = ShoppingCartItem;
+
+/***/ },
 /* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
