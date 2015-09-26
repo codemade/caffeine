@@ -5,7 +5,8 @@ let actionIdentifiers = {
     selectArticle: 'articleList.selectArticle'
   },
   shoppingCart: {
-    addArticle: 'shoppingCart.addArticle'
+    addArticle: 'shoppingCart.addArticle',
+    removeArticle: 'shoppingCart.removeArticle'
   }
 };
 

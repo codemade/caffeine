@@ -67,10 +67,42 @@ class ArticleStore extends Store {
 
       if (amount) {
         acc.articleCount += amount;
-        acc.totalPrice += article.price * amount / 100;
+        acc.totalPrice += article.price * amount;
       }
       return acc;
     }, shoppingCartInfo);
+  }
+
+  getShoppingCartContent() {
+    let shoppingCartContent = {
+      totalAmount: 0,
+      totalPrice: 0,
+      packagingSizeInvalid: false,
+      items: []
+    };
+
+    if (!this.data || !this.data.articles) return shoppingCartContent;
+
+    let items = this.data.articles.reduce((acc, article) => {
+      let amount = this.shoppingCart[article.id];
+
+      if (amount) {
+        acc.push({
+          id: article.id,
+          name: article.name,
+          amount: amount,
+          price: article.price,
+          totalPrice: amount * article.price
+        });
+      }
+      return acc;
+    }, []);
+
+    shoppingCartContent.items = items;
+    shoppingCartContent.totalAmount = items.reduce((sum, item) => sum + item.amount, 0);
+    shoppingCartContent.totalPrice = items.reduce((sum, item) => sum + item.totalPrice, 0);
+    shoppingCartContent.packagingSizeInvalid = shoppingCartContent.totalAmount % 50 !== 0;
+    return shoppingCartContent;
   }
 
   onInitialize(data) {
@@ -100,6 +132,14 @@ class ArticleStore extends Store {
     this.emitChange('changed');
   }
 
+  onRemoveArticleFromShoppingCart(articleId, amount) {
+    let previousAmount = this.shoppingCart[articleId];
+    let currentAmount = previousAmount - amount;
+    this.shoppingCart[articleId] = currentAmount;
+    if (currentAmount <= 0) delete this.shoppingCart[articleId];
+    this.emitChange('changed');
+  }
+
   onActionDispatched(action) {
     switch (action.type) {
       case actionIdentifiers.articleList.initialize:
@@ -113,6 +153,9 @@ class ArticleStore extends Store {
         break;
       case actionIdentifiers.shoppingCart.addArticle:
         this.onAddArticleToShoppingCart(action.articleId, action.amount);
+        break;
+      case actionIdentifiers.shoppingCart.removeArticle:
+        this.onRemoveArticleFromShoppingCart(action.articleId, action.amount);
         break;
       default:
         // nothing to do here

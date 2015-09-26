@@ -18,7 +18,7 @@ const App = React.createClass({
     return <ArticlesControllerView store={this.props.store} actionCreator={this.props.actionCreator} navigate={navigate} />;
   },
   shoppingCart() {
-    return <ShoppingCartControllerView/>;
+    return <ShoppingCartControllerView store={this.props.store} actionCreator={this.props.actionCreator} />;
   }
 });
 
