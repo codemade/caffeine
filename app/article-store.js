@@ -92,7 +92,8 @@ class ArticleStore extends Store {
           name: article.name,
           amount: amount,
           price: article.price,
-          totalPrice: amount * article.price
+          totalPrice: amount * article.price,
+          color: article.color
         });
       }
       return acc;
