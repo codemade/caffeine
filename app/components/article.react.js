@@ -8,11 +8,14 @@ class Article extends React.Component {
 
   render() {
     let article = this.props.article;
-    let image = 'assets/60x60/article_' + article.id + '.png';
     let className = article.isMatchingFilter ? 'article-details' : 'article-details grayed-out';
 
+    let styles = {
+      backgroundColor: article.color
+    };
+
     return <div className={className} onClick={this.handleClick.bind(this)}>
-            <img src={image} />
+            <div className="article-image" style={styles}></div>
             <br />
             <span className='article-name'>{this.props.article.name}</span>
             <br />

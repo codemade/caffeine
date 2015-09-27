@@ -10,13 +10,13 @@ img {
   vertical-align: middle;
 }
 
-div.category {
+.category {
   padding-bottom:10px;
   text-align:center;
   text-decoration: underline;
 }
 
-div.article-details {
+.article-details {
   display:inline-block;
   width:220px;
   height:140px;
@@ -34,15 +34,37 @@ div.article-details {
   filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4c4c4c', endColorstr='#131313', GradientType=0 );
 }
 
-div.article-details.grayed-out{
+.article-details.grayed-out{
   opacity:0.3;
 }
 
-span.intensity-label {
+.article-image {
+  display:inline-block;
+  position:relative;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  margin-bottom:10px;
+}
+
+.article-image:before {
+  position:absolute;
+  left: 0;
+  top: 0;
+  content: '';
+  width: 100%;
+  height: 100%;
+  background-image: url('/dist/bean.svg');
+  background-size: 40%;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+}
+
+.intensity-label {
   font-size:60%;
 }
 
-span.dot-on {
+.dot-on {
   display:inline-block;
   margin:1px;
   width:4px;
@@ -51,7 +73,7 @@ span.dot-on {
   background-color: #999999;
 }
 
-span.dot-off {
+.dot-off {
   display:inline-block;
   margin:1px;
   width:4px;
@@ -59,7 +81,7 @@ span.dot-off {
   border:1px solid #aaaaaa;
 }
 
-div.intensity-filter {
+.intensity-filter {
   padding:16px;
   width: 300px;
   height: 50px;
@@ -67,12 +89,12 @@ div.intensity-filter {
   background-color: #292727;
 }
 
-div.intensity-filter > div.legend {
+.intensity-filter > .legend {
   font-size:12px;
   padding-bottom:4px;
 }
 
-span.intensity-filter-item {
+.intensity-filter-item {
   display:inline-block;
   text-align:center;
   cursor:pointer;
@@ -84,43 +106,43 @@ span.intensity-filter-item {
   margin-right:1px;
 }
 
-span.intensity-filter-item:hover {
+.intensity-filter-item:hover {
   -moz-opacity:.6;
   opacity:.6;
   filter:alpha(opacity=60);
 }
 
-span.intensity-filter-item.unavailable {
+.intensity-filter-item.unavailable {
   cursor:default;
   -moz-opacity:.1;
   opacity:.1;
   filter:alpha(opacity=10);
 }
 
-div.shopping-cart-badge {
+.shopping-cart-badge {
   border:1px solid white;
   background-color:gray;
 }
 
-div.shopping-cart-content {
+.shopping-cart-content {
   display:table;
 }
 
-div.shopping-cart-header,
-div.shopping-cart-item,
-div.shopping-cart-footer {
+.shopping-cart-header,
+.shopping-cart-item,
+.shopping-cart-footer {
   display:table-row;
 }
 
-div.shopping-cart-header div,
-div.shopping-cart-item div,
-div.shopping-cart-footer div {
+.shopping-cart-header div,
+.shopping-cart-item div,
+.shopping-cart-footer div {
   display:table-cell;
   border:1px solid white;
   padding:6px;
 }
 
-div.shopping-cart-warning {
+.shopping-cart-warning {
   padding:12px;
   margin:12px;
   border:2px solid #faebcc;
