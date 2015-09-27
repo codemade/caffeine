@@ -8,19 +8,19 @@
   "scripts": {
     "local-ws": "node ./node_modules/local-web-server/bin/ws.js",
     "browser-sync": "node ./node_modules/browser-sync/bin/browser-sync.js start --files dist/bundle.js --proxy http://localhost:8000",
-    "build": "node ./node_modules/webpack/bin/webpack",
-    "build:watch": "node ./node_modules/webpack/bin/webpack --watch",
-    "develop": "npm run build:watch & npm run sass:watch & npm run local-ws & npm run browser-sync",
+    "build-js": "node ./node_modules/webpack/bin/webpack",
+    "build-js:watch": "node ./node_modules/webpack/bin/webpack --watch",
+    "build-css": "node ./node_modules/node-sass/bin/node-sass --output-stype compressed assets/sass/main.scss dist/main.css",
+    "build-css:watch": "node ./node_modules/node-sass/bin/node-sass --output-stype compressed assets/sass/main.scss dist/main.css --watch",
+    "develop": "npm run build-js:watch & npm run build-css:watch & npm run local-ws & npm run browser-sync",
     "mocha": "mocha tests --require ./bootstrap-jsdom.js --recursive --compilers js:babel/register",
     "mocha:watch": "mocha tests --require ./bootstrap-jsdom.js --watch --recursive --compilers js:babel/register && node ./node_modules",
     "eslint": "node ./node_modules/.bin/eslint app tests",
     "test": "npm run mocha && npm run eslint",
     "test:watch": "npm run mocha:watch",
     "coveralls": "node ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha tests --report lcovonly -- --require ./bootstrap-jsdom.js --recursive --compilers js:babel/register && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
-    "sass": "node ./node_modules/node-sass/bin/node-sass --output-stype compressed assets/sass/main.scss dist/main.css",
-    "sass:watch": "node ./node_modules/node-sass/bin/node-sass --output-stype compressed assets/sass/main.scss dist/main.css --watch",
     "start": "npm run develop",
-    "deploy": "npm run build && ./deploy.sh"
+    "deploy": "npm run build-js && npm run build-css && ./deploy.sh"
   },
   "keywords": [
     "react",
