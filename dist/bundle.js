@@ -263,7 +263,9 @@
 	        currentQueue = queue;
 	        queue = [];
 	        while (++queueIndex < len) {
-	            currentQueue[queueIndex].run();
+	            if (currentQueue) {
+	                currentQueue[queueIndex].run();
+	            }
 	        }
 	        queueIndex = -1;
 	        len = queue.length;
@@ -315,7 +317,6 @@
 	    throw new Error('process.binding is not supported');
 	};
 
-	// TODO(shtylman)
 	process.cwd = function () { return '/' };
 	process.chdir = function (dir) {
 	    throw new Error('process.chdir is not supported');
@@ -20567,7 +20568,8 @@
 	            name: article.name,
 	            amount: amount,
 	            price: article.price,
-	            totalPrice: amount * article.price
+	            totalPrice: amount * article.price,
+	            color: article.color
 	          });
 	        }
 	        return acc;
@@ -22034,13 +22036,16 @@
 	    key: 'render',
 	    value: function render() {
 	      var article = this.props.article;
-	      var image = 'assets/60x60/article_' + article.id + '.png';
 	      var className = article.isMatchingFilter ? 'article-details' : 'article-details grayed-out';
+
+	      var styles = {
+	        backgroundColor: article.color
+	      };
 
 	      return React.createElement(
 	        'div',
 	        { className: className, onClick: this.handleClick.bind(this) },
-	        React.createElement('img', { src: image }),
+	        React.createElement('div', { className: 'article-image', style: styles }),
 	        React.createElement('br', null),
 	        React.createElement(
 	          'span',
@@ -22298,30 +22303,21 @@
 
 	    _get(Object.getPrototypeOf(ShoppingCartControllerView.prototype), 'constructor', this).call(this, props);
 	    this.state = {
-	      shoppingCartContent: {
-	        totalAmount: 0,
-	        totalPrice: 0,
-	        items: []
-	      }
+	      shoppingCartContent: props.store.getShoppingCartContent()
 	    };
 	  }
 
 	  _createClass(ShoppingCartControllerView, [{
-	    key: 'handleDataChanged',
-	    value: function handleDataChanged() {
+	    key: 'fetchData',
+	    value: function fetchData() {
 	      this.setState({
 	        shoppingCartContent: this.props.store.getShoppingCartContent()
 	      });
 	    }
 	  }, {
-	    key: 'componentWillMount',
-	    value: function componentWillMount() {
-	      this.handleDataChanged();
-	    }
-	  }, {
 	    key: 'componentDidMount',
 	    value: function componentDidMount() {
-	      this.deregisterChangeListener = this.props.store.addChangeListener('changed', this.handleDataChanged.bind(this));
+	      this.deregisterChangeListener = this.props.store.addChangeListener('changed', this.fetchData.bind(this));
 	    }
 	  }, {
 	    key: 'componentWillUnmount',
@@ -22334,7 +22330,7 @@
 	      var _this = this;
 
 	      var items = this.state.shoppingCartContent.items.map(function (item) {
-	        return React.createElement(ShoppingCartItem, { article: item, actionCreator: _this.props.actionCreator });
+	        return React.createElement(ShoppingCartItem, { key: item.id, article: item, actionCreator: _this.props.actionCreator });
 	      });
 
 	      var header = React.createElement(
@@ -22411,8 +22407,7 @@
 	module.exports = ShoppingCartControllerView;
 
 /***/ },
-/* 183 */,
-/* 184 */
+/* 183 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22441,7 +22436,9 @@
 	    value: function render() {
 	      var _this = this;
 
-	      var image = 'assets/60x60/article_' + this.props.article.id + '.png';
+	      var styles = {
+	        backgroundColor: this.props.article.color
+	      };
 
 	      var addToCart = function addToCart() {
 	        _this.props.actionCreator.addArticleToShoppingCart(_this.props.article.id, 10);
@@ -22457,7 +22454,7 @@
 	        React.createElement(
 	          'div',
 	          { className: 'content' },
-	          React.createElement('img', { src: image }),
+	          React.createElement('div', { className: 'article-image', style: styles }),
 	          this.props.article.name
 	        ),
 	        React.createElement(
@@ -22540,17 +22537,17 @@
 
 	var articles = [
 	// Intenso
-	{ id: 1, intensity: 12, category: 1, price: 39, confections: [25, 40], name: 'Kazaar' }, { id: 2, intensity: 10, category: 1, price: 35, confections: [25, 40], name: 'Ristretto' }, { id: 3, intensity: 11, category: 1, price: 39, confections: [25, 40], name: 'Dharkan' }, { id: 4, intensity: 8, category: 1, price: 35, confections: [25, 40], name: 'Roma' }, { id: 5, intensity: 9, category: 1, price: 35, confections: [25, 40], name: 'Arpeggio' },
+	{ id: 1, intensity: 12, category: 1, price: 39, confections: [25, 40], name: 'Accio', color: '#25334F' }, { id: 2, intensity: 10, category: 1, price: 35, confections: [25, 40], name: 'Flagrante', color: '#000000' }, { id: 3, intensity: 11, category: 1, price: 39, confections: [25, 40], name: 'Gemino', color: '#1E3A40' }, { id: 4, intensity: 8, category: 1, price: 35, confections: [25, 40], name: 'Confundo', color: '#685B56' }, { id: 5, intensity: 9, category: 1, price: 35, confections: [25, 40], name: 'Prior Incantado', color: '#512B7E' },
 	// Espresso
-	{ id: 6, intensity: 3, category: 2, price: 35, confections: [25], name: 'Cosi' }, { id: 7, intensity: 5, category: 2, price: 35, confections: [25], name: 'Capriccio' }, { id: 8, intensity: 4, category: 2, price: 35, confections: [25], name: 'Volluto' }, { id: 9, intensity: 6, category: 2, price: 35, confections: [25], name: 'Livanto' },
+	{ id: 6, intensity: 3, category: 2, price: 35, confections: [25], name: 'Sectumsempra', color: '#432013' }, { id: 7, intensity: 5, category: 2, price: 35, confections: [25], name: 'Silencio', color: '#154134' }, { id: 8, intensity: 4, category: 2, price: 35, confections: [25], name: 'Orchideus', color: '#A3783D' }, { id: 9, intensity: 6, category: 2, price: 35, confections: [25], name: 'Lumos', color: '#81491E' },
 	// Pure Origin
-	{ id: 10, intensity: 10, category: 3, price: 39, confections: [25, 40], name: 'Indriya from India' }, { id: 11, intensity: 3, category: 3, price: 39, confections: [110], name: 'Bukeela ka Ethiopia' }, { id: 12, intensity: 4, category: 3, price: 39, confections: [40], name: 'Dulsão do Brasil' }, { id: 13, intensity: 6, category: 3, price: 39, confections: [40], name: 'Rosabaya de Colombia' },
+	{ id: 10, intensity: 10, category: 3, price: 39, confections: [25, 40], name: 'Expulso', color: '#484536' }, { id: 11, intensity: 3, category: 3, price: 39, confections: [110], name: 'Densaugeo', color: '#A56850' }, { id: 12, intensity: 4, category: 3, price: 39, confections: [40], name: 'Waddiwasi', color: '#D3BDA6' }, { id: 13, intensity: 6, category: 3, price: 39, confections: [40], name: 'Sonorus', color: '#CDBDC1' },
 	// Lungo
-	{ id: 14, intensity: 4, category: 4, price: 37, confections: [110], name: 'Vivalto Lungo' }, { id: 15, intensity: 4, category: 4, price: 37, confections: [110], name: 'Linizio Lungo' }, { id: 16, intensity: 8, category: 4, price: 37, confections: [110], name: 'Fortissio Lungo' },
+	{ id: 14, intensity: 4, category: 4, price: 37, confections: [110], name: 'Quietus', color: '#306CA8' }, { id: 15, intensity: 4, category: 4, price: 37, confections: [110], name: 'Ratzeputz', color: '#DB903E' }, { id: 16, intensity: 8, category: 4, price: 37, confections: [110], name: 'Relaschio', color: '#286264' },
 	// Decaffeinato
-	{ id: 17, intensity: 4, category: 5, price: 37, confections: [40], name: 'Volluto Decaffeinato' }, { id: 18, intensity: 7, category: 5, price: 37, confections: [40], name: 'Decaffeinato Intenso' }, { id: 19, intensity: 4, category: 5, price: 39, confections: [110], name: 'Vivalto Lungo Decaffeinato' }, { id: 20, intensity: 9, category: 5, price: 37, confections: [25, 110], name: 'Arpeggio Decaffeinato' },
+	{ id: 17, intensity: 4, category: 5, price: 37, confections: [40], name: 'Impedimenta', color: '#CD953D' }, { id: 18, intensity: 7, category: 5, price: 37, confections: [40], name: 'Glisseo', color: '#460008' }, { id: 19, intensity: 4, category: 5, price: 39, confections: [110], name: 'Incendio', color: '#D35B51' }, { id: 20, intensity: 9, category: 5, price: 37, confections: [25, 110], name: 'Morsmordre', color: '#D81E41' },
 	// Variations
-	{ id: 21, intensity: 6, category: 6, price: 42, confections: [40], name: 'Caramelito' }, { id: 22, intensity: 6, category: 6, price: 42, confections: [40], name: 'Vanilio' }, { id: 23, intensity: 6, category: 6, price: 42, confections: [40], name: 'Ciocattino' }];
+	{ id: 21, intensity: 6, category: 6, price: 42, confections: [40], name: 'Muffliato', color: '#B56F29' }, { id: 22, intensity: 6, category: 6, price: 42, confections: [40], name: 'Alohomora', color: '#E1DB9F' }, { id: 23, intensity: 6, category: 6, price: 42, confections: [40], name: 'Confringo', color: '#301A0F' }];
 
 	module.exports = {
 	  categories: categories,
