@@ -54,7 +54,7 @@ img {
   content: '';
   width: 100%;
   height: 100%;
-  background-image: url('/dist/bean.svg');
+  background-image: url('../assets/bean.svg');
   background-size: 40%;
   background-repeat: no-repeat;
   background-position: 50% 50%;
