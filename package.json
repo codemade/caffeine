@@ -8,8 +8,9 @@
   "scripts": {
     "local-ws": "node ./node_modules/local-web-server/bin/ws.js",
     "browser-sync": "node ./node_modules/browser-sync/bin/browser-sync.js start --files dist/bundle.js --proxy http://localhost:8000",
-    "build": "node ./node_modules/webpack/bin/webpack --watch",
-    "develop": "npm run build & npm run local-ws & npm run browser-sync",
+    "build": "node ./node_modules/webpack/bin/webpack",
+    "build:watch": "node ./node_modules/webpack/bin/webpack --watch",
+    "develop": "npm run build:watch & npm run local-ws & npm run browser-sync",
     "mocha": "mocha tests --require ./bootstrap-jsdom.js --recursive --compilers js:babel/register",
     "mocha:watch": "mocha tests --require ./bootstrap-jsdom.js --watch --recursive --compilers js:babel/register && node ./node_modules",
     "eslint": "node ./node_modules/.bin/eslint app tests",
@@ -17,7 +18,7 @@
     "test:watch": "npm run mocha:watch",
     "coveralls": "node ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha tests --report lcovonly -- --require ./bootstrap-jsdom.js --recursive --compilers js:babel/register && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
     "start": "npm run develop",
-    "deploy": "./deploy.sh"
+    "deploy": "npm run build && ./deploy.sh"
   },
   "keywords": [
     "react",
