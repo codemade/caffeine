@@ -6,6 +6,6 @@ let DataAccess = require('./data-access.js');
 
 let dataAccess = new DataAccess();
 let actionCreator = new ActionCreator(dataAccess);
-let store = new ArticleStore();
+let store = new ArticleStore(sessionStorage);
 
 React.render(<App store={store} actionCreator={actionCreator} />, document.body);
