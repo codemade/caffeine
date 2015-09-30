@@ -33,9 +33,19 @@ describe('store', () => {
 
   describe('emitting an event', () => {
     let store;
+    let storage;
     beforeEach(function() {
       let Store = require('../../app/flux/store.js');
-      store = new Store('article-store', new StorageFake());
+      storage = new StorageFake();
+      store = new Store('article-store', storage);
+    });
+
+    it('should persist changed state in SessionStorage', () => {
+      let expected = {id: 4711, town: 'Cologne'};
+      store.state = expected;
+      store.emitChange('somethingChanged');
+      let actual = JSON.parse(storage.getItem('article-store'));
+      expect(actual).to.deep.equal(expected);
     });
 
     it('should execute all change listeners registered for that event', () => {
