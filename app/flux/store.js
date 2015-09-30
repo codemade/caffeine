@@ -3,8 +3,17 @@ function removeChangeListenerWithId(listenerId, eventIdentifier, store) {
     .filter((listener) => { return listener.id !== listenerId; });
 }
 
+function readStateFromStorage(storeIdentifier, storage) {
+  if (!storage) return null;
+  var serializedState = storage.getItem(storeIdentifier);
+  if (!serializedState) return null;
+  return JSON.parse(serializedState);
+}
+
 class Store {
-  constructor() {
+  constructor(storeIdentifier, storage) {
+    this.storeIdentifier = storeIdentifier;
+    this.state = readStateFromStorage(storeIdentifier, storage);
     this.listeners = {};
     this.highestListenerId = 0;
   }
