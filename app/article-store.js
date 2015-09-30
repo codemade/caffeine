@@ -8,9 +8,9 @@ const MAXIMUM_POSSIBLE_INTENSITY = 13;
 class ArticleStore extends Store {
   constructor(storage) {
     super('article-store', storage);
-    this.state.shoppingCart = {};
-    this.state.intensityFilter = Maybe.Not;
-    this.state.maybeSelectedArticle = Maybe.Not;
+    if (!this.state.shoppingCart) this.state.shoppingCart = {};
+    if (!this.state.intensityFilter) this.state.intensityFilter = Maybe.Not;
+    if (!this.state.maybeSelectedArticle) this.state.maybeSelectedArticle = Maybe.Not;
     dispatcher.register(this.onActionDispatched.bind(this));
   }
 
