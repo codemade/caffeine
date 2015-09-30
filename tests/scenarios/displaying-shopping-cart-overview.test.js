@@ -2,6 +2,7 @@ let React = require('react');
 let TestUtils = React.addons.TestUtils;
 let chai = require('chai');
 let sinonChai = require('sinon-chai');
+let StorageFake = require('../flux/storage-fake.js');
 let expect = chai.expect;
 chai.use(sinonChai);
 let renderTarget, renderedComponent;
@@ -32,7 +33,7 @@ describe('Displaying the shopping cart overview', () => {
     let ActionCreator = require('../../app/action-creator.js');
     actionCreator = new ActionCreator(dataAccess);
     let ArticleStore = require('../../app/article-store.js');
-    store = new ArticleStore();
+    store = new ArticleStore(new StorageFake());
     renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store} />, renderTarget);
     // initialize action creator, to fetch article data from server etc.
     actionCreator.initialize();

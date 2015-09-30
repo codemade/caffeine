@@ -2,6 +2,7 @@ let expect = require('chai').expect;
 let React = require('react/addons');
 let ActionCreator = require('../../app/action-creator.js');
 let Store = require('../../app/article-store.js');
+let StorageFake = require('../flux/storage-fake.js');
 let TestUtils = React.addons.TestUtils;
 let renderTarget, articleInformationComponent;
 
@@ -26,7 +27,7 @@ describe('no article is selected', () => {
     };
 
     let actionCreator = new ActionCreator(dataAccess);
-    let store = new Store(actionCreator);
+    let store = new Store(new StorageFake());
 
     let renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
     articleInformationComponent = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-information')[0];

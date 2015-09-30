@@ -2,19 +2,8 @@ let chai = require('chai');
 let expect = chai.expect;
 let sinon = require('sinon');
 let sinonChai = require('sinon-chai');
+let StorageFake = require('./storage-fake.js');
 chai.use(sinonChai);
-
-class StorageFake {
-  constructor() {
-    this.data = [];
-  }
-  getItem(key) {
-    return this.data[key];
-  }
-  setItem(key, value) {
-    this.data[key] = value;
-  }
-}
 
 describe('store', () => {
   describe('initializing with state peristed in SessionStorage', () => {

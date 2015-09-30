@@ -4,7 +4,7 @@ function removeChangeListenerWithId(listenerId, eventIdentifier, store) {
 }
 
 function applyStateFromStorage(store) {
-  store.state = null;
+  store.state = {};
   if (!store.storage) return;
   var serializedState = store.storage.getItem(store.identifier);
   if (!serializedState) return;
@@ -18,8 +18,8 @@ function writeStateToStorage(store) {
 
 class Store {
   constructor(identifier, storage) {
-    this.storage = storage;
     this.identifier = identifier;
+    this.storage = storage;
     this.listeners = {};
     this.highestListenerId = 0;
     applyStateFromStorage(this);

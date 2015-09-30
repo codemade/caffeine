@@ -1,5 +1,6 @@
 let expect = require('chai').expect;
 let React = require('react/addons');
+let StorageFake = require('../flux/storage-fake.js');
 let TestUtils = React.addons.TestUtils;
 let renderTarget, renderedComponent;
 
@@ -29,7 +30,7 @@ describe('displaying article overview', () => {
     let ActionCreator = require('../../app/action-creator.js');
     let actionCreator = new ActionCreator(dataAccess);
     let ArticleStore = require('../../app/article-store.js');
-    let store = new ArticleStore();
+    let store = new ArticleStore(new StorageFake());
     renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
   });
 
