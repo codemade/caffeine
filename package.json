@@ -46,7 +46,7 @@
     "jsdom": "5.6.1",
     "local-web-server": "0.5.23",
     "mocha": "2.3.3",
-    "mocha-lcov-reporter": "0.0.1",
+    "mocha-lcov-reporter": "1.0.0",
     "sinon": "1.17.1",
     "sinon-chai": "2.8.0",
     "webpack": "1.12.2"
