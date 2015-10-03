@@ -28,3 +28,4 @@ node_modules
 
 # bundled javascript
 dist/bundle.js
+dist/*.css
