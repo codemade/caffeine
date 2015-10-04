@@ -83,7 +83,7 @@ describe('filtering articles by intensity', () => {
           .filter((article) => {
             return +article.querySelector('.articleDetails__intensityValue').textContent !== 3;
           });
-      expect(articleInfosWithIntensity.every(article => article.className === 'articleDetails grayed-out')).to.equal(true);
+      expect(articleInfosWithIntensity.every(article => article.className === 'articleDetails articleDetails--grayed-out')).to.equal(true);
     });
 
     it('should disable all other intensity filter items', () => {

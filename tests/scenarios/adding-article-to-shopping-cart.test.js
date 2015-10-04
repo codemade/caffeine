@@ -6,6 +6,7 @@ let TestUtils = React.addons.TestUtils;
 let renderedComponent;
 let renderTarget, firstArticleComponent;
 let shoppingCartBadge;
+let actionCreator;
 
 describe('adding an article to the shopping cart', () => {
   let categories = [{id: 1}, {id: 2}];
@@ -27,7 +28,7 @@ describe('adding an article to the shopping cart', () => {
       }
     };
 
-    let actionCreator = new ActionCreator(dataAccess);
+    actionCreator = new ActionCreator(dataAccess);
     let store = new Store(actionCreator);
 
     renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
@@ -65,4 +66,16 @@ describe('adding an article to the shopping cart', () => {
       expect(articleCount.getDOMNode().textContent).to.equal('20 Artikel: 7.8 €');
     });
   });
+
+  describe('on an article not matching the filter', () => {
+    beforeEach(() => {
+      actionCreator.filterByIntensity(10);
+      clickAddToCartButton();
+    });
+
+    it('should display zero articles in the shopping cart badge', () => {
+      let articleCount = TestUtils.scryRenderedDOMComponentsWithClass(shoppingCartBadge, 'shoppingCartBadge__cartInfo')[0];
+      expect(articleCount.getDOMNode().textContent).to.equal('0 Artikel: 0 €');
+    });
+  })
 });

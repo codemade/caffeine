@@ -3,13 +3,13 @@ let IntensityBar = require('./intensity-bar.react.js');
 
 class Article extends React.Component {
   handleClick() {
-    //this.props.actionCreator.selectArticle(this.props.article.id);
+    if(!this.props.article.isMatchingFilter) return;
     this.props.actionCreator.addArticleToShoppingCart(this.props.article.id, 10);
   }
 
   render() {
     let article = this.props.article;
-    let className = article.isMatchingFilter ? 'articleDetails' : 'articleDetails grayed-out';
+    let className = article.isMatchingFilter ? 'articleDetails' : 'articleDetails articleDetails--grayed-out';
 
     let styles = {
       backgroundColor: article.color

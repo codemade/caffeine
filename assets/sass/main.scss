@@ -4,7 +4,66 @@
 @import './components/shoppingCartBadge';
 @import './components/articleDetails';
 
+html, body {
+	color: #58595A;
+}
 
 .contentWrapper {
 	padding-top: $main-navigation-height + 20px;
+}
+
+
+
+.dot-on {
+  display:inline-block;
+  margin:1px;
+  width:4px;
+  height:4px;
+  background-color: #58595A;
+}
+
+.dot-off {
+  display:inline-block;
+  margin:1px;
+  width:4px;
+  height:4px;
+  border: 1px solid #58595A;
+}
+
+.intensity-filter {
+  padding:16px;
+  width: 300px;
+  height: 50px;
+  text-align: center;
+  background-color: #58595A;
+}
+
+.intensity-filter > .legend {
+  font-size:12px;
+  padding-bottom:4px;
+}
+
+.intensity-filter-item {
+  display:inline-block;
+  text-align:center;
+  cursor:pointer;
+  background:transparent url('../assets/intensity-filter.png') no-repeat center 0;
+  font-size:9px;
+  padding-top:16px;
+  width:16px;
+  margin-left:1px;
+  margin-right:1px;
+}
+
+.intensity-filter-item:hover {
+  -moz-opacity:.6;
+  opacity:.6;
+  filter:alpha(opacity=60);
+}
+
+.intensity-filter-item.unavailable {
+  cursor:default;
+  -moz-opacity:.1;
+  opacity:.1;
+  filter:alpha(opacity=10);
 }

@@ -44,12 +44,29 @@
 		padding-top: 1px;
 		padding-left: 1px;
 	}
-}
+	
+	&--grayed-out {
+		opacity: 0.2;
 
-// @media (min-width: 768px) {
-// 	.article-details {
-// 		width: 150px;
-// 		float: left;
-// 		margin: 10px;
-// 	}
-// }
+		&:hover{
+			background: none;
+			content: '';
+		}
+	}
+	
+	&.articleDetails--grayed-out:hover &__image:before {
+		position:absolute;
+		left: 0;
+		top: 0;
+		content: '';
+		width: 100%;
+		height: 100%;
+		background-image: url('../assets/bean.svg');
+		background-size: 40%;
+		background-repeat: no-repeat;
+		background-position: 50% 50%;
+	}
+
+
+
+}
