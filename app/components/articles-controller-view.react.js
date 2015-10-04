@@ -1,4 +1,5 @@
 let React = require('react');
+let Navigation = require('./navigation.react.js');
 let ShoppingCartBadge = require('./shopping-cart-badge.react.js');
 let ArticleList = require('./article-list.react.js');
 let ArticleInformation = require('./article-information.react.js');
@@ -49,15 +50,18 @@ class ArticlesControllerView extends React.Component {
     let availableIntensities = this.props.store.getAvailableIntensities();
 
     return <div>
-            <h1>Unsere Kaffee-Geschmackserlebnisse</h1>
-            <IntensityFilter actionCreator={this.props.actionCreator}
-                             maximumIntensity={maximumIntensity}
-                             availableIntensities={availableIntensities} />
-            <ArticleList categories={this.state.categories}
-                         articles={this.state.articles}
-                         actionCreator={this.props.actionCreator}/>
-            <ShoppingCartBadge shoppingCartInfo={this.state.shoppingCartInfo} navigate={this.props.navigate} />
-            {articleInformation}
+            <Navigation />
+            <div className="container contentWrapper">
+              <h1>Unsere Kaffee-</h1>
+              <IntensityFilter actionCreator={this.props.actionCreator}
+                               maximumIntensity={maximumIntensity}
+                               availableIntensities={availableIntensities} />
+              <ArticleList categories={this.state.categories}
+                           articles={this.state.articles}
+                           actionCreator={this.props.actionCreator}/>
+              <ShoppingCartBadge shoppingCartInfo={this.state.shoppingCartInfo} navigate={this.props.navigate} />
+              {articleInformation}
+            </div>
           </div>;
   }
 }

@@ -7,10 +7,10 @@
   "main": "index.js",
   "scripts": {
     "local-ws": "node ./node_modules/local-web-server/bin/ws.js",
-    "browser-sync": "node ./node_modules/browser-sync/bin/browser-sync.js start --files dist/bundle.js --proxy http://localhost:8000",
+    "browser-sync": "node ./node_modules/browser-sync/bin/browser-sync.js start --files dist/**/* --proxy http://localhost:8000",
     "build-js": "node ./node_modules/webpack/bin/webpack",
     "build-js:watch": "node ./node_modules/webpack/bin/webpack --watch",
-    "build-css": "node ./node_modules/node-sass/bin/node-sass --output-stype compressed assets/sass/main.scss dist/main.css",
+    "build-css": "node ./node_modules/node-sass/bin/node-sass --output-stype compressed assets/sass/**/*.scss dist/",
     "build-css:watch": "node ./node_modules/node-sass/bin/node-sass --output-stype compressed assets/sass/main.scss dist/main.css --watch",
     "develop": "npm run build-js:watch & npm run build-css:watch & npm run local-ws & npm run browser-sync",
     "mocha": "mocha tests --require ./bootstrap-jsdom.js --recursive --compilers js:babel/register",

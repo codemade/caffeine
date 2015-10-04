@@ -1,0 +1,45 @@
+// Navigation 
+.mainNavigation {
+	border-bottom: 1px solid $default-border-color;
+	padding: 10px;
+	position:fixed;
+	width: 100%;
+	height: $main-navigation-height;
+	background-color: white;
+
+	.container {
+		padding: 0;
+	}
+
+	ul {
+		list-style-type: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	&__navItem {
+		display:inline-block;
+		color: green;
+		padding: 0;
+		line-height: $main-navigation-item-height;
+	}
+
+	&__logo {
+		display: block;
+		float: left;
+		width: $logo-size;
+		height: $logo-size;
+		background: url('/dist/codemade.png') no-repeat;
+		background-size: 60px;
+		padding-right: 10px;
+	}
+
+	&__brandName {
+		float: left;
+		margin: 0;
+		padding-left: 10px;
+		font-size: 18px;
+		line-height: $main-navigation-item-height;
+		color: $brand-color;
+	}
+}
