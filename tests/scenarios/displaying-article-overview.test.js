@@ -46,7 +46,7 @@ describe('displaying article overview', () => {
     // });
 
     it('should display articles from server', () => {
-      let actualArticleNames = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-name').map((article) => article.getDOMNode().textContent);
+      let actualArticleNames = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'articleDetails__name').map((article) => article.getDOMNode().textContent);
       let expectedArticleNames = articles.map((article) => article.name);
       expect(actualArticleNames).to.deep.equal(expectedArticleNames);
     });

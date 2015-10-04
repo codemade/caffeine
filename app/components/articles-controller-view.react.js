@@ -61,7 +61,7 @@ class ArticlesControllerView extends React.Component {
               <ArticleList categories={this.state.categories}
                            articles={this.state.articles}
                            actionCreator={this.props.actionCreator}/>
-              {articleInformation}
+              {/*articleInformation*/}
             </div>
           </div>;
   }

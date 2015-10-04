@@ -5,7 +5,8 @@
 	position:fixed;
 	width: 100%;
 	height: $main-navigation-height;
-	background-color: white;
+	background-color: rgba(255,255,255, 0.95);
+	z-index: 2;
 
 	.container {
 		padding: 0;
@@ -29,7 +30,7 @@
 		width: $logo-size;
 		height: $logo-size;
 		background: url('/dist/codemade.png') no-repeat;
-		background-size: 60px;
+		background-size: $logo-size;
 		padding-right: 10px;
 	}
 

@@ -67,23 +67,23 @@ describe('filtering articles by intensity', () => {
     });
 
     it('should display articles with matching intensity as default', () => {
-      let articleDetails = Array.from(TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-details'));
+      let articleDetails = Array.from(TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'articleDetails'));
       let articleInfosWithIntensity = articleDetails
           .map((article) => article.getDOMNode())
           .filter((article) => {
-            return +article.querySelector('.intensity-value').textContent === 3;
+            return +article.querySelector('.articleDetails__intensityValue').textContent === 3;
           });
-      expect(articleInfosWithIntensity.every(article => article.className === 'article-details')).to.equal(true);
+      expect(articleInfosWithIntensity.every(article => article.className === 'articleDetails')).to.equal(true);
     });
 
     it('should display articles with non-matching intensity grayed-out', () => {
-      let articleDetails = Array.from(TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-details'));
+      let articleDetails = Array.from(TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'articleDetails'));
       let articleInfosWithIntensity = articleDetails
           .map((article) => article.getDOMNode())
           .filter((article) => {
-            return +article.querySelector('.intensity-value').textContent !== 3;
+            return +article.querySelector('.articleDetails__intensityValue').textContent !== 3;
           });
-      expect(articleInfosWithIntensity.every(article => article.className === 'article-details grayed-out')).to.equal(true);
+      expect(articleInfosWithIntensity.every(article => article.className === 'articleDetails grayed-out')).to.equal(true);
     });
 
     it('should disable all other intensity filter items', () => {

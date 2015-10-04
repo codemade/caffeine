@@ -31,9 +31,8 @@ describe('adding an article to the shopping cart', () => {
     let store = new Store(actionCreator);
 
     renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
-    firstArticleComponent = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-details')[0];
-    React.addons.TestUtils.Simulate.click(firstArticleComponent);
-    shoppingCartBadge = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-badge')[0];
+    firstArticleComponent = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'articleDetails')[0];
+    shoppingCartBadge = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shoppingCartBadge')[0];
   });
 
   afterEach(() => {
@@ -41,8 +40,7 @@ describe('adding an article to the shopping cart', () => {
   });
 
   let clickAddToCartButton = () => {
-    let button = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'addToCart')[0];
-    React.addons.TestUtils.Simulate.click(button);
+    React.addons.TestUtils.Simulate.click(firstArticleComponent);
   };
 
   describe('once', () => {
@@ -51,7 +49,7 @@ describe('adding an article to the shopping cart', () => {
     });
 
     it('should display 10 articles in the shopping cart badge', () => {
-      let articleCount = TestUtils.scryRenderedDOMComponentsWithClass(shoppingCartBadge, 'article-count')[0];
+      let articleCount = TestUtils.scryRenderedDOMComponentsWithClass(shoppingCartBadge, 'shoppingCartBadge__cartInfo')[0];
       expect(articleCount.getDOMNode().textContent).to.equal('10 Artikel: 3.9 €');
     });
   });
@@ -63,7 +61,7 @@ describe('adding an article to the shopping cart', () => {
     });
 
     it('should display 20 articles in the shopping cart badge', () => {
-      let articleCount = TestUtils.scryRenderedDOMComponentsWithClass(shoppingCartBadge, 'article-count')[0];
+      let articleCount = TestUtils.scryRenderedDOMComponentsWithClass(shoppingCartBadge, 'shoppingCartBadge__cartInfo')[0];
       expect(articleCount.getDOMNode().textContent).to.equal('20 Artikel: 7.8 €');
     });
   });
