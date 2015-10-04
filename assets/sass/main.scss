@@ -1,7 +1,9 @@
 @import 'variables';
 @import 'utilities';
 @import './components/navigation';
+@import './components/shoppingCartBadge';
+
 
 .contentWrapper {
-	padding-top: $main-navigation-height;
+	padding-top: $main-navigation-height + 20px;
 }

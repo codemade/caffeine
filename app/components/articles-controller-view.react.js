@@ -55,7 +55,6 @@ class ArticlesControllerView extends React.Component {
             </Navigation>
 
             <div className="container contentWrapper">
-              <h1>Unsere Kaffee-</h1>
               <IntensityFilter actionCreator={this.props.actionCreator}
                                maximumIntensity={maximumIntensity}
                                availableIntensities={availableIntensities} />

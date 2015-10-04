@@ -1,0 +1,31 @@
+.shoppingCartBadge {
+	display: inline-block;
+	min-width: 165px;
+	height: 35px;
+	line-height: 35px;
+	margin: 14px;
+	padding-left: 10px;
+
+	cursor: pointer;
+	color: white;
+
+	background-color: #3498DB;
+	border-radius: 3px;
+	font-size: 12px;
+	text-align: center;
+
+	&__logo {
+		padding: 0;
+
+		i {
+			margin-top: 5px;
+			border-right: 1px solid #2B89C9;
+			padding-right: 7px;
+		}
+	}
+
+	&__cartInfo {
+		padding-left: 10px;
+		padding-right: 10px;
+	}
+}
