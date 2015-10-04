@@ -9,7 +9,7 @@ let Navigation = React.createClass({
 						<span className="mainNavigation__logo"></span>
 						<h1 className="mainNavigation__brandName">Coffee Store</h1>
 					</li>
-					<li className="mainNavigation__navItem col-xs-6 align-right">[shopping-cart]</li>
+					<li className="mainNavigation__navItem col-xs-6 align-right">{this.props.children}</li>
 				</ul>
 			</nav>
 		</div>;
