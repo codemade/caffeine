@@ -77,5 +77,5 @@ describe('adding an article to the shopping cart', () => {
       let articleCount = TestUtils.scryRenderedDOMComponentsWithClass(shoppingCartBadge, 'shoppingCartBadge__cartInfo')[0];
       expect(articleCount.getDOMNode().textContent).to.equal('0 Artikel: 0 €');
     });
-  })
+  });
 });

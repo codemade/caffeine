@@ -21733,7 +21733,6 @@
 	var Navigation = __webpack_require__(175);
 	var ShoppingCartBadge = __webpack_require__(176);
 	var ArticleList = __webpack_require__(177);
-	var ArticleInformation = __webpack_require__(180);
 	var IntensityFilter = __webpack_require__(181);
 	var Maybe = __webpack_require__(163);
 
@@ -21781,10 +21780,6 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var articleInformation = undefined;
-	      if (this.state.selectedArticle.hasValue) {
-	        articleInformation = React.createElement(ArticleInformation, { actionCreator: this.props.actionCreator, article: this.state.selectedArticle.value });
-	      }
 	      var maximumIntensity = this.props.store.getMaximumPossibleIntensity();
 	      var availableIntensities = this.props.store.getAvailableIntensities();
 
@@ -21818,7 +21813,6 @@
 	  actionCreator: React.PropTypes.object.isRequired
 	};
 	module.exports = ArticlesControllerView;
-	/*articleInformation*/
 
 /***/ },
 /* 175 */
@@ -22009,7 +22003,9 @@
 	  _createClass(Article, [{
 	    key: 'handleClick',
 	    value: function handleClick() {
-	      if (!this.props.article.isMatchingFilter) return;
+	      if (!this.props.article.isMatchingFilter) {
+	        return;
+	      }
 	      this.props.actionCreator.addArticleToShoppingCart(this.props.article.id, 10);
 	    }
 	  }, {
@@ -22112,7 +22108,7 @@
 	      }
 	      return React.createElement(
 	        'div',
-	        { className: 'intensityBar intensity-bar' },
+	        { className: 'intensity-bar' },
 	        dots
 	      );
 	    }
@@ -22127,71 +22123,7 @@
 	module.exports = IntensityBar;
 
 /***/ },
-/* 180 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var React = __webpack_require__(2);
-
-	var ArticleInformation = (function (_React$Component) {
-	  _inherits(ArticleInformation, _React$Component);
-
-	  function ArticleInformation() {
-	    _classCallCheck(this, ArticleInformation);
-
-	    _get(Object.getPrototypeOf(ArticleInformation.prototype), 'constructor', this).apply(this, arguments);
-	  }
-
-	  _createClass(ArticleInformation, [{
-	    key: 'render',
-	    value: function render() {
-	      var _this = this;
-
-	      var styles = {
-	        border: '1px solid white'
-	      };
-
-	      var addToCart = function addToCart() {
-	        _this.props.actionCreator.addArticleToShoppingCart(_this.props.article.id, 10);
-	      };
-
-	      return React.createElement(
-	        'div',
-	        { className: 'article-information', style: styles },
-	        React.createElement(
-	          'span',
-	          { className: 'article-name' },
-	          this.props.article.name
-	        ),
-	        React.createElement(
-	          'button',
-	          { className: 'addToCart', onClick: addToCart },
-	          '+'
-	        )
-	      );
-	    }
-	  }]);
-
-	  return ArticleInformation;
-	})(React.Component);
-
-	ArticleInformation.propTypes = {
-	  actionCreator: React.PropTypes.object.isRequired,
-	  article: React.PropTypes.object.isRequired
-	};
-
-	module.exports = ArticleInformation;
-
-/***/ },
+/* 180 */,
 /* 181 */
 /***/ function(module, exports, __webpack_require__) {
 
@@ -22224,7 +22156,7 @@
 	      var intensityFilterItems = [];
 
 	      var _loop = function (intensity) {
-	        var className = _this.props.availableIntensities.indexOf(intensity) > -1 ? 'intensity-filter-item' : 'intensity-filter-item unavailable';
+	        var className = _this.props.availableIntensities.indexOf(intensity) > -1 ? 'intensityFilter__item' : 'intensityFilter__item intensityFilter__item--unavailable';
 	        var selectIntensity = function selectIntensity() {
 	          _this.props.actionCreator.filterByIntensity(intensity);
 	        };
@@ -22241,10 +22173,10 @@
 
 	      return React.createElement(
 	        'div',
-	        { className: 'intensity-filter' },
+	        { className: 'intensityFilter' },
 	        React.createElement(
 	          'div',
-	          { className: 'legend' },
+	          { className: 'intensityFilter__legend' },
 	          'Nach Intensität filtern'
 	        ),
 	        intensityFilterItems

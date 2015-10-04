@@ -11,7 +11,7 @@ class IntensityBar extends React.Component {
       let key = 'intensity-bar-item-' + i;
       dots.push(<span key={key} className={className}></span>);
     }
-    return <div className="intensityBar intensity-bar">
+    return <div className="intensity-bar">
       {dots}
     </div>;
   }

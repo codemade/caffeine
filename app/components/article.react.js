@@ -3,7 +3,9 @@ let IntensityBar = require('./intensity-bar.react.js');
 
 class Article extends React.Component {
   handleClick() {
-    if(!this.props.article.isMatchingFilter) return;
+    if (!this.props.article.isMatchingFilter) {
+      return;
+    }
     this.props.actionCreator.addArticleToShoppingCart(this.props.article.id, 10);
   }
 

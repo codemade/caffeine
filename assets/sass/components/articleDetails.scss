@@ -23,7 +23,7 @@
 			content: '';
 			width: 100%;
 			height: 100%;
-			background-image: url('../assets/bean.svg');
+			background-image: url('/dist/bean_white.svg');
 			background-size: 40%;
 			background-repeat: no-repeat;
 			background-position: 50% 50%;
@@ -68,5 +68,19 @@
 	}
 
 
+	.dot-on {
+	  display:inline-block;
+	  margin:1px;
+	  width:4px;
+	  height:4px;
+	  background-color: #58595A;
+	}
 
+	.dot-off {
+	  display:inline-block;
+	  margin:1px;
+	  width:4px;
+	  height:4px;
+	  border: 1px solid #58595A;
+	}
 }

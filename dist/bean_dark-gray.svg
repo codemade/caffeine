@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg width="39px" height="63px" viewBox="0 0 39 63" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:sketch="http://www.bohemiancoding.com/sketch/ns">
+    <!-- Generator: Sketch 3.3.3 (12081) - http://www.bohemiancoding.com/sketch -->
+    <title>Oval 2</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" sketch:type="MSPage">
+        <g id="A4" sketch:type="MSArtboardGroup" transform="translate(-252.000000, -288.000000)" fill="#58595A">
+            <g id="Kapsel" sketch:type="MSLayerGroup" transform="translate(209.000000, 269.000000)">
+                <path d="M63.512542,81.3415033 C73.8114902,80.4986046 82,66.8707454 82,50.1828399 C82,33.6449152 73.9580156,20.1122803 63.7897084,19.0499938 C63.6375811,20.0453021 61.85,31.8316362 61.85,36.1046483 C61.85,43.0177315 63.8,47.3842926 63.8,54.2973758 C63.8,59.0795119 62.2399747,66.236955 61.85,72.5230292 C61.6656328,75.4948771 62.4210883,78.5654526 63.512542,81.3415033 Z M61.8470796,19 C51.3797856,19.5509915 43,33.3011526 43,50.1828399 C43,66.7486136 51.0690919,80.2989676 61.2616785,81.3209463 C60.3431836,78.4745963 59.728666,75.4055519 59.8999997,72.5230292 C60.320551,65.4476643 61.85,59.7381571 61.85,54.2973758 C61.85,49.4582176 59.9,40.9438064 59.9,36.1046483 C59.9,30.5258653 61.7631885,19.4938929 61.8470796,19 Z" id="Oval-2" sketch:type="MSShapeGroup"></path>
+            </g>
+        </g>
+    </g>
+</svg>
