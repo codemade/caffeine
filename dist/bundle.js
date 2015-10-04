@@ -57,7 +57,7 @@
 	var ArticleStore = __webpack_require__(158);
 	var ActionCreator = __webpack_require__(164);
 	var App = __webpack_require__(165);
-	var DataAccess = __webpack_require__(184);
+	var DataAccess = __webpack_require__(185);
 
 	var dataAccess = new DataAccess();
 	var actionCreator = new ActionCreator(dataAccess);
@@ -263,7 +263,9 @@
 	        currentQueue = queue;
 	        queue = [];
 	        while (++queueIndex < len) {
-	            currentQueue[queueIndex].run();
+	            if (currentQueue) {
+	                currentQueue[queueIndex].run();
+	            }
 	        }
 	        queueIndex = -1;
 	        len = queue.length;
@@ -315,7 +317,6 @@
 	    throw new Error('process.binding is not supported');
 	};
 
-	// TODO(shtylman)
 	process.cwd = function () { return '/' };
 	process.chdir = function (dir) {
 	    throw new Error('process.chdir is not supported');
@@ -20891,7 +20892,7 @@
 	var React = __webpack_require__(2);
 	var RouterMixin = __webpack_require__(166).RouterMixin;
 	var ArticlesControllerView = __webpack_require__(174);
-	var ShoppingCartControllerView = __webpack_require__(182);
+	var ShoppingCartControllerView = __webpack_require__(183);
 	var navigate = __webpack_require__(166).navigate;
 
 	var App = React.createClass({
@@ -21729,10 +21730,11 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var React = __webpack_require__(2);
-	var ShoppingCartBadge = __webpack_require__(175);
-	var ArticleList = __webpack_require__(176);
-	var ArticleInformation = __webpack_require__(180);
-	var IntensityFilter = __webpack_require__(181);
+	var Navigation = __webpack_require__(175);
+	var ShoppingCartBadge = __webpack_require__(176);
+	var ArticleList = __webpack_require__(177);
+	var ArticleInformation = __webpack_require__(181);
+	var IntensityFilter = __webpack_require__(182);
 	var Maybe = __webpack_require__(163);
 
 	var ArticlesControllerView = (function (_React$Component) {
@@ -21790,18 +21792,21 @@
 	        'div',
 	        null,
 	        React.createElement(
-	          'h1',
+	          Navigation,
 	          null,
-	          'Unsere Kaffee-Geschmackserlebnisse'
+	          React.createElement(ShoppingCartBadge, { shoppingCartInfo: this.state.shoppingCartInfo, navigate: this.props.navigate })
 	        ),
-	        React.createElement(IntensityFilter, { actionCreator: this.props.actionCreator,
-	          maximumIntensity: maximumIntensity,
-	          availableIntensities: availableIntensities }),
-	        React.createElement(ArticleList, { categories: this.state.categories,
-	          articles: this.state.articles,
-	          actionCreator: this.props.actionCreator }),
-	        React.createElement(ShoppingCartBadge, { shoppingCartInfo: this.state.shoppingCartInfo, navigate: this.props.navigate }),
-	        articleInformation
+	        React.createElement(
+	          'div',
+	          { className: 'container contentWrapper' },
+	          React.createElement(IntensityFilter, { actionCreator: this.props.actionCreator,
+	            maximumIntensity: maximumIntensity,
+	            availableIntensities: availableIntensities }),
+	          React.createElement(ArticleList, { categories: this.state.categories,
+	            articles: this.state.articles,
+	            actionCreator: this.props.actionCreator }),
+	          articleInformation
+	        )
 	      );
 	    }
 	  }]);
@@ -21817,6 +21822,50 @@
 
 /***/ },
 /* 175 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var React = __webpack_require__(2);
+
+	var Navigation = React.createClass({
+		displayName: "Navigation",
+
+		render: function render() {
+			return React.createElement(
+				"div",
+				{ className: "mainNavigation" },
+				React.createElement(
+					"nav",
+					{ className: "container" },
+					React.createElement(
+						"ul",
+						{ className: "row" },
+						React.createElement(
+							"li",
+							{ className: "mainNavigation__navItem col-xs-6" },
+							React.createElement("span", { className: "mainNavigation__logo" }),
+							React.createElement(
+								"h1",
+								{ className: "mainNavigation__brandName" },
+								"Coffee Store"
+							)
+						),
+						React.createElement(
+							"li",
+							{ className: "mainNavigation__navItem col-xs-6 align-right" },
+							this.props.children
+						)
+					)
+				)
+			);
+		}
+	});
+
+	module.exports = Navigation;
+
+/***/ },
+/* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21851,17 +21900,18 @@
 
 	      return React.createElement(
 	        'div',
-	        { className: 'shopping-cart-badge', onClick: navigateToShoppingCart },
-	        'Shopping Cart Overview',
+	        { className: 'shoppingCartBadge shopping-cart-badge row', onClick: navigateToShoppingCart },
 	        React.createElement(
 	          'div',
-	          { className: 'article-count' },
-	          this.props.shoppingCartInfo.articleCount
+	          { className: 'shoppingCartBadge__logo col-xs-2' },
+	          React.createElement('i', { className: 'fa fa-shopping-cart fa-2x' })
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'total-price' },
-	          this.props.shoppingCartInfo.totalPrice / 100
+	          { className: 'shoppingCartBadge__cartInfo article-count col-xs-10' },
+	          this.props.shoppingCartInfo.articleCount + ' Artikel:',
+	          ' ',
+	          this.props.shoppingCartInfo.totalPrice / 100 + ' €'
 	        )
 	      );
 	    }
@@ -21874,71 +21924,6 @@
 	  shoppingCartInfo: React.PropTypes.object.isRequired
 	};
 	module.exports = ShoppingCartBadge;
-
-/***/ },
-/* 176 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var React = __webpack_require__(2);
-	var ArticleCategory = __webpack_require__(177);
-
-	var ArticleList = (function (_React$Component) {
-	  _inherits(ArticleList, _React$Component);
-
-	  function ArticleList() {
-	    _classCallCheck(this, ArticleList);
-
-	    _get(Object.getPrototypeOf(ArticleList.prototype), 'constructor', this).apply(this, arguments);
-	  }
-
-	  _createClass(ArticleList, [{
-	    key: 'render',
-	    value: function render() {
-	      var _this = this;
-
-	      var categories = this.props.categories.map(function (category) {
-	        var articles = _this.props.articles.filter(function (article) {
-	          return article.category === category.id;
-	        });
-	        return React.createElement(ArticleCategory, {
-	          key: category.id,
-	          category: category,
-	          articles: articles,
-	          actionCreator: _this.props.actionCreator });
-	      });
-
-	      return React.createElement(
-	        'div',
-	        null,
-	        React.createElement(
-	          'h2',
-	          null,
-	          'Diese Artikel sind verfügbar:'
-	        ),
-	        categories
-	      );
-	    }
-	  }]);
-
-	  return ArticleList;
-	})(React.Component);
-
-	ArticleList.propTypes = {
-	  actionCreator: React.PropTypes.object.isRequired,
-	  categories: React.PropTypes.array.isRequired,
-	  articles: React.PropTypes.array.isRequired
-	};
-	module.exports = ArticleList;
 
 /***/ },
 /* 177 */
@@ -21955,18 +21940,18 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var React = __webpack_require__(2);
-	var Article = __webpack_require__(178);
+	var Article = __webpack_require__(179);
 
-	var ArticleCategory = (function (_React$Component) {
-	  _inherits(ArticleCategory, _React$Component);
+	var ArticleList = (function (_React$Component) {
+	  _inherits(ArticleList, _React$Component);
 
-	  function ArticleCategory() {
-	    _classCallCheck(this, ArticleCategory);
+	  function ArticleList() {
+	    _classCallCheck(this, ArticleList);
 
-	    _get(Object.getPrototypeOf(ArticleCategory.prototype), 'constructor', this).apply(this, arguments);
+	    _get(Object.getPrototypeOf(ArticleList.prototype), 'constructor', this).apply(this, arguments);
 	  }
 
-	  _createClass(ArticleCategory, [{
+	  _createClass(ArticleList, [{
 	    key: 'render',
 	    value: function render() {
 	      var _this = this;
@@ -21979,29 +21964,25 @@
 
 	      return React.createElement(
 	        'div',
-	        { className: 'category' },
-	        React.createElement(
-	          'h3',
-	          { className: 'category-name' },
-	          this.props.category.name
-	        ),
+	        null,
 	        articles
 	      );
 	    }
 	  }]);
 
-	  return ArticleCategory;
+	  return ArticleList;
 	})(React.Component);
 
-	ArticleCategory.propTypes = {
+	ArticleList.propTypes = {
 	  actionCreator: React.PropTypes.object.isRequired,
-	  category: React.PropTypes.object.isRequired,
+	  categories: React.PropTypes.array.isRequired,
 	  articles: React.PropTypes.array.isRequired
 	};
-	module.exports = ArticleCategory;
+	module.exports = ArticleList;
 
 /***/ },
-/* 178 */
+/* 178 */,
+/* 179 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22015,7 +21996,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var React = __webpack_require__(2);
-	var IntensityBar = __webpack_require__(179);
+	var IntensityBar = __webpack_require__(180);
 
 	var Article = (function (_React$Component) {
 	  _inherits(Article, _React$Component);
@@ -22089,7 +22070,7 @@
 	module.exports = Article;
 
 /***/ },
-/* 179 */
+/* 180 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22142,7 +22123,7 @@
 	module.exports = IntensityBar;
 
 /***/ },
-/* 180 */
+/* 181 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22207,7 +22188,7 @@
 	module.exports = ArticleInformation;
 
 /***/ },
-/* 181 */
+/* 182 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22278,7 +22259,7 @@
 	module.exports = IntensityFilter;
 
 /***/ },
-/* 182 */
+/* 183 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22292,7 +22273,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var React = __webpack_require__(2);
-	var ShoppingCartItem = __webpack_require__(183);
+	var ShoppingCartItem = __webpack_require__(184);
 
 	var ShoppingCartControllerView = (function (_React$Component) {
 	  _inherits(ShoppingCartControllerView, _React$Component);
@@ -22406,7 +22387,7 @@
 	module.exports = ShoppingCartControllerView;
 
 /***/ },
-/* 183 */
+/* 184 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22498,7 +22479,7 @@
 	module.exports = ShoppingCartItem;
 
 /***/ },
-/* 184 */
+/* 185 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -22515,7 +22496,7 @@
 	  _createClass(DataAccess, [{
 	    key: 'getCategoriesAndArticles',
 	    value: function getCategoriesAndArticles() {
-	      return __webpack_require__(185);
+	      return __webpack_require__(186);
 	    }
 	  }]);
 
@@ -22525,7 +22506,7 @@
 	module.exports = DataAccess;
 
 /***/ },
-/* 185 */
+/* 186 */
 /***/ function(module, exports) {
 
 	'use strict';
