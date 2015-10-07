@@ -1,9 +1,10 @@
-let expect = require('chai').expect;
-let React = require('react/addons');
+/*eslint-disable no-unused-vars*/
+let React = require('react');
 let ReactDOM = require('react-dom');
+let TestUtils = require('react-addons-test-utils');
+let expect = require('chai').expect;
 let ActionCreator = require('../../app/action-creator.js');
 let Store = require('../../app/article-store.js');
-let TestUtils = React.addons.TestUtils;
 let renderTarget, renderedComponent;
 
 describe('filtering articles by intensity', () => {
@@ -64,7 +65,7 @@ describe('filtering articles by intensity', () => {
     let firstAvailableIntensityItem;
     beforeEach(() => {
       firstAvailableIntensityItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'intensity-filter-item')[2];
-      React.addons.TestUtils.Simulate.click(firstAvailableIntensityItem);
+      TestUtils.Simulate.click(firstAvailableIntensityItem);
     });
 
     it('should display articles with matching intensity as default', () => {
@@ -92,7 +93,7 @@ describe('filtering articles by intensity', () => {
 
     describe('twice', () => {
       beforeEach(() => {
-        React.addons.TestUtils.Simulate.click(firstAvailableIntensityItem);
+        TestUtils.Simulate.click(firstAvailableIntensityItem);
       });
 
       it('should disable intensity filter items with unavailable intensity', () => {

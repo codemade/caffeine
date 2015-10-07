@@ -1,6 +1,7 @@
+/*eslint-disable no-unused-vars*/
 let React = require('react');
 let ReactDOM = require('react-dom');
-let TestUtils = React.addons.TestUtils;
+let TestUtils = require('react-addons-test-utils');
 let chai = require('chai');
 let sinonChai = require('sinon-chai');
 let expect = chai.expect;
@@ -96,7 +97,7 @@ describe('Displaying the shopping cart overview', () => {
       beforeEach(() => {
         shoppingCartItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item')[0];
         addButton = shoppingCartItem.querySelector('.addToCart');
-        React.addons.TestUtils.Simulate.click(addButton);
+        TestUtils.Simulate.click(addButton);
       });
 
       it('should increase article amount by 10', () => {
@@ -121,7 +122,7 @@ describe('Displaying the shopping cart overview', () => {
 
       describe('Once', () => {
         it('should decrease article amount by 10', () => {
-          React.addons.TestUtils.Simulate.click(minusButton);
+          TestUtils.Simulate.click(minusButton);
           let actual = Array.from(shoppingCartItem.querySelectorAll('.content')).map((cell) => cell.textContent);
           let expected = ['first article', '0.42', '10', '4.2'];
           expect(actual).to.deep.equal(expected);
@@ -130,8 +131,8 @@ describe('Displaying the shopping cart overview', () => {
 
       describe('Twice', () => {
         it('should remove article from shopping cart', () => {
-          React.addons.TestUtils.Simulate.click(minusButton);
-          React.addons.TestUtils.Simulate.click(minusButton);
+          TestUtils.Simulate.click(minusButton);
+          TestUtils.Simulate.click(minusButton);
           let shoppingCartItems = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item');
           expect(shoppingCartItems.length).to.equal(1);
         });

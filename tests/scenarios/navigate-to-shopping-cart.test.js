@@ -1,6 +1,7 @@
+/*eslint-disable no-unused-vars*/
 let React = require('react');
 let ReactDOM = require('react-dom');
-let TestUtils = React.addons.TestUtils;
+let TestUtils = require('react-addons-test-utils');
 let chai = require('chai');
 let sinon = require('sinon');
 let sinonChai = require('sinon-chai');

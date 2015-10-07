@@ -1,7 +1,8 @@
-let expect = require('chai').expect;
-let React = require('react/addons');
+/*eslint-disable no-unused-vars*/
+let React = require('react');
 let ReactDOM = require('react-dom');
-let TestUtils = React.addons.TestUtils;
+let TestUtils = require('react-addons-test-utils');
+let expect = require('chai').expect;
 let renderTarget, renderedComponent;
 
 describe('displaying article overview', () => {

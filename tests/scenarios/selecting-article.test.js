@@ -1,9 +1,10 @@
-let expect = require('chai').expect;
-let React = require('react/addons');
+/*eslint-disable no-unused-vars*/
+let React = require('react');
 let ReactDOM = require('react-dom');
+let TestUtils = require('react-addons-test-utils');
+let expect = require('chai').expect;
 let ActionCreator = require('../../app/action-creator.js');
 let Store = require('../../app/article-store.js');
-let TestUtils = React.addons.TestUtils;
 let renderTarget, firstArticleComponent, articleInformationComponent;
 
 describe('selecting an article', () => {
@@ -31,7 +32,7 @@ describe('selecting an article', () => {
 
     let renderedComponent = ReactDOM.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
     firstArticleComponent = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-details')[0];
-    React.addons.TestUtils.Simulate.click(firstArticleComponent);
+    TestUtils.Simulate.click(firstArticleComponent);
     articleInformationComponent = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-information')[0];
   });
 
