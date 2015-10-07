@@ -1,5 +1,6 @@
 let expect = require('chai').expect;
 let React = require('react/addons');
+let ReactDOM = require('react-dom');
 let TestUtils = React.addons.TestUtils;
 let renderTarget, renderedComponent;
 
@@ -30,11 +31,11 @@ describe('displaying article overview', () => {
     let actionCreator = new ActionCreator(dataAccess);
     let ArticleStore = require('../../app/article-store.js');
     let store = new ArticleStore();
-    renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
+    renderedComponent = ReactDOM.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
   });
 
   afterEach(() => {
-    React.unmountComponentAtNode(renderTarget);
+    ReactDOM.unmountComponentAtNode(renderTarget);
     renderedComponent = null;
   });
 

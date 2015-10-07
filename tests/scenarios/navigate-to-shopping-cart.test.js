@@ -1,4 +1,5 @@
 let React = require('react');
+let ReactDOM = require('react-dom');
 let TestUtils = React.addons.TestUtils;
 let chai = require('chai');
 let sinon = require('sinon');
@@ -35,11 +36,11 @@ describe('Navigate to shopping-cart route', () => {
     let ArticleStore = require('../../app/article-store.js');
     let store = new ArticleStore();
     navigateSpy = sinon.spy();
-    renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store} navigate={navigateSpy} />, renderTarget);
+    renderedComponent = ReactDOM.render(<ComponentClass actionCreator={actionCreator} store={store} navigate={navigateSpy} />, renderTarget);
   });
 
   afterEach(() => {
-    React.unmountComponentAtNode(renderTarget);
+    ReactDOM.unmountComponentAtNode(renderTarget);
     renderedComponent = null;
   });
 

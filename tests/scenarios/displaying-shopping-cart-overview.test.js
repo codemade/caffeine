@@ -1,4 +1,5 @@
 let React = require('react');
+let ReactDOM = require('react-dom');
 let TestUtils = React.addons.TestUtils;
 let chai = require('chai');
 let sinonChai = require('sinon-chai');
@@ -33,13 +34,13 @@ describe('Displaying the shopping cart overview', () => {
     actionCreator = new ActionCreator(dataAccess);
     let ArticleStore = require('../../app/article-store.js');
     store = new ArticleStore();
-    renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store} />, renderTarget);
+    renderedComponent = ReactDOM.render(<ComponentClass actionCreator={actionCreator} store={store} />, renderTarget);
     // initialize action creator, to fetch article data from server etc.
     actionCreator.initialize();
   });
 
   afterEach(() => {
-    React.unmountComponentAtNode(renderTarget);
+    ReactDOM.unmountComponentAtNode(renderTarget);
     renderedComponent = null;
   });
 

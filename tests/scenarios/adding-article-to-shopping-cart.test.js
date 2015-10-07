@@ -1,5 +1,6 @@
 let expect = require('chai').expect;
 let React = require('react/addons');
+let ReactDOM = require('react-dom');
 let ActionCreator = require('../../app/action-creator.js');
 let Store = require('../../app/article-store.js');
 let TestUtils = React.addons.TestUtils;
@@ -30,14 +31,14 @@ describe('adding an article to the shopping cart', () => {
     let actionCreator = new ActionCreator(dataAccess);
     let store = new Store(actionCreator);
 
-    renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
+    renderedComponent = ReactDOM.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
     firstArticleComponent = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-details')[0];
     React.addons.TestUtils.Simulate.click(firstArticleComponent);
     shoppingCartBadge = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-badge')[0];
   });
 
   afterEach(() => {
-    React.unmountComponentAtNode(renderTarget);
+    ReactDOM.unmountComponentAtNode(renderTarget);
   });
 
   let clickAddToCartButton = () => {

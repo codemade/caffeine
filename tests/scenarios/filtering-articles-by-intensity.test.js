@@ -1,5 +1,6 @@
 let expect = require('chai').expect;
 let React = require('react/addons');
+let ReactDOM = require('react-dom');
 let ActionCreator = require('../../app/action-creator.js');
 let Store = require('../../app/article-store.js');
 let TestUtils = React.addons.TestUtils;
@@ -27,12 +28,12 @@ describe('filtering articles by intensity', () => {
     };
     let actionCreator = new ActionCreator(dataAccess);
     store = new Store(actionCreator);
-    renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
+    renderedComponent = ReactDOM.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
     maximumIntensity = store.getMaximumPossibleIntensity();
   });
 
   afterEach(() => {
-    React.unmountComponentAtNode(renderTarget);
+    ReactDOM.unmountComponentAtNode(renderTarget);
     renderedComponent = null;
   });
 
