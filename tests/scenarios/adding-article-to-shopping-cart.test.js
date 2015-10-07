@@ -52,12 +52,12 @@ describe('adding an article to the shopping cart', () => {
     });
 
     it('should display 10 articles in the shopping cart badge', () => {
-      let articleCount = TestUtils.scryRenderedDOMComponentsWithClass(shoppingCartBadge, 'article-count')[0];
+      let articleCount = shoppingCartBadge.querySelectorAll('.article-count')[0];
       expect(articleCount.textContent).to.equal('10');
     });
 
     it('should display price for 10 articles in the shopping cart badge', () => {
-      let totalPrice = TestUtils.scryRenderedDOMComponentsWithClass(shoppingCartBadge, 'total-price')[0];
+      let totalPrice = shoppingCartBadge.querySelectorAll('.total-price')[0];
       expect(totalPrice.textContent).to.equal('3.9');
     });
   });
@@ -69,12 +69,12 @@ describe('adding an article to the shopping cart', () => {
     });
 
     it('should display 20 articles in the shopping cart badge', () => {
-      let articleCount = TestUtils.scryRenderedDOMComponentsWithClass(shoppingCartBadge, 'article-count')[0];
+      let articleCount = shoppingCartBadge.querySelectorAll('.article-count')[0];
       expect(articleCount.textContent).to.equal('20');
     });
 
     it('should display price for 20 articles in the shopping cart badge', () => {
-      let totalPrice = TestUtils.scryRenderedDOMComponentsWithClass(shoppingCartBadge, 'total-price')[0];
+      let totalPrice = shoppingCartBadge.querySelectorAll('.total-price')[0];
       expect(totalPrice.textContent).to.equal('7.8');
     });
   });

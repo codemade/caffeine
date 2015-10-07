@@ -40,7 +40,7 @@ describe('selecting an article', () => {
   });
 
   it('should show details for article', () => {
-    let articleName = TestUtils.scryRenderedDOMComponentsWithClass(articleInformationComponent, 'article-name')[0];
+    let articleName = articleInformationComponent.querySelectorAll('.article-name')[0];
     expect(articleName.innerHTML).to.equal('Ristretto');
   });
 });
