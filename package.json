@@ -30,7 +30,7 @@
   "author": "René Viering, Christian Kühl",
   "license": "MIT",
   "dependencies": {
-    "react": "0.13.3",
+    "react": "0.14.0",
     "react-mini-router": "1.1.7"
   },
   "devDependencies": {
