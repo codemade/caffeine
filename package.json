@@ -30,7 +30,8 @@
   "author": "René Viering, Christian Kühl",
   "license": "MIT",
   "dependencies": {
-    "react": "0.13.3",
+    "react": "0.14.0",
+    "react-dom": "0.14.0",
     "react-mini-router": "1.1.7"
   },
   "devDependencies": {
@@ -47,6 +48,7 @@
     "local-web-server": "0.5.23",
     "mocha": "2.3.3",
     "mocha-lcov-reporter": "1.0.0",
+    "react-addons-test-utils": "0.14.0",
     "sinon": "1.17.1",
     "sinon-chai": "2.8.0",
     "webpack": "1.12.2"

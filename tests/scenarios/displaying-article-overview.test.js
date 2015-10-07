@@ -1,6 +1,8 @@
+/*eslint-disable no-unused-vars*/
+let React = require('react');
+let ReactDOM = require('react-dom');
+let TestUtils = require('react-addons-test-utils');
 let expect = require('chai').expect;
-let React = require('react/addons');
-let TestUtils = React.addons.TestUtils;
 let renderTarget, renderedComponent;
 
 describe('displaying article overview', () => {
@@ -15,7 +17,7 @@ describe('displaying article overview', () => {
 
   beforeEach(() => {
     let ComponentClass = require('../../app/components/articles-controller-view.react.js');
-    renderTarget = document.getElementsByTagName('body')[0];
+    renderTarget = document.getElementsByClassName('app')[0];
 
     let dataAccess = {
       getCategoriesAndArticles: () => {
@@ -30,23 +32,23 @@ describe('displaying article overview', () => {
     let actionCreator = new ActionCreator(dataAccess);
     let ArticleStore = require('../../app/article-store.js');
     let store = new ArticleStore();
-    renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
+    renderedComponent = ReactDOM.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
   });
 
   afterEach(() => {
-    React.unmountComponentAtNode(renderTarget);
+    ReactDOM.unmountComponentAtNode(renderTarget);
     renderedComponent = null;
   });
 
   describe('server has some categories and articles', () => {
     it('should display categories from server', () => {
-      let actualCategoryNames = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'category-name').map((category) => category.getDOMNode().textContent);
+      let actualCategoryNames = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'category-name').map((category) => category.textContent);
       let expectedCategoryNames = categories.map((category) => category.name);
       expect(actualCategoryNames).to.deep.equal(expectedCategoryNames);
     });
 
     it('should display articles from server', () => {
-      let actualArticleNames = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-name').map((article) => article.getDOMNode().textContent);
+      let actualArticleNames = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-name').map((article) => article.textContent);
       let expectedArticleNames = articles.map((article) => article.name);
       expect(actualArticleNames).to.deep.equal(expectedArticleNames);
     });

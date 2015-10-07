@@ -1,8 +1,10 @@
+/*eslint-disable no-unused-vars*/
+let React = require('react');
+let ReactDOM = require('react-dom');
+let TestUtils = require('react-addons-test-utils');
 let expect = require('chai').expect;
-let React = require('react/addons');
 let ActionCreator = require('../../app/action-creator.js');
 let Store = require('../../app/article-store.js');
-let TestUtils = React.addons.TestUtils;
 let renderTarget, firstArticleComponent, articleInformationComponent;
 
 describe('selecting an article', () => {
@@ -14,7 +16,7 @@ describe('selecting an article', () => {
 
   beforeEach(() => {
     let ComponentClass = require('../../app/components/articles-controller-view.react.js');
-    renderTarget = document.getElementsByTagName('body')[0];
+    renderTarget = document.getElementsByClassName('app')[0];
 
     let dataAccess = {
       getCategoriesAndArticles: () => {
@@ -28,18 +30,18 @@ describe('selecting an article', () => {
     let actionCreator = new ActionCreator(dataAccess);
     let store = new Store(actionCreator);
 
-    let renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
+    let renderedComponent = ReactDOM.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
     firstArticleComponent = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-details')[0];
-    React.addons.TestUtils.Simulate.click(firstArticleComponent);
+    TestUtils.Simulate.click(firstArticleComponent);
     articleInformationComponent = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-information')[0];
   });
 
   afterEach(() => {
-    React.unmountComponentAtNode(renderTarget);
+    ReactDOM.unmountComponentAtNode(renderTarget);
   });
 
   it('should show details for article', () => {
-    let articleName = TestUtils.scryRenderedDOMComponentsWithClass(articleInformationComponent, 'article-name')[0].getDOMNode();
+    let articleName = articleInformationComponent.querySelectorAll('.article-name')[0];
     expect(articleName.innerHTML).to.equal('Ristretto');
   });
 });
