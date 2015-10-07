@@ -18,7 +18,7 @@ describe('Displaying the shopping cart overview', () => {
   ];
   beforeEach(function() {
     let ComponentClass = require('../../app/components/shopping-cart-controller-view.react.js');
-    renderTarget = document.getElementsByTagName('body')[0];
+    renderTarget = document.getElementsByClassName('app')[0];
 
     let dataAccess = {
       getCategoriesAndArticles: () => {

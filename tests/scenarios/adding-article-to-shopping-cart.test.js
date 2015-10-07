@@ -16,7 +16,7 @@ describe('adding an article to the shopping cart', () => {
 
   beforeEach(() => {
     let ComponentClass = require('../../app/components/articles-controller-view.react.js');
-    renderTarget = document.getElementsByTagName('body')[0];
+    renderTarget = document.getElementsByClassName('app')[0];
 
     let dataAccess = {
       getCategoriesAndArticles: () => {
