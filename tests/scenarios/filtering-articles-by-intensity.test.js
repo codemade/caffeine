@@ -41,10 +41,10 @@ describe('filtering articles by intensity', () => {
     let intensityFilterItems = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'intensity-filter-item');
     let itemsWithWrongClassName = Array.from(intensityFilterItems)
       .filter((intensityItem) => {
-        let expectedClassName = availableIntensities.indexOf(+intensityItem.getDOMNode().textContent) > -1
+        let expectedClassName = availableIntensities.indexOf(+intensityItem.textContent) > -1
           ? 'intensity-filter-item'
           : 'intensity-filter-item unavailable';
-        return intensityItem.getDOMNode().className !== expectedClassName;
+        return intensityItem.className !== expectedClassName;
       });
     expect(itemsWithWrongClassName.length).to.equal(0);
   };
@@ -70,7 +70,6 @@ describe('filtering articles by intensity', () => {
     it('should display articles with matching intensity as default', () => {
       let articleDetails = Array.from(TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-details'));
       let articleInfosWithIntensity = articleDetails
-          .map((article) => article.getDOMNode())
           .filter((article) => {
             return +article.querySelector('.intensity-value').textContent === 3;
           });
@@ -80,7 +79,6 @@ describe('filtering articles by intensity', () => {
     it('should display articles with non-matching intensity grayed-out', () => {
       let articleDetails = Array.from(TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-details'));
       let articleInfosWithIntensity = articleDetails
-          .map((article) => article.getDOMNode())
           .filter((article) => {
             return +article.querySelector('.intensity-value').textContent !== 3;
           });
