@@ -51,7 +51,7 @@ describe('adding an article to the shopping cart', () => {
 
     it('should display 10 articles in the shopping cart badge', () => {
       let articleCount = TestUtils.scryRenderedDOMComponentsWithClass(shoppingCartBadge, 'shoppingCartBadge__cartInfo')[0];
-      expect(articleCount.getDOMNode().textContent).to.equal('10 Artikel: 3.9 €');
+      expect(articleCount.getDOMNode().textContent).to.equal('10 Artikel: 3.90 €');
     });
   });
 
@@ -63,7 +63,7 @@ describe('adding an article to the shopping cart', () => {
 
     it('should display 20 articles in the shopping cart badge', () => {
       let articleCount = TestUtils.scryRenderedDOMComponentsWithClass(shoppingCartBadge, 'shoppingCartBadge__cartInfo')[0];
-      expect(articleCount.getDOMNode().textContent).to.equal('20 Artikel: 7.8 €');
+      expect(articleCount.getDOMNode().textContent).to.equal('20 Artikel: 7.80 €');
     });
   });
 
@@ -75,7 +75,7 @@ describe('adding an article to the shopping cart', () => {
 
     it('should display zero articles in the shopping cart badge', () => {
       let articleCount = TestUtils.scryRenderedDOMComponentsWithClass(shoppingCartBadge, 'shoppingCartBadge__cartInfo')[0];
-      expect(articleCount.getDOMNode().textContent).to.equal('0 Artikel: 0 €');
+      expect(articleCount.getDOMNode().textContent).to.equal('0 Artikel: 0.00 €');
     });
   });
 });
