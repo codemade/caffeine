@@ -1,5 +1,7 @@
+/*eslint-disable no-unused-vars*/
 let React = require('react');
-let TestUtils = React.addons.TestUtils;
+let ReactDOM = require('react-dom');
+let TestUtils = require('react-addons-test-utils');
 let chai = require('chai');
 let sinonChai = require('sinon-chai');
 let expect = chai.expect;
@@ -18,7 +20,7 @@ describe('Displaying the shopping cart overview', () => {
   ];
   beforeEach(function() {
     let ComponentClass = require('../../app/components/shopping-cart-controller-view.react.js');
-    renderTarget = document.getElementsByTagName('body')[0];
+    renderTarget = document.getElementsByClassName('app')[0];
 
     let dataAccess = {
       getCategoriesAndArticles: () => {
@@ -33,13 +35,13 @@ describe('Displaying the shopping cart overview', () => {
     actionCreator = new ActionCreator(dataAccess);
     let ArticleStore = require('../../app/article-store.js');
     store = new ArticleStore();
-    renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store} />, renderTarget);
+    renderedComponent = ReactDOM.render(<ComponentClass actionCreator={actionCreator} store={store} />, renderTarget);
     // initialize action creator, to fetch article data from server etc.
     actionCreator.initialize();
   });
 
   afterEach(() => {
-    React.unmountComponentAtNode(renderTarget);
+    ReactDOM.unmountComponentAtNode(renderTarget);
     renderedComponent = null;
   });
 
@@ -50,7 +52,7 @@ describe('Displaying the shopping cart overview', () => {
     });
 
     it('should display empty footer', () => {
-      let shoppingCartFooter = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-footer')[0].getDOMNode();
+      let shoppingCartFooter = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-footer')[0];
       let actual = Array.from(shoppingCartFooter.querySelectorAll('div')).map((cell) => cell.textContent);
       let expected = ['', '', '0', '0'];
       expect(actual).to.deep.equal(expected);
@@ -64,21 +66,21 @@ describe('Displaying the shopping cart overview', () => {
     });
 
     it('should display name, amount and price of first article', () => {
-      let shoppingCartItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item')[0].getDOMNode();
+      let shoppingCartItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item')[0];
       let actual = Array.from(shoppingCartItem.querySelectorAll('.content')).map((cell) => cell.textContent);
       let expected = ['first article', '0.42', '20', '8.4'];
       expect(actual).to.deep.equal(expected);
     });
 
     it('should display name, amount and price of second article', () => {
-      let shoppingCartItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item')[1].getDOMNode();
+      let shoppingCartItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item')[1];
       let actual = Array.from(shoppingCartItem.querySelectorAll('.content')).map((cell) => cell.textContent);
       let expected = ['second article', '0.38', '30', '11.4'];
       expect(actual).to.deep.equal(expected);
     });
 
     it('should display footer with total amount and total price', () => {
-      let shoppingCartFooter = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-footer')[0].getDOMNode();
+      let shoppingCartFooter = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-footer')[0];
       let actual = Array.from(shoppingCartFooter.querySelectorAll('div')).map((cell) => cell.textContent);
       let expected = ['', '', '50', '19.8'];
       expect(actual).to.deep.equal(expected);
@@ -93,9 +95,9 @@ describe('Displaying the shopping cart overview', () => {
       let shoppingCartItem, addButton;
 
       beforeEach(() => {
-        shoppingCartItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item')[0].getDOMNode();
+        shoppingCartItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item')[0];
         addButton = shoppingCartItem.querySelector('.addToCart');
-        React.addons.TestUtils.Simulate.click(addButton);
+        TestUtils.Simulate.click(addButton);
       });
 
       it('should increase article amount by 10', () => {
@@ -114,13 +116,13 @@ describe('Displaying the shopping cart overview', () => {
       let shoppingCartItem, minusButton;
 
       beforeEach(() => {
-        shoppingCartItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item')[0].getDOMNode();
+        shoppingCartItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item')[0];
         minusButton = shoppingCartItem.querySelector('.removeFromCart');
       });
 
       describe('Once', () => {
         it('should decrease article amount by 10', () => {
-          React.addons.TestUtils.Simulate.click(minusButton);
+          TestUtils.Simulate.click(minusButton);
           let actual = Array.from(shoppingCartItem.querySelectorAll('.content')).map((cell) => cell.textContent);
           let expected = ['first article', '0.42', '10', '4.2'];
           expect(actual).to.deep.equal(expected);
@@ -129,8 +131,8 @@ describe('Displaying the shopping cart overview', () => {
 
       describe('Twice', () => {
         it('should remove article from shopping cart', () => {
-          React.addons.TestUtils.Simulate.click(minusButton);
-          React.addons.TestUtils.Simulate.click(minusButton);
+          TestUtils.Simulate.click(minusButton);
+          TestUtils.Simulate.click(minusButton);
           let shoppingCartItems = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-item');
           expect(shoppingCartItems.length).to.equal(1);
         });

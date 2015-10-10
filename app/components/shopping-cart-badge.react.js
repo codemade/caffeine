@@ -3,7 +3,7 @@ let React = require('react');
 class ShoppingCartBadge extends React.Component {
   render() {
     let navigateToShoppingCart = () => {
-      this.props.navigate('/shopping-cart');
+      this.props.navigate('shopping-cart');
     };
 
     let shoppingCartPrice = (this.props.shoppingCartInfo.totalPrice / 100).toFixed(2);
