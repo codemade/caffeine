@@ -54,7 +54,7 @@ describe('Displaying the shopping cart overview', () => {
     it('should display empty footer', () => {
       let shoppingCartFooter = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shoppingCart__footer')[0];
       let actual = Array.from(shoppingCartFooter.querySelectorAll('td')).map((cell) => cell.textContent);
-      let expected = ['', '', '0', '0.00 €'];
+      let expected = ['Gesamt:', '', '0', '0.00 €'];
       expect(actual).to.deep.equal(expected);
     });
   });
@@ -96,7 +96,7 @@ describe('Displaying the shopping cart overview', () => {
     it('should display footer with total amount and total price', () => {
       let shoppingCartFooter = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shoppingCart__footer')[0];
       let actual = Array.from(shoppingCartFooter.querySelectorAll('tr td')).map((cell) => cell.textContent);
-      let expected = ['', '', '50', '19.80 €'];
+      let expected = ['Gesamt:', '', '50', '19.80 €'];
       expect(actual).to.deep.equal(expected);
     });
 
