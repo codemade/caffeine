@@ -1,5 +1,4 @@
 let React = require('react');
-let ShoppingCartItem = require('./shopping-cart-item.react.js');
 let Navigation = require('./navigation.react.js');
 let utils = require('../utils.js');
 
@@ -28,9 +27,7 @@ class ShoppingCartControllerView extends React.Component {
   }
 
   _getArticleItems() {
-
     return this.state.shoppingCartContent.items.map((item) => {
-
       let addToCart = () => {
         this.props.actionCreator.addArticleToShoppingCart(item.id, 10);
       };
@@ -39,13 +36,12 @@ class ShoppingCartControllerView extends React.Component {
         this.props.actionCreator.removeArticleFromShoppingCart(item.id, 10);
       };
 
-
       let itemPrice = utils.formatAsPrice(item.price / 100);
       let itemTotalPrice = utils.formatAsPrice(item.amount * item.price / 100);
 
       let itemStyles = {
         backgroundColor: item.color
-      }
+      };
 
       return <tr key={item.id} className="shoppingCartItem">
         <td className="shoppingCartItem__name">
@@ -57,8 +53,7 @@ class ShoppingCartControllerView extends React.Component {
         <td>
           <span className="shoppingCartItem__amount">{item.amount}</span>
           <br/>
-          <button className='shoppingCartItem__addToCart' onClick={addToCart}>+</button> <button 
-          className='shoppingCartItem__removeFromCart' onClick={removeFromCart}>-</button>
+          <button className='shoppingCartItem__addToCart' onClick={addToCart}>+</button> <button className='shoppingCartItem__removeFromCart' onClick={removeFromCart}>-</button>
         </td>
         <td className="shoppingCartItem__totalPrice">{itemTotalPrice}</td>
       </tr>;
