@@ -20031,10 +20031,14 @@
 /* 161 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 
 	module.exports.clone = function (item) {
 	  return JSON.parse(JSON.stringify(item));
+	};
+
+	module.exports.formatAsPrice = function (number) {
+	  return number.toFixed(2) + ' €';
 	};
 
 /***/ },
@@ -20811,6 +20815,7 @@
 	var React = __webpack_require__(2);
 	var ShoppingCartItem = __webpack_require__(177);
 	var Navigation = __webpack_require__(170);
+	var utils = __webpack_require__(161);
 
 	var ShoppingCartControllerView = (function (_React$Component) {
 	  _inherits(ShoppingCartControllerView, _React$Component);
@@ -20842,43 +20847,88 @@
 	      this.deregisterChangeListener();
 	    }
 	  }, {
+	    key: '_getArticleItems',
+	    value: function _getArticleItems() {
+	      var _this = this;
+
+	      return this.state.shoppingCartContent.items.map(function (item) {
+
+	        var addToCart = function addToCart() {
+	          _this.props.actionCreator.addArticleToShoppingCart(item.id, 10);
+	        };
+
+	        var removeFromCart = function removeFromCart() {
+	          _this.props.actionCreator.removeArticleFromShoppingCart(item.id, 10);
+	        };
+
+	        var itemPrice = utils.formatAsPrice(item.price / 100);
+	        var itemTotalPrice = utils.formatAsPrice(item.amount * item.price / 100);
+
+	        var itemStyles = {
+	          backgroundColor: item.color
+	        };
+
+	        return React.createElement(
+	          'tr',
+	          { key: item.id, className: 'shoppingCartItem' },
+	          React.createElement(
+	            'td',
+	            { className: 'shoppingCartItem__name' },
+	            React.createElement('div', { className: 'articleDetails__image', style: itemStyles }),
+	            React.createElement('br', null),
+	            item.name
+	          ),
+	          React.createElement(
+	            'td',
+	            { className: 'shoppingCartItem__price' },
+	            itemPrice
+	          ),
+	          React.createElement(
+	            'td',
+	            null,
+	            React.createElement(
+	              'span',
+	              { className: 'shoppingCartItem__amount' },
+	              item.amount
+	            ),
+	            React.createElement(
+	              'button',
+	              { className: 'shoppingCartItem__addToCart', onClick: addToCart },
+	              '+'
+	            ),
+	            React.createElement(
+	              'button',
+	              { className: 'shoppingCartItem__removeFromCart', onClick: removeFromCart },
+	              '-'
+	            )
+	          ),
+	          React.createElement(
+	            'td',
+	            { className: 'shoppingCartItem__totalPrice' },
+	            itemTotalPrice
+	          )
+	        );
+	      });
+	    }
+	  }, {
 	    key: 'render',
 	    value: function render() {
-	      // let items = this.state.shoppingCartContent.items.map((item) => {
-	      //   return <ShoppingCartItem key={item.id} article={item} actionCreator={this.props.actionCreator} />;
-	      // });
+	      var warning = this.state.shoppingCartContent.packagingSizeInvalid ? React.createElement(
+	        'div',
+	        { className: 'shoppingCart__warning' },
+	        'Gesamtmenge muss ein Vielfaches von 50 sein!'
+	      ) : '';
 
-	      // let header = <div className='shopping-cart-header'>
-	      //   <div>Artikel</div>
-	      //   <div>Einzelpreis</div>
-	      //   <div>Anzahl</div>
-	      //   <div>Gesamtpreis</div>
-	      // </div>;
+	      var articleItems = this._getArticleItems();
+	      var totalArticlesPrice = utils.formatAsPrice(this.state.shoppingCartContent.totalPrice / 100);
 
-	      // let footer = <div className='shopping-cart-footer'>
-	      //     <div></div>
-	      //     <div></div>
-	      //     <div>{this.state.shoppingCartContent.totalAmount}</div>
-	      //     <div>{this.state.shoppingCartContent.totalPrice / 100}</div>
-	      //   </div>;
-
-	      // let warning = this.state.shoppingCartContent.packagingSizeInvalid
-	      //   ? <div className='shopping-cart-warning'>Gesamtmenge muss ein Vielfaches von 50 sein!</div>
-	      //   : '';
-
-	      // return <div className='shopping-cart'>
-	      //   <h1>Shopping-Cart-View</h1>
-	      //   <div className='shopping-cart-content'>
-	      //     {header}
-	      //     {items}
-	      //     {footer}
-	      //   </div>
-	      //   {warning}
-	      // </div>;
+	      var alertIt = function alertIt() {
+	        alert('Sorry, just a demo!');
+	      };
 
 	      return React.createElement(
 	        'div',
-	        null,
+	        { className: 'shoppingCart' },
 	        React.createElement(Navigation, null),
 	        React.createElement(
 	          'div',
@@ -20888,6 +20938,71 @@
 	            { href: '#' },
 	            React.createElement('i', { className: 'fa fa-chevron-left' }),
 	            ' Back to articles overview'
+	          ),
+	          React.createElement('br', null),
+	          React.createElement('br', null),
+	          React.createElement(
+	            'table',
+	            null,
+	            React.createElement(
+	              'thead',
+	              null,
+	              React.createElement(
+	                'tr',
+	                null,
+	                React.createElement(
+	                  'th',
+	                  null,
+	                  'Artikel'
+	                ),
+	                React.createElement(
+	                  'th',
+	                  null,
+	                  'Einzelpreis'
+	                ),
+	                React.createElement(
+	                  'th',
+	                  null,
+	                  'Anzahl'
+	                ),
+	                React.createElement(
+	                  'th',
+	                  null,
+	                  'Gesamtpreis'
+	                )
+	              )
+	            ),
+	            React.createElement(
+	              'tbody',
+	              null,
+	              articleItems
+	            ),
+	            React.createElement(
+	              'tfoot',
+	              { className: 'shoppingCart__footer' },
+	              React.createElement(
+	                'tr',
+	                null,
+	                React.createElement('td', null),
+	                React.createElement('td', null),
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  this.state.shoppingCartContent.totalAmount
+	                ),
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  totalArticlesPrice
+	                )
+	              )
+	            )
+	          ),
+	          warning,
+	          React.createElement(
+	            'button',
+	            { onClick: alertIt },
+	            'Buy it'
 	          )
 	        )
 	      );
