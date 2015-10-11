@@ -1,3 +1,4 @@
+/*eslint-disable no-unused-vars*/
 let React = require('react');
 let ReactDOM = require('react-dom');
 
@@ -20,7 +21,7 @@ const renderComponent = function(component) {
 
 routie({
 	'': function() {
-		renderComponent(<ArticlesControllerView store={store} actionCreator={actionCreator} navigate={routie} />);		
+		renderComponent(<ArticlesControllerView store={store} actionCreator={actionCreator} navigate={routie} />);
 	},
 	'shopping-cart': function() {
 		renderComponent(<ShoppingCartControllerView store={store} actionCreator={actionCreator} />);

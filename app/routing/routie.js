@@ -8,7 +8,6 @@
     this.fns = [];
     this.params = {};
     this.regex = pathToRegexp(this.path, this.keys, false, false);
-
   };
 
   Route.prototype.addHandler = function(fn) {
@@ -18,7 +17,7 @@
   Route.prototype.removeHandler = function(fn) {
     for (var i = 0, c = this.fns.length; i < c; i++) {
       var f = this.fns[i];
-      if (fn == f) {
+      if (fn === f) {
         this.fns.splice(i, 1);
         return;
       }
@@ -31,16 +30,15 @@
     }
   };
 
-  Route.prototype.match = function(path, params){
+  Route.prototype.match = function(path, params) {
     var m = this.regex.exec(path);
 
     if (!m) return false;
 
-
     for (var i = 1, len = m.length; i < len; ++i) {
       var key = this.keys[i - 1];
 
-      var val = ('string' == typeof m[i]) ? decodeURIComponent(m[i]) : m[i];
+      var val = (typeof m[i] === 'string') ? decodeURIComponent(m[i]) : m[i];
 
       if (key) {
         this.params[key.name] = val;
@@ -54,11 +52,11 @@
   Route.prototype.toURL = function(params) {
     var path = this.path;
     for (var param in params) {
-      path = path.replace('/:'+param, '/'+params[param]);
+      path = path.replace('/:' + param, '/' + params[param]);
     }
     path = path.replace(/\/:.*\?/g, '/').replace(/\?/g, '');
-    if (path.indexOf(':') != -1) {
-      throw new Error('missing parameters for url: '+path);
+    if (path.indexOf(':') !== -1) {
+      throw new Error('missing parameters for url: ' + path);
     }
     return path;
   };
@@ -70,8 +68,8 @@
       .concat(strict ? '' : '/?')
       .replace(/\/\(/g, '(?:/')
       .replace(/\+/g, '__plus__')
-      .replace(/(\/)?(\.)?:(\w+)(?:(\(.*?\)))?(\?)?/g, function(_, slash, format, key, capture, optional){
-        keys.push({ name: key, optional: !! optional });
+      .replace(/(\/)?(\.)?:(\w+)(?:(\(.*?\)))?(\?)?/g, function(_, slash, format, key, capture, optional) {
+        keys.push({ name: key, optional: !!optional });
         slash = slash || '';
         return '' + (optional ? '' : slash) + '(?:' + (optional ? slash : '') + (format || '') + (capture || (format && '([^/.]+?)' || '([^/]+?)')) + ')' + (optional || '');
       })
@@ -83,8 +81,8 @@
 
   var addHandler = function(path, fn) {
     var s = path.split(' ');
-    var name = (s.length == 2) ? s[0] : null;
-    path = (s.length == 2) ? s[1] : s[0];
+    var name = (s.length === 2) ? s[0] : null;
+    path = (s.length === 2) ? s[1] : s[0];
 
     if (!map[path]) {
       map[path] = new Route(path, name);
@@ -94,10 +92,10 @@
   };
 
   var routie = function(path, fn) {
-    if (typeof fn == 'function') {
+    if (typeof fn === 'function') {
       addHandler(path, fn);
       routie.reload();
-    } else if (typeof path == 'object') {
+    } else if (typeof path === 'object') {
       for (var p in path) {
         addHandler(p, path[p]);
       }
@@ -110,7 +108,7 @@
   routie.lookup = function(name, obj) {
     for (var i = 0, c = routes.length; i < c; i++) {
       var route = routes[i];
-      if (route.name == name) {
+      if (route.name === name) {
         return route.toURL(obj);
       }
     }
@@ -118,8 +116,9 @@
 
   routie.remove = function(path, fn) {
     var route = map[path];
-    if (!route)
+    if (!route) {
       return;
+    }
     route.removeHandler(fn);
   };
 
@@ -139,11 +138,10 @@
       window.location.hash = path;
 
       if (silent) {
-        setTimeout(function() { 
+        setTimeout(function() {
           addListener();
         }, 1);
       }
-
     }, 1);
   };
 
@@ -188,4 +186,3 @@
   addListener();
 
   module.exports = routie;
-   
