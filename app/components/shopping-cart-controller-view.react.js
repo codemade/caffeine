@@ -56,8 +56,9 @@ class ShoppingCartControllerView extends React.Component {
         <td className="shoppingCartItem__price">{itemPrice}</td>
         <td>
           <span className="shoppingCartItem__amount">{item.amount}</span>
-          <button className='shoppingCartItem__addToCart' onClick={addToCart}>+</button>
-          <button className='shoppingCartItem__removeFromCart' onClick={removeFromCart}>-</button>
+          <br/>
+          <button className='shoppingCartItem__addToCart' onClick={addToCart}>+</button> <button 
+          className='shoppingCartItem__removeFromCart' onClick={removeFromCart}>-</button>
         </td>
         <td className="shoppingCartItem__totalPrice">{itemTotalPrice}</td>
       </tr>;
@@ -82,7 +83,7 @@ class ShoppingCartControllerView extends React.Component {
         <a href="#"><i className="fa fa-chevron-left"></i> Back to articles overview</a>
         <br/>
         <br/>
-        
+        {warning}
         <table>
           <thead>
             <tr>
@@ -97,7 +98,7 @@ class ShoppingCartControllerView extends React.Component {
           </tbody>
           <tfoot className="shoppingCart__footer">
             <tr>
-              <td></td>
+              <td>Gesamt:</td>
               <td></td>
               <td>{this.state.shoppingCartContent.totalAmount}</td>
               <td>{totalArticlesPrice}</td>
@@ -105,9 +106,7 @@ class ShoppingCartControllerView extends React.Component {
           </tfoot>
         </table>
 
-        {warning}
-
-        <button onClick={alertIt}>Buy it</button>
+        <button onClick={alertIt} className="shoppingCart__cashPoint">Buy it</button>
       </div>
     </div>;
   }

@@ -20891,14 +20891,17 @@
 	              { className: 'shoppingCartItem__amount' },
 	              item.amount
 	            ),
+	            React.createElement('br', null),
 	            React.createElement(
 	              'button',
 	              { className: 'shoppingCartItem__addToCart', onClick: addToCart },
 	              '+'
 	            ),
+	            ' ',
 	            React.createElement(
 	              'button',
-	              { className: 'shoppingCartItem__removeFromCart', onClick: removeFromCart },
+	              {
+	                className: 'shoppingCartItem__removeFromCart', onClick: removeFromCart },
 	              '-'
 	            )
 	          ),
@@ -20941,6 +20944,7 @@
 	          ),
 	          React.createElement('br', null),
 	          React.createElement('br', null),
+	          warning,
 	          React.createElement(
 	            'table',
 	            null,
@@ -20983,7 +20987,11 @@
 	              React.createElement(
 	                'tr',
 	                null,
-	                React.createElement('td', null),
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  'Gesamt:'
+	                ),
 	                React.createElement('td', null),
 	                React.createElement(
 	                  'td',
@@ -20998,10 +21006,9 @@
 	              )
 	            )
 	          ),
-	          warning,
 	          React.createElement(
 	            'button',
-	            { onClick: alertIt },
+	            { onClick: alertIt, className: 'shoppingCart__cashPoint' },
 	            'Buy it'
 	          )
 	        )
