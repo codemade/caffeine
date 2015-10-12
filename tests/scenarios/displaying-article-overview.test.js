@@ -1,8 +1,10 @@
 /*eslint-disable no-unused-vars*/
 let React = require('react');
 let ReactDOM = require('react-dom');
-let TestUtils = require('react-addons-test-utils');
 let expect = require('chai').expect;
+let StorageFake = require('../flux/storage-fake.js');
+let TestUtils = require('react-addons-test-utils');
+
 let renderTarget, renderedComponent;
 
 describe('displaying article overview', () => {
@@ -31,8 +33,8 @@ describe('displaying article overview', () => {
     let ActionCreator = require('../../app/action-creator.js');
     let actionCreator = new ActionCreator(dataAccess);
     let ArticleStore = require('../../app/article-store.js');
-    let store = new ArticleStore();
-    renderedComponent = ReactDOM.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
+    let store = new ArticleStore(new StorageFake());
+    renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
   });
 
   afterEach(() => {

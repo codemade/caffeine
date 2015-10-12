@@ -3,10 +3,26 @@ function removeChangeListenerWithId(listenerId, eventIdentifier, store) {
     .filter((listener) => { return listener.id !== listenerId; });
 }
 
+function applyStateFromStorage(store) {
+  store.state = {};
+  if (!store.storage) return;
+  var serializedState = store.storage.getItem(store.identifier);
+  if (!serializedState) return;
+  store.state = JSON.parse(serializedState);
+}
+
+function writeStateToStorage(store) {
+  if (!store.storage) return;
+  store.storage.setItem(store.identifier, JSON.stringify(store.state));
+}
+
 class Store {
-  constructor() {
+  constructor(identifier, storage) {
+    this.identifier = identifier;
+    this.storage = storage;
     this.listeners = {};
     this.highestListenerId = 0;
+    applyStateFromStorage(this);
   }
 
   addChangeListener(eventIdentifier, listener) {
@@ -22,6 +38,7 @@ class Store {
   }
 
   emitChange(eventIdentifier) {
+    writeStateToStorage(this);
     let listenersForEvent = this.listeners[eventIdentifier];
     if (listenersForEvent) {
       listenersForEvent.forEach((listener) => {

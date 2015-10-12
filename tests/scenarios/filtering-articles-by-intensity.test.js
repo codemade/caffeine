@@ -5,6 +5,9 @@ let TestUtils = require('react-addons-test-utils');
 let expect = require('chai').expect;
 let ActionCreator = require('../../app/action-creator.js');
 let Store = require('../../app/article-store.js');
+
+let StorageFake = require('../flux/storage-fake.js');
+
 let renderTarget, renderedComponent;
 
 describe('filtering articles by intensity', () => {
@@ -28,8 +31,8 @@ describe('filtering articles by intensity', () => {
       }
     };
     let actionCreator = new ActionCreator(dataAccess);
-    store = new Store(actionCreator);
-    renderedComponent = ReactDOM.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
+    store = new Store(new StorageFake());
+    renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
     maximumIntensity = store.getMaximumPossibleIntensity();
   });
 

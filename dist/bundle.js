@@ -68,7 +68,7 @@
 
 	var dataAccess = new DataAccess();
 	var actionCreator = new ActionCreator(dataAccess);
-	var store = new ArticleStore();
+	var store = new ArticleStore(sessionStorage);
 
 	var renderComponent = function renderComponent(component) {
 		ReactDOM.render(component, document.getElementById('content'));
@@ -19842,27 +19842,27 @@
 	var ArticleStore = (function (_Store) {
 	  _inherits(ArticleStore, _Store);
 
-	  function ArticleStore() {
+	  function ArticleStore(storage) {
 	    _classCallCheck(this, ArticleStore);
 
-	    _get(Object.getPrototypeOf(ArticleStore.prototype), 'constructor', this).call(this);
-	    this.shoppingCart = {};
-	    this.intensityFilter = Maybe.Not;
-	    this.maybeSelectedArticle = Maybe.Not;
+	    _get(Object.getPrototypeOf(ArticleStore.prototype), 'constructor', this).call(this, 'article-store', storage);
+	    if (!this.state.shoppingCart) this.state.shoppingCart = {};
+	    if (!this.state.intensityFilter) this.state.intensityFilter = Maybe.Not;
+	    if (!this.state.maybeSelectedArticle) this.state.maybeSelectedArticle = Maybe.Not;
 	    dispatcher.register(this.onActionDispatched.bind(this));
 	  }
 
 	  _createClass(ArticleStore, [{
 	    key: 'getCategories',
 	    value: function getCategories() {
-	      return utils.clone(this.data.categories);
+	      return utils.clone(this.state.data.categories);
 	    }
 	  }, {
 	    key: 'getArticles',
 	    value: function getArticles() {
 	      var _this = this;
 
-	      var articles = utils.clone(this.data.articles);
+	      var articles = utils.clone(this.state.data.articles);
 
 	      var result = articles.map(function (article) {
 	        article.isMatchingFilter = _this.articleMatchesFilter(article);
@@ -19873,13 +19873,13 @@
 	  }, {
 	    key: 'getMaybeSelectedArticle',
 	    value: function getMaybeSelectedArticle() {
-	      return this.maybeSelectedArticle;
+	      return this.state.maybeSelectedArticle;
 	    }
 	  }, {
 	    key: 'articleMatchesFilter',
 	    value: function articleMatchesFilter(article) {
-	      if (!this.intensityFilter.hasValue) return true;
-	      return article.intensity === this.intensityFilter.value;
+	      if (!this.state.intensityFilter.hasValue) return true;
+	      return article.intensity === this.state.intensityFilter.value;
 	    }
 	  }, {
 	    key: 'getMaximumPossibleIntensity',
@@ -19890,14 +19890,14 @@
 	    key: 'getAvailableIntensities',
 	    value: function getAvailableIntensities() {
 	      var intensities = [];
-	      if (this.intensityFilter.hasValue) {
-	        intensities.push(this.intensityFilter.value);
+	      if (this.state.intensityFilter.hasValue) {
+	        intensities.push(this.state.intensityFilter.value);
 	        return intensities;
 	      }
 
-	      if (!this.data || !this.data.articles) return intensities;
+	      if (!this.state.data || !this.state.data.articles) return intensities;
 
-	      return this.data.articles.reduce(function (acc, current) {
+	      return this.state.data.articles.reduce(function (acc, current) {
 	        if (acc.indexOf(current.intensity) === -1) {
 	          acc.push(current.intensity);
 	        }
@@ -19910,10 +19910,10 @@
 	      var _this2 = this;
 
 	      var shoppingCartInfo = { articleCount: 0, totalPrice: 0 };
-	      if (!this.data || !this.data.articles) return shoppingCartInfo;
+	      if (!this.state.data || !this.state.data.articles) return shoppingCartInfo;
 
-	      return this.data.articles.reduce(function (acc, article) {
-	        var amount = _this2.shoppingCart[article.id];
+	      return this.state.data.articles.reduce(function (acc, article) {
+	        var amount = _this2.state.shoppingCart[article.id];
 
 	        if (amount) {
 	          acc.articleCount += amount;
@@ -19934,10 +19934,10 @@
 	        items: []
 	      };
 
-	      if (!this.data || !this.data.articles) return shoppingCartContent;
+	      if (!this.state.data || !this.state.data.articles) return shoppingCartContent;
 
-	      var items = this.data.articles.reduce(function (acc, article) {
-	        var amount = _this3.shoppingCart[article.id];
+	      var items = this.state.data.articles.reduce(function (acc, article) {
+	        var amount = _this3.state.shoppingCart[article.id];
 
 	        if (amount) {
 	          acc.push({
@@ -19965,39 +19965,39 @@
 	  }, {
 	    key: 'onInitialize',
 	    value: function onInitialize(data) {
-	      this.data = data;
+	      this.state.data = data;
 	      this.emitChange('changed');
 	    }
 	  }, {
 	    key: 'onFilterByIntensity',
 	    value: function onFilterByIntensity(intensity) {
-	      this.intensityFilter = this.intensityFilter.hasValue && this.intensityFilter.value === intensity ? Maybe.Not : new Maybe(intensity);
+	      this.state.intensityFilter = this.state.intensityFilter.hasValue && this.state.intensityFilter.value === intensity ? Maybe.Not : new Maybe(intensity);
 	      this.emitChange('changed');
 	    }
 	  }, {
 	    key: 'onSelectArticle',
 	    value: function onSelectArticle(articleId) {
-	      var selectedArticle = this.data.articles.filter(function (article) {
+	      var selectedArticle = this.state.data.articles.filter(function (article) {
 	        return article.id === articleId;
 	      })[0];
-	      this.maybeSelectedArticle = new Maybe(selectedArticle);
+	      this.state.maybeSelectedArticle = new Maybe(selectedArticle);
 	      this.emitChange('changed');
 	    }
 	  }, {
 	    key: 'onAddArticleToShoppingCart',
 	    value: function onAddArticleToShoppingCart(articleId, amount) {
-	      var previousAmount = this.shoppingCart[articleId];
+	      var previousAmount = this.state.shoppingCart[articleId];
 	      var currentAmount = previousAmount ? previousAmount + amount : amount;
-	      this.shoppingCart[articleId] = currentAmount;
+	      this.state.shoppingCart[articleId] = currentAmount;
 	      this.emitChange('changed');
 	    }
 	  }, {
 	    key: 'onRemoveArticleFromShoppingCart',
 	    value: function onRemoveArticleFromShoppingCart(articleId, amount) {
-	      var previousAmount = this.shoppingCart[articleId];
+	      var previousAmount = this.state.shoppingCart[articleId];
 	      var currentAmount = previousAmount - amount;
-	      this.shoppingCart[articleId] = currentAmount;
-	      if (currentAmount <= 0) delete this.shoppingCart[articleId];
+	      this.state.shoppingCart[articleId] = currentAmount;
+	      if (currentAmount <= 0) delete this.state.shoppingCart[articleId];
 	      this.emitChange('changed');
 	    }
 	  }, {
@@ -20116,12 +20116,28 @@
 	  });
 	}
 
+	function applyStateFromStorage(store) {
+	  store.state = {};
+	  if (!store.storage) return;
+	  var serializedState = store.storage.getItem(store.identifier);
+	  if (!serializedState) return;
+	  store.state = JSON.parse(serializedState);
+	}
+
+	function writeStateToStorage(store) {
+	  if (!store.storage) return;
+	  store.storage.setItem(store.identifier, JSON.stringify(store.state));
+	}
+
 	var Store = (function () {
-	  function Store() {
+	  function Store(identifier, storage) {
 	    _classCallCheck(this, Store);
 
+	    this.identifier = identifier;
+	    this.storage = storage;
 	    this.listeners = {};
 	    this.highestListenerId = 0;
+	    applyStateFromStorage(this);
 	  }
 
 	  _createClass(Store, [{
@@ -20144,6 +20160,7 @@
 	  }, {
 	    key: "emitChange",
 	    value: function emitChange(eventIdentifier) {
+	      writeStateToStorage(this);
 	      var listenersForEvent = this.listeners[eventIdentifier];
 	      if (listenersForEvent) {
 	        listenersForEvent.forEach(function (listener) {

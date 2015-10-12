@@ -1,10 +1,12 @@
 /*eslint-disable no-unused-vars*/
 let React = require('react');
 let ReactDOM = require('react-dom');
-let TestUtils = require('react-addons-test-utils');
 let expect = require('chai').expect;
 let ActionCreator = require('../../app/action-creator.js');
 let Store = require('../../app/article-store.js');
+let StorageFake = require('../flux/storage-fake.js');
+let TestUtils = require('react-addons-test-utils');
+
 let renderedComponent;
 let renderTarget, firstArticleComponent;
 let shoppingCartBadge;
@@ -31,7 +33,7 @@ describe('adding an article to the shopping cart', () => {
     };
 
     actionCreator = new ActionCreator(dataAccess);
-    let store = new Store(actionCreator);
+    let store = new Store(new StorageFake());
 
     renderedComponent = ReactDOM.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
     firstArticleComponent = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'articleDetails')[0];

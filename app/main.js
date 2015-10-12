@@ -13,7 +13,7 @@ let ShoppingCartControllerView = require('./components/shopping-cart-controller-
 
 let dataAccess = new DataAccess();
 let actionCreator = new ActionCreator(dataAccess);
-let store = new ArticleStore();
+let store = new ArticleStore(sessionStorage);
 
 const renderComponent = function(component) {
 	ReactDOM.render(component, document.getElementById('content'));

@@ -5,6 +5,7 @@ let TestUtils = require('react-addons-test-utils');
 let chai = require('chai');
 let sinon = require('sinon');
 let sinonChai = require('sinon-chai');
+let StorageFake = require('../flux/storage-fake.js');
 let expect = chai.expect;
 chai.use(sinonChai);
 let renderTarget, renderedComponent;
@@ -35,7 +36,7 @@ describe('Navigate to shopping-cart route', () => {
     let ActionCreator = require('../../app/action-creator.js');
     let actionCreator = new ActionCreator(dataAccess);
     let ArticleStore = require('../../app/article-store.js');
-    let store = new ArticleStore();
+    let store = new ArticleStore(new StorageFake());
     navigateSpy = sinon.spy();
     renderedComponent = ReactDOM.render(<ComponentClass actionCreator={actionCreator} store={store} navigate={navigateSpy} />, renderTarget);
   });
