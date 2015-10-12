@@ -1,5 +1,6 @@
 let React = require('react');
-let ShoppingCartItem = require('./shopping-cart-item.react.js');
+let Navigation = require('./navigation.react.js');
+let utils = require('../utils.js');
 
 class ShoppingCartControllerView extends React.Component {
   constructor(props) {
@@ -25,37 +26,83 @@ class ShoppingCartControllerView extends React.Component {
     this.deregisterChangeListener();
   }
 
-  render() {
-    let items = this.state.shoppingCartContent.items.map((item) => {
-      return <ShoppingCartItem key={item.id} article={item} actionCreator={this.props.actionCreator} />;
+  _getArticleItems() {
+    return this.state.shoppingCartContent.items.map((item) => {
+      let addToCart = () => {
+        this.props.actionCreator.addArticleToShoppingCart(item.id, 10);
+      };
+
+      let removeFromCart = () => {
+        this.props.actionCreator.removeArticleFromShoppingCart(item.id, 10);
+      };
+
+      let itemPrice = utils.formatAsPrice(item.price / 100);
+      let itemTotalPrice = utils.formatAsPrice(item.amount * item.price / 100);
+
+      let itemStyles = {
+        backgroundColor: item.color
+      };
+
+      return <tr key={item.id} className="shoppingCartItem">
+        <td className="shoppingCartItem__name">
+          <div className="articleDetails__image" style={itemStyles}/>
+          <br/>
+          {item.name}
+        </td>
+        <td className="shoppingCartItem__price">{itemPrice}</td>
+        <td>
+          <span className="shoppingCartItem__amount">{item.amount}</span>
+          <br/>
+          <button className='shoppingCartItem__addToCart' onClick={addToCart}>+</button> <button className='shoppingCartItem__removeFromCart' onClick={removeFromCart}>-</button>
+        </td>
+        <td className="shoppingCartItem__totalPrice">{itemTotalPrice}</td>
+      </tr>;
     });
+  }
 
-    let header = <div className='shopping-cart-header'>
-      <div>Artikel</div>
-      <div>Einzelpreis</div>
-      <div>Anzahl</div>
-      <div>Gesamtpreis</div>
-    </div>;
-
-    let footer = <div className='shopping-cart-footer'>
-        <div></div>
-        <div></div>
-        <div>{this.state.shoppingCartContent.totalAmount}</div>
-        <div>{this.state.shoppingCartContent.totalPrice / 100}</div>
-      </div>;
-
+  render() {
     let warning = this.state.shoppingCartContent.packagingSizeInvalid
-      ? <div className='shopping-cart-warning'>Gesamtmenge muss ein Vielfaches von 50 sein!</div>
+      ? <div className='shoppingCart__warning'>Gesamtmenge muss ein Vielfaches von 50 sein!</div>
       : '';
 
-    return <div className='shopping-cart'>
-      <h1>Shopping-Cart-View</h1>
-      <div className='shopping-cart-content'>
-        {header}
-        {items}
-        {footer}
+    let articleItems = this._getArticleItems();
+    let totalArticlesPrice = utils.formatAsPrice(this.state.shoppingCartContent.totalPrice / 100);
+
+    let alertIt = function() {
+      alert('Sorry, just a demo!');
+    };
+
+    return <div className="shoppingCart">
+      <Navigation/>
+      <div className="container contentWrapper">
+        <a href="#"><i className="fa fa-chevron-left"></i> Back to articles overview</a>
+        <br/>
+        <br/>
+        {warning}
+        <table>
+          <thead>
+            <tr>
+              <th>Artikel</th>
+              <th>Einzelpreis</th>
+              <th>Anzahl</th>
+              <th>Gesamtpreis</th>
+            </tr>
+          </thead>
+          <tbody>
+            {articleItems}
+          </tbody>
+          <tfoot className="shoppingCart__footer">
+            <tr>
+              <td>Gesamt:</td>
+              <td></td>
+              <td>{this.state.shoppingCartContent.totalAmount}</td>
+              <td>{totalArticlesPrice}</td>
+            </tr>
+          </tfoot>
+        </table>
+
+        <button onClick={alertIt} className="shoppingCart__cashPoint">Buy it</button>
       </div>
-      {warning}
     </div>;
   }
 }

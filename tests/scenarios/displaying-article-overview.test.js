@@ -41,14 +41,8 @@ describe('displaying article overview', () => {
   });
 
   describe('server has some categories and articles', () => {
-    it('should display categories from server', () => {
-      let actualCategoryNames = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'category-name').map((category) => category.textContent);
-      let expectedCategoryNames = categories.map((category) => category.name);
-      expect(actualCategoryNames).to.deep.equal(expectedCategoryNames);
-    });
-
     it('should display articles from server', () => {
-      let actualArticleNames = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-name').map((article) => article.textContent);
+      let actualArticleNames = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'articleDetails__name').map((article) => article.textContent);
       let expectedArticleNames = articles.map((article) => article.name);
       expect(actualArticleNames).to.deep.equal(expectedArticleNames);
     });

@@ -47,7 +47,7 @@ describe('Navigate to shopping-cart route', () => {
 
   describe('by clicking on the shopping-cart-badge', () => {
     it('displays the shopping-cart', function() {
-      let shoppingCartBadge = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-badge')[0];
+      let shoppingCartBadge = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shoppingCartBadge')[0];
       TestUtils.Simulate.click(shoppingCartBadge);
       expect(navigateSpy).to.have.been.called;
     });

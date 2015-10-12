@@ -1,0 +1,86 @@
+.articleDetails {
+	margin-top: 10px;
+	padding: 10px;
+	//width: 100%;
+	width: 150px;
+	float: left;
+	text-align: center;
+	cursor: pointer;
+
+	&__image {
+		margin: 0 auto;
+		display:inline-block;
+		position:relative;
+		width: 50px;
+		height: 50px;
+		border-radius: 50%;
+		margin-bottom:10px;		
+
+		&:before {
+			position:absolute;
+			left: 0;
+			top: 0;
+			content: '';
+			width: 100%;
+			height: 100%;
+			background-image: url('/dist/bean_white.svg');
+			background-size: 40%;
+			background-repeat: no-repeat;
+			background-position: 50% 50%;
+		}
+	}
+
+	&:hover {
+		background-color: #F2F2F2;
+	}
+
+	&:hover &__image:before {
+		background: none;
+		color: white;
+		content: '+';	
+		height: 40px;
+		line-height: 40px;
+		font-size: 40px;
+		padding-top: 1px;
+		padding-left: 1px;
+	}
+	
+	&--grayed-out {
+		opacity: 0.2;
+
+		&:hover{
+			background: none;
+			content: '';
+		}
+	}
+	
+	&.articleDetails--grayed-out:hover &__image:before {
+		position:absolute;
+		left: 0;
+		top: 0;
+		content: '';
+		width: 100%;
+		height: 100%;
+		background-image: url('../assets/bean.svg');
+		background-size: 40%;
+		background-repeat: no-repeat;
+		background-position: 50% 50%;
+	}
+
+
+	.dot-on {
+	  display:inline-block;
+	  margin:1px;
+	  width:4px;
+	  height:4px;
+	  background-color: #58595A;
+	}
+
+	.dot-off {
+	  display:inline-block;
+	  margin:1px;
+	  width:4px;
+	  height:4px;
+	  border: 1px solid #58595A;
+	}
+}
