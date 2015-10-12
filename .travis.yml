@@ -5,6 +5,7 @@ node_js:
 
 before_install: 
 	- npm install -g istanbul mocha
+	- npm install bower -g
 	- bower install
 
 script: npm run test && npm run coveralls
