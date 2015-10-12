@@ -27,7 +27,7 @@
     float: left;
     width: 50px;
     height: 50px;
-    background: url("/dist/codemade.png") no-repeat;
+    background: url("../dist/codemade.png") no-repeat;
     background-size: 50px;
     padding-right: 10px; }
   .mainNavigation__brandName {
@@ -83,7 +83,7 @@
       content: '';
       width: 100%;
       height: 100%;
-      background-image: url("/dist/bean_white.svg");
+      background-image: url("../dist/bean_white.svg");
       background-size: 40%;
       background-repeat: no-repeat;
       background-position: 50% 50%; }
@@ -134,14 +134,14 @@
     display: inline-block;
     text-align: center;
     cursor: pointer;
-    background: transparent url("/dist/bean_dark-gray.svg") no-repeat;
+    background: transparent url("../dist/bean_dark-gray.svg") no-repeat;
     background-size: 16px;
     width: 16px;
     margin-left: 1px;
     margin-right: 1px;
     padding-top: 25px; }
   .intensityFilter__item--unavailable {
-    background: transparent url("/dist/bean_light-gray.svg") no-repeat;
+    background: transparent url("../dist/bean_light-gray.svg") no-repeat;
     background-size: 16px; }
   .intensityFilter__legend {
     font-size: 14px;
