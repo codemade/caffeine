@@ -3,7 +3,9 @@ language: node_js
 node_js:
   - iojs-v2.3.1
 
-before_install: npm install -g istanbul mocha
+before_install: 
+	- npm install -g istanbul mocha
+	- bower install
 
 script: npm run test && npm run coveralls
 
