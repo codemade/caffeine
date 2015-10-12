@@ -51,6 +51,7 @@
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/*eslint-disable no-unused-vars*/
 	'use strict';
 
 	var React = __webpack_require__(2);
@@ -19654,7 +19655,7 @@
 	Route.prototype.removeHandler = function (fn) {
 	  for (var i = 0, c = this.fns.length; i < c; i++) {
 	    var f = this.fns[i];
-	    if (fn == f) {
+	    if (fn === f) {
 	      this.fns.splice(i, 1);
 	      return;
 	    }
@@ -19675,7 +19676,7 @@
 	  for (var i = 1, len = m.length; i < len; ++i) {
 	    var key = this.keys[i - 1];
 
-	    var val = 'string' == typeof m[i] ? decodeURIComponent(m[i]) : m[i];
+	    var val = typeof m[i] === 'string' ? decodeURIComponent(m[i]) : m[i];
 
 	    if (key) {
 	      this.params[key.name] = val;
@@ -19692,7 +19693,7 @@
 	    path = path.replace('/:' + param, '/' + params[param]);
 	  }
 	  path = path.replace(/\/:.*\?/g, '/').replace(/\?/g, '');
-	  if (path.indexOf(':') != -1) {
+	  if (path.indexOf(':') !== -1) {
 	    throw new Error('missing parameters for url: ' + path);
 	  }
 	  return path;
@@ -19711,8 +19712,8 @@
 
 	var addHandler = function addHandler(path, fn) {
 	  var s = path.split(' ');
-	  var name = s.length == 2 ? s[0] : null;
-	  path = s.length == 2 ? s[1] : s[0];
+	  var name = s.length === 2 ? s[0] : null;
+	  path = s.length === 2 ? s[1] : s[0];
 
 	  if (!map[path]) {
 	    map[path] = new Route(path, name);
@@ -19722,10 +19723,10 @@
 	};
 
 	var routie = function routie(path, fn) {
-	  if (typeof fn == 'function') {
+	  if (typeof fn === 'function') {
 	    addHandler(path, fn);
 	    routie.reload();
-	  } else if (typeof path == 'object') {
+	  } else if (typeof path === 'object') {
 	    for (var p in path) {
 	      addHandler(p, path[p]);
 	    }
@@ -19738,7 +19739,7 @@
 	routie.lookup = function (name, obj) {
 	  for (var i = 0, c = routes.length; i < c; i++) {
 	    var route = routes[i];
-	    if (route.name == name) {
+	    if (route.name === name) {
 	      return route.toURL(obj);
 	    }
 	  }
@@ -19746,7 +19747,9 @@
 
 	routie.remove = function (path, fn) {
 	  var route = map[path];
-	  if (!route) return;
+	  if (!route) {
+	    return;
+	  }
 	  route.removeHandler(fn);
 	};
 
@@ -20813,7 +20816,6 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var React = __webpack_require__(2);
-	var ShoppingCartItem = __webpack_require__(177);
 	var Navigation = __webpack_require__(170);
 	var utils = __webpack_require__(161);
 
@@ -20852,7 +20854,6 @@
 	      var _this = this;
 
 	      return this.state.shoppingCartContent.items.map(function (item) {
-
 	        var addToCart = function addToCart() {
 	          _this.props.actionCreator.addArticleToShoppingCart(item.id, 10);
 	        };
@@ -20900,8 +20901,7 @@
 	            ' ',
 	            React.createElement(
 	              'button',
-	              {
-	                className: 'shoppingCartItem__removeFromCart', onClick: removeFromCart },
+	              { className: 'shoppingCartItem__removeFromCart', onClick: removeFromCart },
 	              '-'
 	            )
 	          ),
@@ -21020,98 +21020,6 @@
 	})(React.Component);
 
 	module.exports = ShoppingCartControllerView;
-
-/***/ },
-/* 177 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var React = __webpack_require__(2);
-
-	var ShoppingCartItem = (function (_React$Component) {
-	  _inherits(ShoppingCartItem, _React$Component);
-
-	  function ShoppingCartItem() {
-	    _classCallCheck(this, ShoppingCartItem);
-
-	    _get(Object.getPrototypeOf(ShoppingCartItem.prototype), 'constructor', this).apply(this, arguments);
-	  }
-
-	  _createClass(ShoppingCartItem, [{
-	    key: 'render',
-	    value: function render() {
-	      var _this = this;
-
-	      var styles = {
-	        backgroundColor: this.props.article.color
-	      };
-
-	      var addToCart = function addToCart() {
-	        _this.props.actionCreator.addArticleToShoppingCart(_this.props.article.id, 10);
-	      };
-
-	      var removeFromCart = function removeFromCart() {
-	        _this.props.actionCreator.removeArticleFromShoppingCart(_this.props.article.id, 10);
-	      };
-
-	      return React.createElement(
-	        'div',
-	        { className: 'shopping-cart-item' },
-	        React.createElement(
-	          'div',
-	          { className: 'content' },
-	          React.createElement('div', { className: 'article-image', style: styles }),
-	          this.props.article.name
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'content' },
-	          this.props.article.price / 100
-	        ),
-	        React.createElement(
-	          'div',
-	          null,
-	          React.createElement(
-	            'span',
-	            { className: 'content' },
-	            this.props.article.amount
-	          ),
-	          React.createElement(
-	            'button',
-	            { className: 'addToCart', onClick: addToCart },
-	            '+'
-	          ),
-	          React.createElement(
-	            'button',
-	            { className: 'removeFromCart', onClick: removeFromCart },
-	            '-'
-	          )
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'content' },
-	          this.props.article.amount * this.props.article.price / 100
-	        )
-	      );
-	    }
-	  }]);
-
-	  return ShoppingCartItem;
-	})(React.Component);
-
-	ShoppingCartItem.propTypes = {
-	  article: React.PropTypes.object.isRequired
-	};
-	module.exports = ShoppingCartItem;
 
 /***/ }
 /******/ ]);
