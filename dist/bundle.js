@@ -51,19 +51,37 @@
 /* 1 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/*eslint-disable no-unused-vars*/
 	'use strict';
 
 	var React = __webpack_require__(2);
-	var ArticleStore = __webpack_require__(158);
-	var ActionCreator = __webpack_require__(164);
-	var App = __webpack_require__(165);
-	var DataAccess = __webpack_require__(184);
+	var ReactDOM = __webpack_require__(158);
+
+	var routie = __webpack_require__(159);
+
+	var ArticleStore = __webpack_require__(160);
+	var ActionCreator = __webpack_require__(166);
+	var DataAccess = __webpack_require__(167);
+
+	var ArticlesControllerView = __webpack_require__(169);
+	var ShoppingCartControllerView = __webpack_require__(176);
 
 	var dataAccess = new DataAccess();
 	var actionCreator = new ActionCreator(dataAccess);
 	var store = new ArticleStore();
 
-	React.render(React.createElement(App, { store: store, actionCreator: actionCreator }), document.body);
+	var renderComponent = function renderComponent(component) {
+		ReactDOM.render(component, document.getElementById('content'));
+	};
+
+	routie({
+		'': function _() {
+			renderComponent(React.createElement(ArticlesControllerView, { store: store, actionCreator: actionCreator, navigate: routie }));
+		},
+		'shopping-cart': function shoppingCart() {
+			renderComponent(React.createElement(ShoppingCartControllerView, { store: store, actionCreator: actionCreator }));
+		}
+	});
 
 /***/ },
 /* 2 */
@@ -19609,6 +19627,203 @@
 
 	'use strict';
 
+	module.exports = __webpack_require__(4);
+
+
+/***/ },
+/* 159 */
+/***/ function(module, exports) {
+
+	'use strict';
+
+	var routes = [];
+	var map = {};
+
+	var Route = function Route(path, name) {
+	  this.name = name;
+	  this.path = path;
+	  this.keys = [];
+	  this.fns = [];
+	  this.params = {};
+	  this.regex = pathToRegexp(this.path, this.keys, false, false);
+	};
+
+	Route.prototype.addHandler = function (fn) {
+	  this.fns.push(fn);
+	};
+
+	Route.prototype.removeHandler = function (fn) {
+	  for (var i = 0, c = this.fns.length; i < c; i++) {
+	    var f = this.fns[i];
+	    if (fn === f) {
+	      this.fns.splice(i, 1);
+	      return;
+	    }
+	  }
+	};
+
+	Route.prototype.run = function (params) {
+	  for (var i = 0, c = this.fns.length; i < c; i++) {
+	    this.fns[i].apply(this, params);
+	  }
+	};
+
+	Route.prototype.match = function (path, params) {
+	  var m = this.regex.exec(path);
+
+	  if (!m) return false;
+
+	  for (var i = 1, len = m.length; i < len; ++i) {
+	    var key = this.keys[i - 1];
+
+	    var val = typeof m[i] === 'string' ? decodeURIComponent(m[i]) : m[i];
+
+	    if (key) {
+	      this.params[key.name] = val;
+	    }
+	    params.push(val);
+	  }
+
+	  return true;
+	};
+
+	Route.prototype.toURL = function (params) {
+	  var path = this.path;
+	  for (var param in params) {
+	    path = path.replace('/:' + param, '/' + params[param]);
+	  }
+	  path = path.replace(/\/:.*\?/g, '/').replace(/\?/g, '');
+	  if (path.indexOf(':') !== -1) {
+	    throw new Error('missing parameters for url: ' + path);
+	  }
+	  return path;
+	};
+
+	var pathToRegexp = function pathToRegexp(path, keys, sensitive, strict) {
+	  if (path instanceof RegExp) return path;
+	  if (path instanceof Array) path = '(' + path.join('|') + ')';
+	  path = path.concat(strict ? '' : '/?').replace(/\/\(/g, '(?:/').replace(/\+/g, '__plus__').replace(/(\/)?(\.)?:(\w+)(?:(\(.*?\)))?(\?)?/g, function (_, slash, format, key, capture, optional) {
+	    keys.push({ name: key, optional: !!optional });
+	    slash = slash || '';
+	    return '' + (optional ? '' : slash) + '(?:' + (optional ? slash : '') + (format || '') + (capture || (format && '([^/.]+?)' || '([^/]+?)')) + ')' + (optional || '');
+	  }).replace(/([\/.])/g, '\\$1').replace(/__plus__/g, '(.+)').replace(/\*/g, '(.*)');
+	  return new RegExp('^' + path + '$', sensitive ? '' : 'i');
+	};
+
+	var addHandler = function addHandler(path, fn) {
+	  var s = path.split(' ');
+	  var name = s.length === 2 ? s[0] : null;
+	  path = s.length === 2 ? s[1] : s[0];
+
+	  if (!map[path]) {
+	    map[path] = new Route(path, name);
+	    routes.push(map[path]);
+	  }
+	  map[path].addHandler(fn);
+	};
+
+	var routie = function routie(path, fn) {
+	  if (typeof fn === 'function') {
+	    addHandler(path, fn);
+	    routie.reload();
+	  } else if (typeof path === 'object') {
+	    for (var p in path) {
+	      addHandler(p, path[p]);
+	    }
+	    routie.reload();
+	  } else if (typeof fn === 'undefined') {
+	    routie.navigate(path);
+	  }
+	};
+
+	routie.lookup = function (name, obj) {
+	  for (var i = 0, c = routes.length; i < c; i++) {
+	    var route = routes[i];
+	    if (route.name === name) {
+	      return route.toURL(obj);
+	    }
+	  }
+	};
+
+	routie.remove = function (path, fn) {
+	  var route = map[path];
+	  if (!route) {
+	    return;
+	  }
+	  route.removeHandler(fn);
+	};
+
+	routie.removeAll = function () {
+	  map = {};
+	  routes = [];
+	};
+
+	routie.navigate = function (path, options) {
+	  options = options || {};
+	  var silent = options.silent || false;
+
+	  if (silent) {
+	    removeListener();
+	  }
+	  setTimeout(function () {
+	    window.location.hash = path;
+
+	    if (silent) {
+	      setTimeout(function () {
+	        addListener();
+	      }, 1);
+	    }
+	  }, 1);
+	};
+
+	var getHash = function getHash() {
+	  return window.location.hash.substring(1);
+	};
+
+	var checkRoute = function checkRoute(hash, route) {
+	  var params = [];
+	  if (route.match(hash, params)) {
+	    route.run(params);
+	    return true;
+	  }
+	  return false;
+	};
+
+	var hashChanged = routie.reload = function () {
+	  var hash = getHash();
+	  for (var i = 0, c = routes.length; i < c; i++) {
+	    var route = routes[i];
+	    if (checkRoute(hash, route)) {
+	      return;
+	    }
+	  }
+	};
+
+	var addListener = function addListener() {
+	  if (window.addEventListener) {
+	    window.addEventListener('hashchange', hashChanged, false);
+	  } else {
+	    window.attachEvent('onhashchange', hashChanged);
+	  }
+	};
+
+	var removeListener = function removeListener() {
+	  if (window.removeEventListener) {
+	    window.removeEventListener('hashchange', hashChanged);
+	  } else {
+	    window.detachEvent('onhashchange', hashChanged);
+	  }
+	};
+	addListener();
+
+	module.exports = routie;
+
+/***/ },
+/* 160 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+
 	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
@@ -19617,11 +19832,11 @@
 
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-	var utils = __webpack_require__(159);
-	var dispatcher = __webpack_require__(160);
-	var actionIdentifiers = __webpack_require__(161);
-	var Store = __webpack_require__(162);
-	var Maybe = __webpack_require__(163);
+	var utils = __webpack_require__(161);
+	var dispatcher = __webpack_require__(162);
+	var actionIdentifiers = __webpack_require__(163);
+	var Store = __webpack_require__(164);
+	var Maybe = __webpack_require__(165);
 	var MAXIMUM_POSSIBLE_INTENSITY = 13;
 
 	var ArticleStore = (function (_Store) {
@@ -19816,17 +20031,21 @@
 	module.exports = ArticleStore;
 
 /***/ },
-/* 159 */
+/* 161 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 
 	module.exports.clone = function (item) {
 	  return JSON.parse(JSON.stringify(item));
 	};
 
+	module.exports.formatAsPrice = function (number) {
+	  return number.toFixed(2) + ' €';
+	};
+
 /***/ },
-/* 160 */
+/* 162 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -19862,7 +20081,7 @@
 	module.exports = new Dispatcher();
 
 /***/ },
-/* 161 */
+/* 163 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -19882,7 +20101,7 @@
 	module.exports = actionIdentifiers;
 
 /***/ },
-/* 162 */
+/* 164 */
 /***/ function(module, exports) {
 
 	"use strict";
@@ -19940,7 +20159,7 @@
 	module.exports = Store;
 
 /***/ },
-/* 163 */
+/* 165 */
 /***/ function(module, exports) {
 
 	'use strict';
@@ -19976,7 +20195,7 @@
 	module.exports = Maybe;
 
 /***/ },
-/* 164 */
+/* 166 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -19985,8 +20204,8 @@
 
 	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	var dispatcher = __webpack_require__(160);
-	var actionIdentifiers = __webpack_require__(161);
+	var dispatcher = __webpack_require__(162);
+	var actionIdentifiers = __webpack_require__(163);
 
 	var ActionCreator = (function () {
 	  function ActionCreator(api) {
@@ -20046,839 +20265,64 @@
 	module.exports = ActionCreator;
 
 /***/ },
-/* 165 */
+/* 167 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var React = __webpack_require__(2);
-	var RouterMixin = __webpack_require__(166).RouterMixin;
-	var ArticlesControllerView = __webpack_require__(174);
-	var ShoppingCartControllerView = __webpack_require__(182);
-	var navigate = __webpack_require__(166).navigate;
+	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
-	var App = React.createClass({
-	  displayName: 'App',
+	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-	  mixins: [RouterMixin],
-	  routes: {
-	    '/': 'articles',
-	    '/shopping-cart': 'shoppingCart'
-	  },
-	  render: function render() {
-	    var currentRoute = this.renderCurrentRoute();
-	    return currentRoute;
-	  },
-	  articles: function articles() {
-	    return React.createElement(ArticlesControllerView, { store: this.props.store, actionCreator: this.props.actionCreator, navigate: navigate });
-	  },
-	  shoppingCart: function shoppingCart() {
-	    return React.createElement(ShoppingCartControllerView, { store: this.props.store, actionCreator: this.props.actionCreator });
+	var DataAccess = (function () {
+	  function DataAccess() {
+	    _classCallCheck(this, DataAccess);
 	  }
-	});
 
-	module.exports = App;
-
-/***/ },
-/* 166 */
-/***/ function(module, exports, __webpack_require__) {
-
-	module.exports = {
-	    RouterMixin: __webpack_require__(167),
-	    navigate: __webpack_require__(172)
-	};
-
-/***/ },
-/* 167 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var React = __webpack_require__(2),
-	    EventListener = __webpack_require__(!(function webpackMissingModule() { var e = new Error("Cannot find module \"react/lib/EventListener\""); e.code = 'MODULE_NOT_FOUND'; throw e; }())),
-	    getEventTarget = __webpack_require__(81),
-	    pathToRegexp = __webpack_require__(168),
-	    urllite = __webpack_require__(170),
-	    detect = __webpack_require__(171);
-
-	var PropValidation = {
-	    path: React.PropTypes.string,
-	    root: React.PropTypes.string,
-	    useHistory: React.PropTypes.bool
-	};
-
-	module.exports = {
-
-	    propTypes: PropValidation,
-
-	    contextTypes: PropValidation,
-
-	    childContextTypes: PropValidation,
-
-	    getChildContext: function() {
-	        return {
-	            path: this.state.path,
-	            root: this.state.root,
-	            useHistory: this.state.useHistory
-	        }
-	    },
-
-	    getDefaultProps: function() {
-	        return {
-	            routes: {}
-	        };
-	    },
-
-	    getInitialState: function() {
-	        return {
-	            path: getInitialPath(this),
-	            root: this.props.root || this.context.path || '',
-	            useHistory: (this.props.history || this.context.useHistory) && detect.hasPushState
-	        };
-	    },
-
-	    componentWillMount: function() {
-	        this.setState({ _routes: processRoutes(this.state.root, this.routes, this) });
-	    },
-
-	    componentDidMount: function() {
-	        var _events = this._events = [];
-
-	        _events.push(EventListener.listen(this.getDOMNode(), 'click', this.handleClick));
-
-	        if (this.state.useHistory) {
-	            _events.push(EventListener.listen(window, 'popstate', this.onPopState));
-	        } else {
-	            if (window.location.hash.indexOf('#!') === -1) {
-	                window.location.hash = '#!/';
-	            }
-
-	            _events.push(EventListener.listen(window, 'hashchange', this.onPopState));
-	        }
-	    },
-
-	    componentWillUnmount: function() {
-	        this._events.forEach(function(listener) {
-	           listener.remove();
-	        });
-	    },
-
-	    onPopState: function() {
-	        var url = urllite(window.location.href),
-	            hash = url.hash || '',
-	            path = this.state.useHistory ? url.pathname : hash.slice(2);
-
-	        if (path.length === 0) path = '/';
-
-	        this.setState({ path: path + url.search });
-	    },
-
-	    renderCurrentRoute: function() {
-	        var path = this.state.path,
-	            url = urllite(path),
-	            queryParams = parseSearch(url.search);
-
-	        var parsedPath = url.pathname;
-
-	        if (!parsedPath || parsedPath.length === 0) parsedPath = '/';
-
-	        var matchedRoute = this.matchRoute(parsedPath);
-
-	        if (matchedRoute) {
-	            return matchedRoute.handler.apply(this, matchedRoute.params.concat(queryParams));
-	        } else if (this.notFound) {
-	            return this.notFound(parsedPath, queryParams);
-	        } else {
-	            throw new Error('No route matched path: ' + parsedPath);
-	        }
-	    },
-
-	    handleClick: function(evt) {
-	        var self = this,
-	            url = getHref(evt);
-
-	        if (url && self.matchRoute(url.pathname)) {
-	            evt.preventDefault();
-
-	            // See: http://facebook.github.io/react/docs/interactivity-and-dynamic-uis.html
-	            // Give any component event listeners a chance to fire in the current event loop,
-	            // since they happen at the end of the bubbling phase. (Allows an onClick prop to
-	            // work correctly on the event target <a/> component.)
-	            setTimeout(function() {
-	                var pathWithSearch = url.pathname + (url.search || '');
-	                if (pathWithSearch.length === 0) pathWithSearch = '/';
-
-	                if (self.state.useHistory) {
-	                    window.history.pushState({}, '', pathWithSearch);
-	                } else {
-	                    window.location.hash = '!' + pathWithSearch;
-	                }
-
-	                self.setState({ path: pathWithSearch});
-	            }, 0);
-	        }
-	    },
-
-	    matchRoute: function(path) {
-	        if (!path) {
-	            return false;
-	        }
-
-	        var matchedRoute = {};
-
-	        this.state._routes.some(function(route) {
-	            var matches = route.pattern.exec(path);
-
-	            if (matches) {
-	                matchedRoute.handler = route.handler;
-	                matchedRoute.params = matches.slice(1, route.params.length + 1);
-
-	                return true;
-	            }
-
-	            return false;
-	        });
-
-	        return matchedRoute.handler ? matchedRoute : false;
+	  _createClass(DataAccess, [{
+	    key: 'getCategoriesAndArticles',
+	    value: function getCategoriesAndArticles() {
+	      return __webpack_require__(168);
 	    }
+	  }]);
 
-	};
+	  return DataAccess;
+	})();
 
-	function getInitialPath(component) {
-	    var path = component.props.path || component.context.path,
-	        hash,
-	        url;
-
-	    if (!path && detect.canUseDOM) {
-	        url = urllite(window.location.href);
-
-	        if (component.props.history) {
-	            path = url.pathname + url.search;
-	        } else if (url.hash) {
-	            hash = urllite(url.hash.slice(2));
-	            path = hash.pathname + hash.search;
-	        }
-	    }
-
-	    return path || '/';
-	}
-
-	function getHref(evt) {
-	    if (evt.defaultPrevented) {
-	        return;
-	    }
-
-	    if (evt.metaKey || evt.ctrlKey || evt.shiftKey) {
-	        return;
-	    }
-
-	    if (evt.button !== 0) {
-	        return;
-	    }
-
-	    var elt = getEventTarget(evt);
-
-	    // Since a click could originate from a child element of the <a> tag,
-	    // walk back up the tree to find it.
-	    while (elt && elt.nodeName !== 'A') {
-	        elt = elt.parentNode;
-	    }
-
-	    if (!elt) {
-	        return;
-	    }
-
-	    if (elt.target && elt.target !== '_self') {
-	        return;
-	    }
-
-	    if (!!elt.attributes.download) {
-	        return;
-	    }
-
-	    var linkURL = urllite(elt.href);
-	    var windowURL = urllite(window.location.href);
-
-	    if (linkURL.protocol !== windowURL.protocol || linkURL.host !== windowURL.host) {
-	        return;
-	    }
-
-	    return linkURL;
-	}
-
-	function processRoutes(root, routes, component) {
-	    var patterns = [],
-	        path, pattern, keys, handler, handlerFn;
-
-	    for (path in routes) {
-	        if (routes.hasOwnProperty(path)) {
-	            keys = [];
-	            pattern = pathToRegexp(root + path, keys);
-	            handler = routes[path];
-	            handlerFn = component[handler];
-
-	            patterns.push({ pattern: pattern, params: keys, handler: handlerFn });
-	        }
-	    }
-
-	    return patterns;
-	}
-
-	function parseSearch(str) {
-	    var parsed = {};
-
-	    if (str.indexOf('?') === 0) str = str.slice(1);
-
-	    var pairs = str.split('&');
-
-	    pairs.forEach(function(pair) {
-	        var keyVal = pair.split('=');
-
-	        parsed[decodeURIComponent(keyVal[0])] = decodeURIComponent(keyVal[1]);
-	    });
-
-	    return parsed;
-	}
-
+	module.exports = DataAccess;
 
 /***/ },
 /* 168 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ function(module, exports) {
 
-	var isarray = __webpack_require__(169)
+	'use strict';
 
-	/**
-	 * Expose `pathToRegexp`.
-	 */
-	module.exports = pathToRegexp
-	module.exports.parse = parse
-	module.exports.compile = compile
-	module.exports.tokensToFunction = tokensToFunction
-	module.exports.tokensToRegExp = tokensToRegExp
+	var categories = [{ id: 1, name: 'Intenso' }, { id: 2, name: 'Espresso' }, { id: 3, name: 'Pure Origin' }, { id: 4, name: 'Lungo' }, { id: 5, name: 'Decaffeinato' }, { id: 6, name: 'Variations' }];
 
-	/**
-	 * The main path matching regexp utility.
-	 *
-	 * @type {RegExp}
-	 */
-	var PATH_REGEXP = new RegExp([
-	  // Match escaped characters that would otherwise appear in future matches.
-	  // This allows the user to escape special characters that won't transform.
-	  '(\\\\.)',
-	  // Match Express-style parameters and un-named parameters with a prefix
-	  // and optional suffixes. Matches appear as:
-	  //
-	  // "/:test(\\d+)?" => ["/", "test", "\d+", undefined, "?", undefined]
-	  // "/route(\\d+)"  => [undefined, undefined, undefined, "\d+", undefined, undefined]
-	  // "/*"            => ["/", undefined, undefined, undefined, undefined, "*"]
-	  '([\\/.])?(?:(?:\\:(\\w+)(?:\\(((?:\\\\.|[^()])+)\\))?|\\(((?:\\\\.|[^()])+)\\))([+*?])?|(\\*))'
-	].join('|'), 'g')
+	var confections = [{ size: 25, name: 'Ristretto' }, { size: 40, name: 'Espresso' }, { size: 110, name: 'Lungo' }];
 
-	/**
-	 * Parse a string for the raw tokens.
-	 *
-	 * @param  {String} str
-	 * @return {Array}
-	 */
-	function parse (str) {
-	  var tokens = []
-	  var key = 0
-	  var index = 0
-	  var path = ''
-	  var res
+	var articles = [
+	// Intenso
+	{ id: 1, intensity: 12, category: 1, price: 39, confections: [25, 40], name: 'Accio', color: '#25334F' }, { id: 2, intensity: 10, category: 1, price: 35, confections: [25, 40], name: 'Flagrante', color: '#000000' }, { id: 3, intensity: 11, category: 1, price: 39, confections: [25, 40], name: 'Gemino', color: '#1E3A40' }, { id: 4, intensity: 8, category: 1, price: 35, confections: [25, 40], name: 'Confundo', color: '#685B56' }, { id: 5, intensity: 9, category: 1, price: 35, confections: [25, 40], name: 'Prior Incantado', color: '#512B7E' },
+	// Espresso
+	{ id: 6, intensity: 3, category: 2, price: 35, confections: [25], name: 'Sectumsempra', color: '#432013' }, { id: 7, intensity: 5, category: 2, price: 35, confections: [25], name: 'Silencio', color: '#154134' }, { id: 8, intensity: 4, category: 2, price: 35, confections: [25], name: 'Orchideus', color: '#A3783D' }, { id: 9, intensity: 6, category: 2, price: 35, confections: [25], name: 'Lumos', color: '#81491E' },
+	// Pure Origin
+	{ id: 10, intensity: 10, category: 3, price: 39, confections: [25, 40], name: 'Expulso', color: '#484536' }, { id: 11, intensity: 3, category: 3, price: 39, confections: [110], name: 'Densaugeo', color: '#A56850' }, { id: 12, intensity: 4, category: 3, price: 39, confections: [40], name: 'Waddiwasi', color: '#D3BDA6' }, { id: 13, intensity: 6, category: 3, price: 39, confections: [40], name: 'Sonorus', color: '#CDBDC1' },
+	// Lungo
+	{ id: 14, intensity: 4, category: 4, price: 37, confections: [110], name: 'Quietus', color: '#306CA8' }, { id: 15, intensity: 4, category: 4, price: 37, confections: [110], name: 'Ratzeputz', color: '#DB903E' }, { id: 16, intensity: 8, category: 4, price: 37, confections: [110], name: 'Relaschio', color: '#286264' },
+	// Decaffeinato
+	{ id: 17, intensity: 4, category: 5, price: 37, confections: [40], name: 'Impedimenta', color: '#CD953D' }, { id: 18, intensity: 7, category: 5, price: 37, confections: [40], name: 'Glisseo', color: '#460008' }, { id: 19, intensity: 4, category: 5, price: 39, confections: [110], name: 'Incendio', color: '#D35B51' }, { id: 20, intensity: 9, category: 5, price: 37, confections: [25, 110], name: 'Morsmordre', color: '#D81E41' },
+	// Variations
+	{ id: 21, intensity: 6, category: 6, price: 42, confections: [40], name: 'Muffliato', color: '#B56F29' }, { id: 22, intensity: 6, category: 6, price: 42, confections: [40], name: 'Alohomora', color: '#E1DB9F' }, { id: 23, intensity: 6, category: 6, price: 42, confections: [40], name: 'Confringo', color: '#301A0F' }];
 
-	  while ((res = PATH_REGEXP.exec(str)) != null) {
-	    var m = res[0]
-	    var escaped = res[1]
-	    var offset = res.index
-	    path += str.slice(index, offset)
-	    index = offset + m.length
-
-	    // Ignore already escaped sequences.
-	    if (escaped) {
-	      path += escaped[1]
-	      continue
-	    }
-
-	    // Push the current path onto the tokens.
-	    if (path) {
-	      tokens.push(path)
-	      path = ''
-	    }
-
-	    var prefix = res[2]
-	    var name = res[3]
-	    var capture = res[4]
-	    var group = res[5]
-	    var suffix = res[6]
-	    var asterisk = res[7]
-
-	    var repeat = suffix === '+' || suffix === '*'
-	    var optional = suffix === '?' || suffix === '*'
-	    var delimiter = prefix || '/'
-	    var pattern = capture || group || (asterisk ? '.*' : '[^' + delimiter + ']+?')
-
-	    tokens.push({
-	      name: name || key++,
-	      prefix: prefix || '',
-	      delimiter: delimiter,
-	      optional: optional,
-	      repeat: repeat,
-	      pattern: escapeGroup(pattern)
-	    })
-	  }
-
-	  // Match any characters still remaining.
-	  if (index < str.length) {
-	    path += str.substr(index)
-	  }
-
-	  // If the path exists, push it onto the end.
-	  if (path) {
-	    tokens.push(path)
-	  }
-
-	  return tokens
-	}
-
-	/**
-	 * Compile a string to a template function for the path.
-	 *
-	 * @param  {String}   str
-	 * @return {Function}
-	 */
-	function compile (str) {
-	  return tokensToFunction(parse(str))
-	}
-
-	/**
-	 * Expose a method for transforming tokens into the path function.
-	 */
-	function tokensToFunction (tokens) {
-	  // Compile all the tokens into regexps.
-	  var matches = new Array(tokens.length)
-
-	  // Compile all the patterns before compilation.
-	  for (var i = 0; i < tokens.length; i++) {
-	    if (typeof tokens[i] === 'object') {
-	      matches[i] = new RegExp('^' + tokens[i].pattern + '$')
-	    }
-	  }
-
-	  return function (obj) {
-	    var path = ''
-	    var data = obj || {}
-
-	    for (var i = 0; i < tokens.length; i++) {
-	      var token = tokens[i]
-
-	      if (typeof token === 'string') {
-	        path += token
-
-	        continue
-	      }
-
-	      var value = data[token.name]
-	      var segment
-
-	      if (value == null) {
-	        if (token.optional) {
-	          continue
-	        } else {
-	          throw new TypeError('Expected "' + token.name + '" to be defined')
-	        }
-	      }
-
-	      if (isarray(value)) {
-	        if (!token.repeat) {
-	          throw new TypeError('Expected "' + token.name + '" to not repeat, but received "' + value + '"')
-	        }
-
-	        if (value.length === 0) {
-	          if (token.optional) {
-	            continue
-	          } else {
-	            throw new TypeError('Expected "' + token.name + '" to not be empty')
-	          }
-	        }
-
-	        for (var j = 0; j < value.length; j++) {
-	          segment = encodeURIComponent(value[j])
-
-	          if (!matches[i].test(segment)) {
-	            throw new TypeError('Expected all "' + token.name + '" to match "' + token.pattern + '", but received "' + segment + '"')
-	          }
-
-	          path += (j === 0 ? token.prefix : token.delimiter) + segment
-	        }
-
-	        continue
-	      }
-
-	      segment = encodeURIComponent(value)
-
-	      if (!matches[i].test(segment)) {
-	        throw new TypeError('Expected "' + token.name + '" to match "' + token.pattern + '", but received "' + segment + '"')
-	      }
-
-	      path += token.prefix + segment
-	    }
-
-	    return path
-	  }
-	}
-
-	/**
-	 * Escape a regular expression string.
-	 *
-	 * @param  {String} str
-	 * @return {String}
-	 */
-	function escapeString (str) {
-	  return str.replace(/([.+*?=^!:${}()[\]|\/])/g, '\\$1')
-	}
-
-	/**
-	 * Escape the capturing group by escaping special characters and meaning.
-	 *
-	 * @param  {String} group
-	 * @return {String}
-	 */
-	function escapeGroup (group) {
-	  return group.replace(/([=!:$\/()])/g, '\\$1')
-	}
-
-	/**
-	 * Attach the keys as a property of the regexp.
-	 *
-	 * @param  {RegExp} re
-	 * @param  {Array}  keys
-	 * @return {RegExp}
-	 */
-	function attachKeys (re, keys) {
-	  re.keys = keys
-	  return re
-	}
-
-	/**
-	 * Get the flags for a regexp from the options.
-	 *
-	 * @param  {Object} options
-	 * @return {String}
-	 */
-	function flags (options) {
-	  return options.sensitive ? '' : 'i'
-	}
-
-	/**
-	 * Pull out keys from a regexp.
-	 *
-	 * @param  {RegExp} path
-	 * @param  {Array}  keys
-	 * @return {RegExp}
-	 */
-	function regexpToRegexp (path, keys) {
-	  // Use a negative lookahead to match only capturing groups.
-	  var groups = path.source.match(/\((?!\?)/g)
-
-	  if (groups) {
-	    for (var i = 0; i < groups.length; i++) {
-	      keys.push({
-	        name: i,
-	        prefix: null,
-	        delimiter: null,
-	        optional: false,
-	        repeat: false,
-	        pattern: null
-	      })
-	    }
-	  }
-
-	  return attachKeys(path, keys)
-	}
-
-	/**
-	 * Transform an array into a regexp.
-	 *
-	 * @param  {Array}  path
-	 * @param  {Array}  keys
-	 * @param  {Object} options
-	 * @return {RegExp}
-	 */
-	function arrayToRegexp (path, keys, options) {
-	  var parts = []
-
-	  for (var i = 0; i < path.length; i++) {
-	    parts.push(pathToRegexp(path[i], keys, options).source)
-	  }
-
-	  var regexp = new RegExp('(?:' + parts.join('|') + ')', flags(options))
-
-	  return attachKeys(regexp, keys)
-	}
-
-	/**
-	 * Create a path regexp from string input.
-	 *
-	 * @param  {String} path
-	 * @param  {Array}  keys
-	 * @param  {Object} options
-	 * @return {RegExp}
-	 */
-	function stringToRegexp (path, keys, options) {
-	  var tokens = parse(path)
-	  var re = tokensToRegExp(tokens, options)
-
-	  // Attach keys back to the regexp.
-	  for (var i = 0; i < tokens.length; i++) {
-	    if (typeof tokens[i] !== 'string') {
-	      keys.push(tokens[i])
-	    }
-	  }
-
-	  return attachKeys(re, keys)
-	}
-
-	/**
-	 * Expose a function for taking tokens and returning a RegExp.
-	 *
-	 * @param  {Array}  tokens
-	 * @param  {Array}  keys
-	 * @param  {Object} options
-	 * @return {RegExp}
-	 */
-	function tokensToRegExp (tokens, options) {
-	  options = options || {}
-
-	  var strict = options.strict
-	  var end = options.end !== false
-	  var route = ''
-	  var lastToken = tokens[tokens.length - 1]
-	  var endsWithSlash = typeof lastToken === 'string' && /\/$/.test(lastToken)
-
-	  // Iterate over the tokens and create our regexp string.
-	  for (var i = 0; i < tokens.length; i++) {
-	    var token = tokens[i]
-
-	    if (typeof token === 'string') {
-	      route += escapeString(token)
-	    } else {
-	      var prefix = escapeString(token.prefix)
-	      var capture = token.pattern
-
-	      if (token.repeat) {
-	        capture += '(?:' + prefix + capture + ')*'
-	      }
-
-	      if (token.optional) {
-	        if (prefix) {
-	          capture = '(?:' + prefix + '(' + capture + '))?'
-	        } else {
-	          capture = '(' + capture + ')?'
-	        }
-	      } else {
-	        capture = prefix + '(' + capture + ')'
-	      }
-
-	      route += capture
-	    }
-	  }
-
-	  // In non-strict mode we allow a slash at the end of match. If the path to
-	  // match already ends with a slash, we remove it for consistency. The slash
-	  // is valid at the end of a path match, not in the middle. This is important
-	  // in non-ending mode, where "/test/" shouldn't match "/test//route".
-	  if (!strict) {
-	    route = (endsWithSlash ? route.slice(0, -2) : route) + '(?:\\/(?=$))?'
-	  }
-
-	  if (end) {
-	    route += '$'
-	  } else {
-	    // In non-ending mode, we need the capturing groups to match as much as
-	    // possible by using a positive lookahead to the end or next path segment.
-	    route += strict && endsWithSlash ? '' : '(?=\\/|$)'
-	  }
-
-	  return new RegExp('^' + route, flags(options))
-	}
-
-	/**
-	 * Normalize the given path string, returning a regular expression.
-	 *
-	 * An empty array can be passed in for the keys, which will hold the
-	 * placeholder key descriptions. For example, using `/user/:id`, `keys` will
-	 * contain `[{ name: 'id', delimiter: '/', optional: false, repeat: false }]`.
-	 *
-	 * @param  {(String|RegExp|Array)} path
-	 * @param  {Array}                 [keys]
-	 * @param  {Object}                [options]
-	 * @return {RegExp}
-	 */
-	function pathToRegexp (path, keys, options) {
-	  keys = keys || []
-
-	  if (!isarray(keys)) {
-	    options = keys
-	    keys = []
-	  } else if (!options) {
-	    options = {}
-	  }
-
-	  if (path instanceof RegExp) {
-	    return regexpToRegexp(path, keys, options)
-	  }
-
-	  if (isarray(path)) {
-	    return arrayToRegexp(path, keys, options)
-	  }
-
-	  return stringToRegexp(path, keys, options)
-	}
-
+	module.exports = {
+	  categories: categories,
+	  confections: confections,
+	  articles: articles
+	};
 
 /***/ },
 /* 169 */
-/***/ function(module, exports) {
-
-	module.exports = Array.isArray || function (arr) {
-	  return Object.prototype.toString.call(arr) == '[object Array]';
-	};
-
-
-/***/ },
-/* 170 */
-/***/ function(module, exports) {
-
-	(function() {
-	  var URL, URL_PATTERN, defaults, urllite,
-	    __hasProp = {}.hasOwnProperty;
-
-	  URL_PATTERN = /^(?:(?:([^:\/?\#]+:)\/+|(\/\/))(?:([a-z0-9-\._~%]+)(?::([a-z0-9-\._~%]+))?@)?(([a-z0-9-\._~%!$&'()*+,;=]+)(?::([0-9]+))?)?)?([^?\#]*?)(\?[^\#]*)?(\#.*)?$/;
-
-	  urllite = function(raw, opts) {
-	    return urllite.URL.parse(raw, opts);
-	  };
-
-	  urllite.URL = URL = (function() {
-	    function URL(props) {
-	      var k, v, _ref;
-	      for (k in defaults) {
-	        if (!__hasProp.call(defaults, k)) continue;
-	        v = defaults[k];
-	        this[k] = (_ref = props[k]) != null ? _ref : v;
-	      }
-	      this.host || (this.host = this.hostname && this.port ? "" + this.hostname + ":" + this.port : this.hostname ? this.hostname : '');
-	      this.origin || (this.origin = this.protocol ? "" + this.protocol + "//" + this.host : '');
-	      this.isAbsolutePathRelative = !this.host && this.pathname.charAt(0) === '/';
-	      this.isPathRelative = !this.host && this.pathname.charAt(0) !== '/';
-	      this.isRelative = this.isSchemeRelative || this.isAbsolutePathRelative || this.isPathRelative;
-	      this.isAbsolute = !this.isRelative;
-	    }
-
-	    URL.parse = function(raw) {
-	      var m, pathname, protocol;
-	      m = raw.toString().match(URL_PATTERN);
-	      pathname = m[8] || '';
-	      protocol = m[1];
-	      return new urllite.URL({
-	        protocol: protocol,
-	        username: m[3],
-	        password: m[4],
-	        hostname: m[6],
-	        port: m[7],
-	        pathname: protocol && pathname.charAt(0) !== '/' ? "/" + pathname : pathname,
-	        search: m[9],
-	        hash: m[10],
-	        isSchemeRelative: m[2] != null
-	      });
-	    };
-
-	    return URL;
-
-	  })();
-
-	  defaults = {
-	    protocol: '',
-	    username: '',
-	    password: '',
-	    host: '',
-	    hostname: '',
-	    port: '',
-	    pathname: '',
-	    search: '',
-	    hash: '',
-	    origin: '',
-	    isSchemeRelative: false
-	  };
-
-	  module.exports = urllite;
-
-	}).call(this);
-
-
-/***/ },
-/* 171 */
-/***/ function(module, exports) {
-
-	var canUseDOM = !!(
-	    typeof window !== 'undefined' &&
-	    window.document &&
-	    window.document.createElement
-	);
-
-	module.exports = {
-	    canUseDOM: canUseDOM,
-	    hasPushState: canUseDOM && window.history && 'pushState' in window.history,
-	    hasHashbang: function() {
-	        return canUseDOM && window.location.hash.indexOf('#!') === 0;
-	    },
-	    hasEventConstructor: function() {
-	        return typeof window.Event == "function";
-	    }
-	};
-
-
-/***/ },
-/* 172 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var detect = __webpack_require__(171);
-	var event = __webpack_require__(173);
-
-	module.exports = function triggerUrl(url, silent) {
-	    if (detect.hasHashbang()) {
-	        window.location.hash = '#!' + url;
-	    } else if (detect.hasPushState) {
-	        window.history.pushState({}, '', url);
-	        if (!silent) {
-	            window.dispatchEvent(event.createEvent('popstate'));
-	        }
-	    } else {
-	        console.error("Browser does not support pushState, and hash is missing a hashbang prefix!");
-	    }
-	};
-
-
-/***/ },
-/* 173 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var detect = __webpack_require__(171);
-
-	module.exports = {
-	    createEvent: function(name) {
-	        if (detect.hasEventConstructor()) {
-	            return new window.Event(name);
-	        } else {
-	            var event = document.createEvent('Event');
-	            event.initEvent(name, true, false);
-	            return event;
-	        }
-	    }
-	};
-
-
-/***/ },
-/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -20892,11 +20336,11 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var React = __webpack_require__(2);
-	var ShoppingCartBadge = __webpack_require__(175);
-	var ArticleList = __webpack_require__(176);
-	var ArticleInformation = __webpack_require__(180);
-	var IntensityFilter = __webpack_require__(181);
-	var Maybe = __webpack_require__(163);
+	var Navigation = __webpack_require__(170);
+	var ShoppingCartBadge = __webpack_require__(171);
+	var ArticleList = __webpack_require__(172);
+	var IntensityFilter = __webpack_require__(175);
+	var Maybe = __webpack_require__(165);
 
 	var ArticlesControllerView = (function (_React$Component) {
 	  _inherits(ArticlesControllerView, _React$Component);
@@ -20942,10 +20386,6 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var articleInformation = undefined;
-	      if (this.state.selectedArticle.hasValue) {
-	        articleInformation = React.createElement(ArticleInformation, { actionCreator: this.props.actionCreator, article: this.state.selectedArticle.value });
-	      }
 	      var maximumIntensity = this.props.store.getMaximumPossibleIntensity();
 	      var availableIntensities = this.props.store.getAvailableIntensities();
 
@@ -20953,18 +20393,20 @@
 	        'div',
 	        null,
 	        React.createElement(
-	          'h1',
+	          Navigation,
 	          null,
-	          'Unsere Kaffee-Geschmackserlebnisse'
+	          React.createElement(ShoppingCartBadge, { shoppingCartInfo: this.state.shoppingCartInfo, navigate: this.props.navigate })
 	        ),
-	        React.createElement(IntensityFilter, { actionCreator: this.props.actionCreator,
-	          maximumIntensity: maximumIntensity,
-	          availableIntensities: availableIntensities }),
-	        React.createElement(ArticleList, { categories: this.state.categories,
-	          articles: this.state.articles,
-	          actionCreator: this.props.actionCreator }),
-	        React.createElement(ShoppingCartBadge, { shoppingCartInfo: this.state.shoppingCartInfo, navigate: this.props.navigate }),
-	        articleInformation
+	        React.createElement(
+	          'div',
+	          { className: 'container contentWrapper' },
+	          React.createElement(IntensityFilter, { actionCreator: this.props.actionCreator,
+	            maximumIntensity: maximumIntensity,
+	            availableIntensities: availableIntensities }),
+	          React.createElement(ArticleList, { categories: this.state.categories,
+	            articles: this.state.articles,
+	            actionCreator: this.props.actionCreator })
+	        )
 	      );
 	    }
 	  }]);
@@ -20979,7 +20421,51 @@
 	module.exports = ArticlesControllerView;
 
 /***/ },
-/* 175 */
+/* 170 */
+/***/ function(module, exports, __webpack_require__) {
+
+	"use strict";
+
+	var React = __webpack_require__(2);
+
+	var Navigation = React.createClass({
+		displayName: "Navigation",
+
+		render: function render() {
+			return React.createElement(
+				"div",
+				{ className: "mainNavigation" },
+				React.createElement(
+					"nav",
+					{ className: "container" },
+					React.createElement(
+						"ul",
+						{ className: "row" },
+						React.createElement(
+							"li",
+							{ className: "mainNavigation__navItem col-xs-6" },
+							React.createElement("span", { className: "mainNavigation__logo" }),
+							React.createElement(
+								"h1",
+								{ className: "mainNavigation__brandName" },
+								"Coffee Store"
+							)
+						),
+						React.createElement(
+							"li",
+							{ className: "mainNavigation__navItem col-xs-6 align-right" },
+							this.props.children
+						)
+					)
+				)
+			);
+		}
+	});
+
+	module.exports = Navigation;
+
+/***/ },
+/* 171 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21009,22 +20495,25 @@
 	      var _this = this;
 
 	      var navigateToShoppingCart = function navigateToShoppingCart() {
-	        _this.props.navigate('/shopping-cart');
+	        _this.props.navigate('shopping-cart');
 	      };
+
+	      var shoppingCartPrice = (this.props.shoppingCartInfo.totalPrice / 100).toFixed(2);
 
 	      return React.createElement(
 	        'div',
-	        { className: 'shopping-cart-badge', onClick: navigateToShoppingCart },
-	        'Shopping Cart Overview',
+	        { className: 'shoppingCartBadge row', onClick: navigateToShoppingCart },
 	        React.createElement(
 	          'div',
-	          { className: 'article-count' },
-	          this.props.shoppingCartInfo.articleCount
+	          { className: 'shoppingCartBadge__logo col-xs-2' },
+	          React.createElement('i', { className: 'fa fa-shopping-cart fa-2x' })
 	        ),
 	        React.createElement(
 	          'div',
-	          { className: 'total-price' },
-	          this.props.shoppingCartInfo.totalPrice / 100
+	          { className: 'shoppingCartBadge__cartInfo col-xs-10' },
+	          this.props.shoppingCartInfo.articleCount + ' Artikel:',
+	          ' ',
+	          shoppingCartPrice + ' €'
 	        )
 	      );
 	    }
@@ -21039,7 +20528,7 @@
 	module.exports = ShoppingCartBadge;
 
 /***/ },
-/* 176 */
+/* 172 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21053,7 +20542,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var React = __webpack_require__(2);
-	var ArticleCategory = __webpack_require__(177);
+	var Article = __webpack_require__(173);
 
 	var ArticleList = (function (_React$Component) {
 	  _inherits(ArticleList, _React$Component);
@@ -21069,26 +20558,16 @@
 	    value: function render() {
 	      var _this = this;
 
-	      var categories = this.props.categories.map(function (category) {
-	        var articles = _this.props.articles.filter(function (article) {
-	          return article.category === category.id;
-	        });
-	        return React.createElement(ArticleCategory, {
-	          key: category.id,
-	          category: category,
-	          articles: articles,
+	      var articles = this.props.articles.map(function (article) {
+	        return React.createElement(Article, { key: article.id,
+	          article: article,
 	          actionCreator: _this.props.actionCreator });
 	      });
 
 	      return React.createElement(
 	        'div',
 	        null,
-	        React.createElement(
-	          'h2',
-	          null,
-	          'Diese Artikel sind verfügbar:'
-	        ),
-	        categories
+	        articles
 	      );
 	    }
 	  }]);
@@ -21104,7 +20583,7 @@
 	module.exports = ArticleList;
 
 /***/ },
-/* 177 */
+/* 173 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21118,67 +20597,7 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var React = __webpack_require__(2);
-	var Article = __webpack_require__(178);
-
-	var ArticleCategory = (function (_React$Component) {
-	  _inherits(ArticleCategory, _React$Component);
-
-	  function ArticleCategory() {
-	    _classCallCheck(this, ArticleCategory);
-
-	    _get(Object.getPrototypeOf(ArticleCategory.prototype), 'constructor', this).apply(this, arguments);
-	  }
-
-	  _createClass(ArticleCategory, [{
-	    key: 'render',
-	    value: function render() {
-	      var _this = this;
-
-	      var articles = this.props.articles.map(function (article) {
-	        return React.createElement(Article, { key: article.id,
-	          article: article,
-	          actionCreator: _this.props.actionCreator });
-	      });
-
-	      return React.createElement(
-	        'div',
-	        { className: 'category' },
-	        React.createElement(
-	          'h3',
-	          { className: 'category-name' },
-	          this.props.category.name
-	        ),
-	        articles
-	      );
-	    }
-	  }]);
-
-	  return ArticleCategory;
-	})(React.Component);
-
-	ArticleCategory.propTypes = {
-	  actionCreator: React.PropTypes.object.isRequired,
-	  category: React.PropTypes.object.isRequired,
-	  articles: React.PropTypes.array.isRequired
-	};
-	module.exports = ArticleCategory;
-
-/***/ },
-/* 178 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var React = __webpack_require__(2);
-	var IntensityBar = __webpack_require__(179);
+	var IntensityBar = __webpack_require__(174);
 
 	var Article = (function (_React$Component) {
 	  _inherits(Article, _React$Component);
@@ -21192,13 +20611,16 @@
 	  _createClass(Article, [{
 	    key: 'handleClick',
 	    value: function handleClick() {
-	      this.props.actionCreator.selectArticle(this.props.article.id);
+	      if (!this.props.article.isMatchingFilter) {
+	        return;
+	      }
+	      this.props.actionCreator.addArticleToShoppingCart(this.props.article.id, 10);
 	    }
 	  }, {
 	    key: 'render',
 	    value: function render() {
 	      var article = this.props.article;
-	      var className = article.isMatchingFilter ? 'article-details' : 'article-details grayed-out';
+	      var className = article.isMatchingFilter ? 'articleDetails' : 'articleDetails articleDetails--grayed-out';
 
 	      var styles = {
 	        backgroundColor: article.color
@@ -21207,31 +20629,35 @@
 	      return React.createElement(
 	        'div',
 	        { className: className, onClick: this.handleClick.bind(this) },
-	        React.createElement('div', { className: 'article-image', style: styles }),
+	        React.createElement('div', { className: 'articleDetails__image', style: styles }),
 	        React.createElement('br', null),
 	        React.createElement(
-	          'span',
-	          { className: 'article-name' },
-	          this.props.article.name
-	        ),
-	        React.createElement('br', null),
-	        React.createElement(
-	          'span',
-	          { className: 'intensity-label' },
-	          'Intensität ',
+	          'div',
+	          { className: 'articleDetails__contentWrapper' },
 	          React.createElement(
 	            'span',
-	            { className: 'intensity-value' },
-	            this.props.article.intensity
+	            { className: 'articleDetails__name' },
+	            this.props.article.name
+	          ),
+	          React.createElement('br', null),
+	          React.createElement(
+	            'span',
+	            { className: 'articleDetails__intensityLabel' },
+	            'Intensität ',
+	            React.createElement(
+	              'span',
+	              { className: 'articleDetails__intensityValue' },
+	              this.props.article.intensity
+	            )
+	          ),
+	          React.createElement(IntensityBar, { intensity: this.props.article.intensity }),
+	          React.createElement(
+	            'span',
+	            { className: 'articleDetails_price' },
+	            'Preis ',
+	            this.props.article.price / 100,
+	            ' €'
 	          )
-	        ),
-	        React.createElement(IntensityBar, { intensity: this.props.article.intensity }),
-	        React.createElement(
-	          'span',
-	          { className: 'article-price' },
-	          'Preis ',
-	          this.props.article.price / 100,
-	          ' €'
 	        )
 	      );
 	    }
@@ -21252,7 +20678,7 @@
 	module.exports = Article;
 
 /***/ },
-/* 179 */
+/* 174 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21305,72 +20731,7 @@
 	module.exports = IntensityBar;
 
 /***/ },
-/* 180 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var React = __webpack_require__(2);
-
-	var ArticleInformation = (function (_React$Component) {
-	  _inherits(ArticleInformation, _React$Component);
-
-	  function ArticleInformation() {
-	    _classCallCheck(this, ArticleInformation);
-
-	    _get(Object.getPrototypeOf(ArticleInformation.prototype), 'constructor', this).apply(this, arguments);
-	  }
-
-	  _createClass(ArticleInformation, [{
-	    key: 'render',
-	    value: function render() {
-	      var _this = this;
-
-	      var styles = {
-	        border: '1px solid white'
-	      };
-
-	      var addToCart = function addToCart() {
-	        _this.props.actionCreator.addArticleToShoppingCart(_this.props.article.id, 10);
-	      };
-
-	      return React.createElement(
-	        'div',
-	        { className: 'article-information', style: styles },
-	        React.createElement(
-	          'span',
-	          { className: 'article-name' },
-	          this.props.article.name
-	        ),
-	        React.createElement(
-	          'button',
-	          { className: 'addToCart', onClick: addToCart },
-	          '+'
-	        )
-	      );
-	    }
-	  }]);
-
-	  return ArticleInformation;
-	})(React.Component);
-
-	ArticleInformation.propTypes = {
-	  actionCreator: React.PropTypes.object.isRequired,
-	  article: React.PropTypes.object.isRequired
-	};
-
-	module.exports = ArticleInformation;
-
-/***/ },
-/* 181 */
+/* 175 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21402,7 +20763,7 @@
 	      var intensityFilterItems = [];
 
 	      var _loop = function (intensity) {
-	        var className = _this.props.availableIntensities.indexOf(intensity) > -1 ? 'intensity-filter-item' : 'intensity-filter-item unavailable';
+	        var className = _this.props.availableIntensities.indexOf(intensity) > -1 ? 'intensityFilter__item' : 'intensityFilter__item intensityFilter__item--unavailable';
 	        var selectIntensity = function selectIntensity() {
 	          _this.props.actionCreator.filterByIntensity(intensity);
 	        };
@@ -21419,10 +20780,10 @@
 
 	      return React.createElement(
 	        'div',
-	        { className: 'intensity-filter' },
+	        { className: 'intensityFilter' },
 	        React.createElement(
 	          'div',
-	          { className: 'legend' },
+	          { className: 'intensityFilter__legend' },
 	          'Nach Intensität filtern'
 	        ),
 	        intensityFilterItems
@@ -21441,7 +20802,7 @@
 	module.exports = IntensityFilter;
 
 /***/ },
-/* 182 */
+/* 176 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
@@ -21455,7 +20816,8 @@
 	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
 	var React = __webpack_require__(2);
-	var ShoppingCartItem = __webpack_require__(183);
+	var Navigation = __webpack_require__(170);
+	var utils = __webpack_require__(161);
 
 	var ShoppingCartControllerView = (function (_React$Component) {
 	  _inherits(ShoppingCartControllerView, _React$Component);
@@ -21487,78 +20849,169 @@
 	      this.deregisterChangeListener();
 	    }
 	  }, {
-	    key: 'render',
-	    value: function render() {
+	    key: '_getArticleItems',
+	    value: function _getArticleItems() {
 	      var _this = this;
 
-	      var items = this.state.shoppingCartContent.items.map(function (item) {
-	        return React.createElement(ShoppingCartItem, { key: item.id, article: item, actionCreator: _this.props.actionCreator });
+	      return this.state.shoppingCartContent.items.map(function (item) {
+	        var addToCart = function addToCart() {
+	          _this.props.actionCreator.addArticleToShoppingCart(item.id, 10);
+	        };
+
+	        var removeFromCart = function removeFromCart() {
+	          _this.props.actionCreator.removeArticleFromShoppingCart(item.id, 10);
+	        };
+
+	        var itemPrice = utils.formatAsPrice(item.price / 100);
+	        var itemTotalPrice = utils.formatAsPrice(item.amount * item.price / 100);
+
+	        var itemStyles = {
+	          backgroundColor: item.color
+	        };
+
+	        return React.createElement(
+	          'tr',
+	          { key: item.id, className: 'shoppingCartItem' },
+	          React.createElement(
+	            'td',
+	            { className: 'shoppingCartItem__name' },
+	            React.createElement('div', { className: 'articleDetails__image', style: itemStyles }),
+	            React.createElement('br', null),
+	            item.name
+	          ),
+	          React.createElement(
+	            'td',
+	            { className: 'shoppingCartItem__price' },
+	            itemPrice
+	          ),
+	          React.createElement(
+	            'td',
+	            null,
+	            React.createElement(
+	              'span',
+	              { className: 'shoppingCartItem__amount' },
+	              item.amount
+	            ),
+	            React.createElement('br', null),
+	            React.createElement(
+	              'button',
+	              { className: 'shoppingCartItem__addToCart', onClick: addToCart },
+	              '+'
+	            ),
+	            ' ',
+	            React.createElement(
+	              'button',
+	              { className: 'shoppingCartItem__removeFromCart', onClick: removeFromCart },
+	              '-'
+	            )
+	          ),
+	          React.createElement(
+	            'td',
+	            { className: 'shoppingCartItem__totalPrice' },
+	            itemTotalPrice
+	          )
+	        );
 	      });
-
-	      var header = React.createElement(
-	        'div',
-	        { className: 'shopping-cart-header' },
-	        React.createElement(
-	          'div',
-	          null,
-	          'Artikel'
-	        ),
-	        React.createElement(
-	          'div',
-	          null,
-	          'Einzelpreis'
-	        ),
-	        React.createElement(
-	          'div',
-	          null,
-	          'Anzahl'
-	        ),
-	        React.createElement(
-	          'div',
-	          null,
-	          'Gesamtpreis'
-	        )
-	      );
-
-	      var footer = React.createElement(
-	        'div',
-	        { className: 'shopping-cart-footer' },
-	        React.createElement('div', null),
-	        React.createElement('div', null),
-	        React.createElement(
-	          'div',
-	          null,
-	          this.state.shoppingCartContent.totalAmount
-	        ),
-	        React.createElement(
-	          'div',
-	          null,
-	          this.state.shoppingCartContent.totalPrice / 100
-	        )
-	      );
-
+	    }
+	  }, {
+	    key: 'render',
+	    value: function render() {
 	      var warning = this.state.shoppingCartContent.packagingSizeInvalid ? React.createElement(
 	        'div',
-	        { className: 'shopping-cart-warning' },
+	        { className: 'shoppingCart__warning' },
 	        'Gesamtmenge muss ein Vielfaches von 50 sein!'
 	      ) : '';
 
+	      var articleItems = this._getArticleItems();
+	      var totalArticlesPrice = utils.formatAsPrice(this.state.shoppingCartContent.totalPrice / 100);
+
+	      var alertIt = function alertIt() {
+	        alert('Sorry, just a demo!');
+	      };
+
 	      return React.createElement(
 	        'div',
-	        { className: 'shopping-cart' },
-	        React.createElement(
-	          'h1',
-	          null,
-	          'Shopping-Cart-View'
-	        ),
+	        { className: 'shoppingCart' },
+	        React.createElement(Navigation, null),
 	        React.createElement(
 	          'div',
-	          { className: 'shopping-cart-content' },
-	          header,
-	          items,
-	          footer
-	        ),
-	        warning
+	          { className: 'container contentWrapper' },
+	          React.createElement(
+	            'a',
+	            { href: '#' },
+	            React.createElement('i', { className: 'fa fa-chevron-left' }),
+	            ' Back to articles overview'
+	          ),
+	          React.createElement('br', null),
+	          React.createElement('br', null),
+	          warning,
+	          React.createElement(
+	            'table',
+	            null,
+	            React.createElement(
+	              'thead',
+	              null,
+	              React.createElement(
+	                'tr',
+	                null,
+	                React.createElement(
+	                  'th',
+	                  null,
+	                  'Artikel'
+	                ),
+	                React.createElement(
+	                  'th',
+	                  null,
+	                  'Einzelpreis'
+	                ),
+	                React.createElement(
+	                  'th',
+	                  null,
+	                  'Anzahl'
+	                ),
+	                React.createElement(
+	                  'th',
+	                  null,
+	                  'Gesamtpreis'
+	                )
+	              )
+	            ),
+	            React.createElement(
+	              'tbody',
+	              null,
+	              articleItems
+	            ),
+	            React.createElement(
+	              'tfoot',
+	              { className: 'shoppingCart__footer' },
+	              React.createElement(
+	                'tr',
+	                null,
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  'Gesamt:'
+	                ),
+	                React.createElement('td', null),
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  this.state.shoppingCartContent.totalAmount
+	                ),
+	                React.createElement(
+	                  'td',
+	                  null,
+	                  totalArticlesPrice
+	                )
+	              )
+	            )
+	          ),
+	          React.createElement(
+	            'button',
+	            { onClick: alertIt, className: 'shoppingCart__cashPoint' },
+	            'Buy it'
+	          )
+	        )
 	      );
 	    }
 	  }]);
@@ -21567,155 +21020,6 @@
 	})(React.Component);
 
 	module.exports = ShoppingCartControllerView;
-
-/***/ },
-/* 183 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	var _get = function get(_x, _x2, _x3) { var _again = true; _function: while (_again) { var object = _x, property = _x2, receiver = _x3; desc = parent = getter = undefined; _again = false; if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { _x = parent; _x2 = property; _x3 = receiver; _again = true; continue _function; } } else if ('value' in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } } };
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-	function _inherits(subClass, superClass) { if (typeof superClass !== 'function' && superClass !== null) { throw new TypeError('Super expression must either be null or a function, not ' + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
-
-	var React = __webpack_require__(2);
-
-	var ShoppingCartItem = (function (_React$Component) {
-	  _inherits(ShoppingCartItem, _React$Component);
-
-	  function ShoppingCartItem() {
-	    _classCallCheck(this, ShoppingCartItem);
-
-	    _get(Object.getPrototypeOf(ShoppingCartItem.prototype), 'constructor', this).apply(this, arguments);
-	  }
-
-	  _createClass(ShoppingCartItem, [{
-	    key: 'render',
-	    value: function render() {
-	      var _this = this;
-
-	      var styles = {
-	        backgroundColor: this.props.article.color
-	      };
-
-	      var addToCart = function addToCart() {
-	        _this.props.actionCreator.addArticleToShoppingCart(_this.props.article.id, 10);
-	      };
-
-	      var removeFromCart = function removeFromCart() {
-	        _this.props.actionCreator.removeArticleFromShoppingCart(_this.props.article.id, 10);
-	      };
-
-	      return React.createElement(
-	        'div',
-	        { className: 'shopping-cart-item' },
-	        React.createElement(
-	          'div',
-	          { className: 'content' },
-	          React.createElement('div', { className: 'article-image', style: styles }),
-	          this.props.article.name
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'content' },
-	          this.props.article.price / 100
-	        ),
-	        React.createElement(
-	          'div',
-	          null,
-	          React.createElement(
-	            'span',
-	            { className: 'content' },
-	            this.props.article.amount
-	          ),
-	          React.createElement(
-	            'button',
-	            { className: 'addToCart', onClick: addToCart },
-	            '+'
-	          ),
-	          React.createElement(
-	            'button',
-	            { className: 'removeFromCart', onClick: removeFromCart },
-	            '-'
-	          )
-	        ),
-	        React.createElement(
-	          'div',
-	          { className: 'content' },
-	          this.props.article.amount * this.props.article.price / 100
-	        )
-	      );
-	    }
-	  }]);
-
-	  return ShoppingCartItem;
-	})(React.Component);
-
-	ShoppingCartItem.propTypes = {
-	  article: React.PropTypes.object.isRequired
-	};
-	module.exports = ShoppingCartItem;
-
-/***/ },
-/* 184 */
-/***/ function(module, exports, __webpack_require__) {
-
-	'use strict';
-
-	var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-	function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
-	var DataAccess = (function () {
-	  function DataAccess() {
-	    _classCallCheck(this, DataAccess);
-	  }
-
-	  _createClass(DataAccess, [{
-	    key: 'getCategoriesAndArticles',
-	    value: function getCategoriesAndArticles() {
-	      return __webpack_require__(185);
-	    }
-	  }]);
-
-	  return DataAccess;
-	})();
-
-	module.exports = DataAccess;
-
-/***/ },
-/* 185 */
-/***/ function(module, exports) {
-
-	'use strict';
-
-	var categories = [{ id: 1, name: 'Intenso' }, { id: 2, name: 'Espresso' }, { id: 3, name: 'Pure Origin' }, { id: 4, name: 'Lungo' }, { id: 5, name: 'Decaffeinato' }, { id: 6, name: 'Variations' }];
-
-	var confections = [{ size: 25, name: 'Ristretto' }, { size: 40, name: 'Espresso' }, { size: 110, name: 'Lungo' }];
-
-	var articles = [
-	// Intenso
-	{ id: 1, intensity: 12, category: 1, price: 39, confections: [25, 40], name: 'Accio', color: '#25334F' }, { id: 2, intensity: 10, category: 1, price: 35, confections: [25, 40], name: 'Flagrante', color: '#000000' }, { id: 3, intensity: 11, category: 1, price: 39, confections: [25, 40], name: 'Gemino', color: '#1E3A40' }, { id: 4, intensity: 8, category: 1, price: 35, confections: [25, 40], name: 'Confundo', color: '#685B56' }, { id: 5, intensity: 9, category: 1, price: 35, confections: [25, 40], name: 'Prior Incantado', color: '#512B7E' },
-	// Espresso
-	{ id: 6, intensity: 3, category: 2, price: 35, confections: [25], name: 'Sectumsempra', color: '#432013' }, { id: 7, intensity: 5, category: 2, price: 35, confections: [25], name: 'Silencio', color: '#154134' }, { id: 8, intensity: 4, category: 2, price: 35, confections: [25], name: 'Orchideus', color: '#A3783D' }, { id: 9, intensity: 6, category: 2, price: 35, confections: [25], name: 'Lumos', color: '#81491E' },
-	// Pure Origin
-	{ id: 10, intensity: 10, category: 3, price: 39, confections: [25, 40], name: 'Expulso', color: '#484536' }, { id: 11, intensity: 3, category: 3, price: 39, confections: [110], name: 'Densaugeo', color: '#A56850' }, { id: 12, intensity: 4, category: 3, price: 39, confections: [40], name: 'Waddiwasi', color: '#D3BDA6' }, { id: 13, intensity: 6, category: 3, price: 39, confections: [40], name: 'Sonorus', color: '#CDBDC1' },
-	// Lungo
-	{ id: 14, intensity: 4, category: 4, price: 37, confections: [110], name: 'Quietus', color: '#306CA8' }, { id: 15, intensity: 4, category: 4, price: 37, confections: [110], name: 'Ratzeputz', color: '#DB903E' }, { id: 16, intensity: 8, category: 4, price: 37, confections: [110], name: 'Relaschio', color: '#286264' },
-	// Decaffeinato
-	{ id: 17, intensity: 4, category: 5, price: 37, confections: [40], name: 'Impedimenta', color: '#CD953D' }, { id: 18, intensity: 7, category: 5, price: 37, confections: [40], name: 'Glisseo', color: '#460008' }, { id: 19, intensity: 4, category: 5, price: 39, confections: [110], name: 'Incendio', color: '#D35B51' }, { id: 20, intensity: 9, category: 5, price: 37, confections: [25, 110], name: 'Morsmordre', color: '#D81E41' },
-	// Variations
-	{ id: 21, intensity: 6, category: 6, price: 42, confections: [40], name: 'Muffliato', color: '#B56F29' }, { id: 22, intensity: 6, category: 6, price: 42, confections: [40], name: 'Alohomora', color: '#E1DB9F' }, { id: 23, intensity: 6, category: 6, price: 42, confections: [40], name: 'Confringo', color: '#301A0F' }];
-
-	module.exports = {
-	  categories: categories,
-	  confections: confections,
-	  articles: articles
-	};
 
 /***/ }
 /******/ ]);

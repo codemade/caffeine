@@ -1,0 +1,26 @@
+.intensityFilter {
+	padding-bottom:16px;
+	text-align: right;
+
+	&__item {
+	  display:inline-block;
+	  text-align:center;
+	  cursor:pointer;
+	  background:transparent url('/dist/bean_dark-gray.svg') no-repeat;
+	  background-size: 16px;
+	  width:16px;
+	  margin-left:1px;
+	  margin-right:1px;
+	  padding-top: 25px;
+	} 
+
+	&__item--unavailable {
+		background:transparent url('/dist/bean_light-gray.svg') no-repeat;
+		background-size: 16px;
+	}
+
+	&__legend {
+		font-size:14px;
+  		padding-bottom:4px;
+	}
+}
