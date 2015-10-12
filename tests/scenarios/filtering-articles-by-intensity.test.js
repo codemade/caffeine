@@ -1,9 +1,13 @@
+/*eslint-disable no-unused-vars*/
+let React = require('react');
+let ReactDOM = require('react-dom');
+let TestUtils = require('react-addons-test-utils');
 let expect = require('chai').expect;
-let React = require('react/addons');
 let ActionCreator = require('../../app/action-creator.js');
 let Store = require('../../app/article-store.js');
+
 let StorageFake = require('../flux/storage-fake.js');
-let TestUtils = React.addons.TestUtils;
+
 let renderTarget, renderedComponent;
 
 describe('filtering articles by intensity', () => {
@@ -16,7 +20,7 @@ describe('filtering articles by intensity', () => {
 
   beforeEach(() => {
     let ComponentClass = require('../../app/components/articles-controller-view.react.js');
-    renderTarget = document.getElementsByTagName('body')[0];
+    renderTarget = document.getElementsByClassName('app')[0];
 
     let dataAccess = {
       getCategoriesAndArticles: () => {
@@ -33,25 +37,25 @@ describe('filtering articles by intensity', () => {
   });
 
   afterEach(() => {
-    React.unmountComponentAtNode(renderTarget);
+    ReactDOM.unmountComponentAtNode(renderTarget);
     renderedComponent = null;
   });
 
   let expectUnavailableIntensitiesAreDisplayedAsUnavailable = (availableIntensities) => {
-    let intensityFilterItems = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'intensity-filter-item');
+    let intensityFilterItems = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'intensityFilter__item');
     let itemsWithWrongClassName = Array.from(intensityFilterItems)
       .filter((intensityItem) => {
-        let expectedClassName = availableIntensities.indexOf(+intensityItem.getDOMNode().textContent) > -1
-          ? 'intensity-filter-item'
-          : 'intensity-filter-item unavailable';
-        return intensityItem.getDOMNode().className !== expectedClassName;
+        let expectedClassName = availableIntensities.indexOf(+intensityItem.textContent) > -1
+          ? 'intensityFilter__item'
+          : 'intensityFilter__item intensityFilter__item--unavailable';
+        return intensityItem.className !== expectedClassName;
       });
     expect(itemsWithWrongClassName.length).to.equal(0);
   };
 
   describe('intensity filter component', () => {
     it('should display an intensity-filter-item for each possible intensity', () => {
-      let allIntensityFilterItems = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'intensity-filter-item');
+      let allIntensityFilterItems = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'intensityFilter__item');
       expect(allIntensityFilterItems.length).to.equal(maximumIntensity);
     });
 
@@ -63,28 +67,26 @@ describe('filtering articles by intensity', () => {
   describe('clicking on an intensity filter item', () => {
     let firstAvailableIntensityItem;
     beforeEach(() => {
-      firstAvailableIntensityItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'intensity-filter-item')[2];
-      React.addons.TestUtils.Simulate.click(firstAvailableIntensityItem);
+      firstAvailableIntensityItem = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'intensityFilter__item')[2];
+      TestUtils.Simulate.click(firstAvailableIntensityItem);
     });
 
     it('should display articles with matching intensity as default', () => {
-      let articleDetails = Array.from(TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-details'));
+      let articleDetails = Array.from(TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'articleDetails'));
       let articleInfosWithIntensity = articleDetails
-          .map((article) => article.getDOMNode())
           .filter((article) => {
-            return +article.querySelector('.intensity-value').textContent === 3;
+            return +article.querySelector('.articleDetails__intensityValue').textContent === 3;
           });
-      expect(articleInfosWithIntensity.every(article => article.className === 'article-details')).to.equal(true);
+      expect(articleInfosWithIntensity.every(article => article.className === 'articleDetails')).to.equal(true);
     });
 
     it('should display articles with non-matching intensity grayed-out', () => {
-      let articleDetails = Array.from(TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-details'));
+      let articleDetails = Array.from(TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'articleDetails'));
       let articleInfosWithIntensity = articleDetails
-          .map((article) => article.getDOMNode())
           .filter((article) => {
-            return +article.querySelector('.intensity-value').textContent !== 3;
+            return +article.querySelector('.articleDetails__intensityValue').textContent !== 3;
           });
-      expect(articleInfosWithIntensity.every(article => article.className === 'article-details grayed-out')).to.equal(true);
+      expect(articleInfosWithIntensity.every(article => article.className === 'articleDetails articleDetails--grayed-out')).to.equal(true);
     });
 
     it('should disable all other intensity filter items', () => {
@@ -94,7 +96,7 @@ describe('filtering articles by intensity', () => {
 
     describe('twice', () => {
       beforeEach(() => {
-        React.addons.TestUtils.Simulate.click(firstAvailableIntensityItem);
+        TestUtils.Simulate.click(firstAvailableIntensityItem);
       });
 
       it('should disable intensity filter items with unavailable intensity', () => {

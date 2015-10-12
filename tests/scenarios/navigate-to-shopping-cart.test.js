@@ -1,5 +1,7 @@
+/*eslint-disable no-unused-vars*/
 let React = require('react');
-let TestUtils = React.addons.TestUtils;
+let ReactDOM = require('react-dom');
+let TestUtils = require('react-addons-test-utils');
 let chai = require('chai');
 let sinon = require('sinon');
 let sinonChai = require('sinon-chai');
@@ -20,7 +22,7 @@ describe('Navigate to shopping-cart route', () => {
   ];
   beforeEach(function() {
     let ComponentClass = require('../../app/components/articles-controller-view.react.js');
-    renderTarget = document.getElementsByTagName('body')[0];
+    renderTarget = document.getElementsByClassName('app')[0];
 
     let dataAccess = {
       getCategoriesAndArticles: () => {
@@ -36,17 +38,17 @@ describe('Navigate to shopping-cart route', () => {
     let ArticleStore = require('../../app/article-store.js');
     let store = new ArticleStore(new StorageFake());
     navigateSpy = sinon.spy();
-    renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store} navigate={navigateSpy} />, renderTarget);
+    renderedComponent = ReactDOM.render(<ComponentClass actionCreator={actionCreator} store={store} navigate={navigateSpy} />, renderTarget);
   });
 
   afterEach(() => {
-    React.unmountComponentAtNode(renderTarget);
+    ReactDOM.unmountComponentAtNode(renderTarget);
     renderedComponent = null;
   });
 
   describe('by clicking on the shopping-cart-badge', () => {
     it('displays the shopping-cart', function() {
-      let shoppingCartBadge = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-badge')[0];
+      let shoppingCartBadge = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shoppingCartBadge')[0];
       TestUtils.Simulate.click(shoppingCartBadge);
       expect(navigateSpy).to.have.been.called;
     });

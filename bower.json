@@ -1,0 +1,27 @@
+{
+  "name": "caffeine",
+  "version": "0.0.0",
+  "homepage": "https://github.com/codemade/caffeine",
+  "authors": [
+    "René Viering",
+    "Christian Kühl"
+  ],
+  "moduleType": [
+    "node"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "bootstrap": "~3.3.5"
+  },
+  "dependencies": {
+    "bootstrap": "~3.3.5",
+    "skeleton": "skeleton-css#~2.0.4"
+  }
+}

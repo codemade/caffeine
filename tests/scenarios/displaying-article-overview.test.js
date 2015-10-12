@@ -1,7 +1,10 @@
+/*eslint-disable no-unused-vars*/
+let React = require('react');
+let ReactDOM = require('react-dom');
 let expect = require('chai').expect;
-let React = require('react/addons');
 let StorageFake = require('../flux/storage-fake.js');
-let TestUtils = React.addons.TestUtils;
+let TestUtils = require('react-addons-test-utils');
+
 let renderTarget, renderedComponent;
 
 describe('displaying article overview', () => {
@@ -16,7 +19,7 @@ describe('displaying article overview', () => {
 
   beforeEach(() => {
     let ComponentClass = require('../../app/components/articles-controller-view.react.js');
-    renderTarget = document.getElementsByTagName('body')[0];
+    renderTarget = document.getElementsByClassName('app')[0];
 
     let dataAccess = {
       getCategoriesAndArticles: () => {
@@ -35,19 +38,13 @@ describe('displaying article overview', () => {
   });
 
   afterEach(() => {
-    React.unmountComponentAtNode(renderTarget);
+    ReactDOM.unmountComponentAtNode(renderTarget);
     renderedComponent = null;
   });
 
   describe('server has some categories and articles', () => {
-    it('should display categories from server', () => {
-      let actualCategoryNames = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'category-name').map((category) => category.getDOMNode().textContent);
-      let expectedCategoryNames = categories.map((category) => category.name);
-      expect(actualCategoryNames).to.deep.equal(expectedCategoryNames);
-    });
-
     it('should display articles from server', () => {
-      let actualArticleNames = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-name').map((article) => article.getDOMNode().textContent);
+      let actualArticleNames = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'articleDetails__name').map((article) => article.textContent);
       let expectedArticleNames = articles.map((article) => article.name);
       expect(actualArticleNames).to.deep.equal(expectedArticleNames);
     });

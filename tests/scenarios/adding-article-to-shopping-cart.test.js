@@ -1,12 +1,16 @@
+/*eslint-disable no-unused-vars*/
+let React = require('react');
+let ReactDOM = require('react-dom');
 let expect = require('chai').expect;
-let React = require('react/addons');
 let ActionCreator = require('../../app/action-creator.js');
 let Store = require('../../app/article-store.js');
 let StorageFake = require('../flux/storage-fake.js');
-let TestUtils = React.addons.TestUtils;
+let TestUtils = require('react-addons-test-utils');
+
 let renderedComponent;
 let renderTarget, firstArticleComponent;
 let shoppingCartBadge;
+let actionCreator;
 
 describe('adding an article to the shopping cart', () => {
   let categories = [{id: 1}, {id: 2}];
@@ -17,7 +21,7 @@ describe('adding an article to the shopping cart', () => {
 
   beforeEach(() => {
     let ComponentClass = require('../../app/components/articles-controller-view.react.js');
-    renderTarget = document.getElementsByTagName('body')[0];
+    renderTarget = document.getElementsByClassName('app')[0];
 
     let dataAccess = {
       getCategoriesAndArticles: () => {
@@ -28,22 +32,20 @@ describe('adding an article to the shopping cart', () => {
       }
     };
 
-    let actionCreator = new ActionCreator(dataAccess);
+    actionCreator = new ActionCreator(dataAccess);
     let store = new Store(new StorageFake());
 
-    renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
-    firstArticleComponent = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'article-details')[0];
-    React.addons.TestUtils.Simulate.click(firstArticleComponent);
-    shoppingCartBadge = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shopping-cart-badge')[0];
+    renderedComponent = ReactDOM.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
+    firstArticleComponent = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'articleDetails')[0];
+    shoppingCartBadge = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shoppingCartBadge')[0];
   });
 
   afterEach(() => {
-    React.unmountComponentAtNode(renderTarget);
+    ReactDOM.unmountComponentAtNode(renderTarget);
   });
 
   let clickAddToCartButton = () => {
-    let button = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'addToCart')[0];
-    React.addons.TestUtils.Simulate.click(button);
+    TestUtils.Simulate.click(firstArticleComponent);
   };
 
   describe('once', () => {
@@ -52,13 +54,8 @@ describe('adding an article to the shopping cart', () => {
     });
 
     it('should display 10 articles in the shopping cart badge', () => {
-      let articleCount = TestUtils.scryRenderedDOMComponentsWithClass(shoppingCartBadge, 'article-count')[0];
-      expect(articleCount.getDOMNode().textContent).to.equal('10');
-    });
-
-    it('should display price for 10 articles in the shopping cart badge', () => {
-      let totalPrice = TestUtils.scryRenderedDOMComponentsWithClass(shoppingCartBadge, 'total-price')[0];
-      expect(totalPrice.getDOMNode().textContent).to.equal('3.9');
+      let articleCount = shoppingCartBadge.querySelectorAll('.shoppingCartBadge__cartInfo')[0];
+      expect(articleCount.textContent).to.equal('10 Artikel: 3.90 €');
     });
   });
 
@@ -69,13 +66,20 @@ describe('adding an article to the shopping cart', () => {
     });
 
     it('should display 20 articles in the shopping cart badge', () => {
-      let articleCount = TestUtils.scryRenderedDOMComponentsWithClass(shoppingCartBadge, 'article-count')[0];
-      expect(articleCount.getDOMNode().textContent).to.equal('20');
+      let articleCount = shoppingCartBadge.querySelectorAll('.shoppingCartBadge__cartInfo')[0];
+      expect(articleCount.textContent).to.equal('20 Artikel: 7.80 €');
+    });
+  });
+
+  describe('on an article not matching the filter', () => {
+    beforeEach(() => {
+      actionCreator.filterByIntensity(10);
+      clickAddToCartButton();
     });
 
-    it('should display price for 20 articles in the shopping cart badge', () => {
-      let totalPrice = TestUtils.scryRenderedDOMComponentsWithClass(shoppingCartBadge, 'total-price')[0];
-      expect(totalPrice.getDOMNode().textContent).to.equal('7.8');
+    it('should display zero articles in the shopping cart badge', () => {
+      let articleCount = shoppingCartBadge.querySelectorAll('.shoppingCartBadge__cartInfo')[0];
+      expect(articleCount.textContent).to.equal('0 Artikel: 0.00 €');
     });
   });
 });
