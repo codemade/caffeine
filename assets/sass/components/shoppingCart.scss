@@ -1,5 +1,4 @@
 .shoppingCart {
-
 	&__warning {
 		background-color: #e74c3c;
 		padding: 10px;
@@ -31,11 +30,12 @@
 		-webkit-box-shadow: inset 0 -2px #28be68;
 		box-shadow: inset 0 -2px #28be68;
 	}
+	
 	&__cashPoint:active {
 		top: 1px;
 		outline: none;
 		-webkit-box-shadow: none;
-		box-shadow: none;	
+		box-shadow: none;
 	}
 
 	table {
