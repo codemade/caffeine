@@ -2,7 +2,6 @@ let React = require('react');
 let Article = require('./article.react.js');
 
 class ArticleList extends React.Component {
-
   render() {
     let articles = this.props.articles.map((article) => {
       return <Article key={article.id}
