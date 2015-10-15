@@ -21,7 +21,6 @@
     "bootstrap": "~3.3.5"
   },
   "dependencies": {
-    "bootstrap": "~3.3.5",
-    "skeleton": "skeleton-css#~2.0.4"
+    "bootstrap": "~3.3.5"
   }
 }
