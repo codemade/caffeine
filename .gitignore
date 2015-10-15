@@ -28,6 +28,7 @@ node_modules
 
 # bundled javascript
 dist/bundle.js
+dist/bundle.js.map
 dist/*.css
 
 libs
