@@ -27,8 +27,9 @@ build/Release
 node_modules
 
 # bundled javascript
-dist/bundle.js
-dist/bundle.js.map
+dist/*.js
+dist/*.js.map
 dist/*.css
+dist/*.css.map
 
 libs
