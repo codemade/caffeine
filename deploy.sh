@@ -10,7 +10,6 @@ mkdir out;
 # copy index.html and dist folder to out directory
 cp index.html out
 cp -r dist out/dist
-cp -r assets out/assets
 cp -r libs out/libs
 
 # go to the out directory and create a *new* Git repo
