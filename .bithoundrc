@@ -8,5 +8,10 @@
   ],
   "test": [
     "tests/**"
-  ]
+  ],
+  "dependencies": {
+    "unused-ignores": [
+      "react-*"
+    ]
+  }
 }
