@@ -20,7 +20,7 @@
     "test:watch": "npm run mocha:watch",
     "coveralls": "node ./node_modules/.bin/istanbul cover ./node_modules/mocha/bin/_mocha tests --report lcovonly -- --require ./bootstrap-jsdom.js --recursive --compilers js:babel/register && cat ./coverage/lcov.info | coveralls && rm -rf ./coverage",
     "start": "npm run develop",
-    "deploy": "npm run build-js && npm run build-css && ./deploy.sh"
+    "deploy": "npm run build-js && npm run build-css && bash ./deploy.sh"
   },
   "keywords": [
     "react",
