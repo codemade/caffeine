@@ -21020,6 +21020,7 @@
 	          React.createElement(
 	            'td',
 	            null,
+	            '- ',
 	            formattedCouponDiscount
 	          )
 	        ));

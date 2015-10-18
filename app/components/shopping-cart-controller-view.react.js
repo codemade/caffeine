@@ -110,7 +110,7 @@ class ShoppingCartControllerView extends React.Component {
           <td>Rabatt:</td>
           <td></td>
           <td></td>
-          <td>{formattedCouponDiscount}</td>
+          <td>- {formattedCouponDiscount}</td>
         </tr>);
       footerRows.push(
         <tr className='shoppingCart__footer__reducedTotalPrice'>
