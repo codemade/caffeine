@@ -26,6 +26,28 @@ class ShoppingCartControllerView extends React.Component {
     this.deregisterChangeListener();
   }
 
+  _getCouponCodeInput() {
+    if (this.state.shoppingCartContent.items.length === 0) return '';
+    let couponCode = this.state.shoppingCartContent.couponCode;
+    if (couponCode.hasValue && couponCode.value.isValid) return '';
+
+    let couponCodeWarning = this.state.shoppingCartContent.couponCodeInvalid
+      ? <div className='shoppingCart__couponCodeWarning'>Der eingegebene Coupon-Code ist ungültig!</div>
+      : '';
+
+      let redeemCoupon = function() {
+        let couponCode = this.refs.couponCode.value;
+        this.props.actionCreator.redeemCoupon(couponCode);
+      };
+
+    return <div className="shoppingCart__couponInput">
+              <span>Geben Sie hier Ihren Coupon-Code ein:</span>
+              <input type="text" className="shoppingCart__couponInput__couponCode" ref="couponCode" placeholder="xxxx-xx-xx-xx"></input>
+              <button onClick={redeemCoupon.bind(this)} className="shoppingCart__couponInput__redeemCoupon">einlösen</button>
+              {couponCodeWarning}
+            </div>;
+  }
+
   _getArticleItems() {
     return this.state.shoppingCartContent.items.map((item) => {
       let addToCart = () => {
@@ -65,10 +87,6 @@ class ShoppingCartControllerView extends React.Component {
       ? <div className='shoppingCart__packagingSizeWarning'>Gesamtmenge muss ein Vielfaches von 50 sein!</div>
       : '';
 
-    let couponCodeWarning = this.state.shoppingCartContent.couponCodeInvalid
-      ? <div className='shoppingCart__couponCodeWarning'>Der eingegebene Coupon-Code ist ungültig!</div>
-      : '';
-
     let articleItems = this._getArticleItems();
     let totalPrice = this.state.shoppingCartContent.totalPrice / 100;
     let couponDiscount = this.state.shoppingCartContent.couponDiscount / 100;
@@ -76,11 +94,6 @@ class ShoppingCartControllerView extends React.Component {
     let formattedTotalPrice = utils.formatAsPrice(totalPrice);
     let formattedCouponDiscount = utils.formatAsPrice(couponDiscount);
     let formattedReducedTotalPrice = utils.formatAsPrice(reducedTotalPrice);
-
-    let redeemCoupon = function() {
-      let couponCode = this.refs.couponCode.value;
-      this.props.actionCreator.redeemCoupon(couponCode);
-    };
 
     let alertIt = function() {
       alert('Sorry, just a demo!');
@@ -96,15 +109,9 @@ class ShoppingCartControllerView extends React.Component {
       </tr>
     );
 
-    let couponCodeInput = <div className="shoppingCart__couponInput">
-              <span>Geben Sie hier Ihren Coupon-Code ein:</span>
-              <input type="text" className="shoppingCart__couponInput__couponCode" ref="couponCode" placeholder="xxxx-xx-xx-xx"></input>
-              <button onClick={redeemCoupon.bind(this)} className="shoppingCart__couponInput__redeemCoupon">einlösen</button>
-              {couponCodeWarning}
-            </div>;
+    let couponCodeInput = this._getCouponCodeInput();
 
     if (this.state.shoppingCartContent.couponCode.hasValue && this.state.shoppingCartContent.couponCode.value.isValid) {
-      couponCodeInput = '';
       footerRows.push(
         <tr className='shoppingCart__footer__couponDiscount'>
           <td>Rabatt:</td>

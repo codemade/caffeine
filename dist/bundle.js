@@ -20870,6 +20870,41 @@
 	      this.deregisterChangeListener();
 	    }
 	  }, {
+	    key: '_getCouponCodeInput',
+	    value: function _getCouponCodeInput() {
+	      if (this.state.shoppingCartContent.items.length === 0) return '';
+	      var couponCode = this.state.shoppingCartContent.couponCode;
+	      if (couponCode.hasValue && couponCode.value.isValid) return '';
+
+	      var couponCodeWarning = this.state.shoppingCartContent.couponCodeInvalid ? React.createElement(
+	        'div',
+	        { className: 'shoppingCart__couponCodeWarning' },
+	        'Der eingegebene Coupon-Code ist ungültig!'
+	      ) : '';
+
+	      var redeemCoupon = function redeemCoupon() {
+	        var couponCode = this.refs.couponCode.value;
+	        this.props.actionCreator.redeemCoupon(couponCode);
+	      };
+
+	      return React.createElement(
+	        'div',
+	        { className: 'shoppingCart__couponInput' },
+	        React.createElement(
+	          'span',
+	          null,
+	          'Geben Sie hier Ihren Coupon-Code ein:'
+	        ),
+	        React.createElement('input', { type: 'text', className: 'shoppingCart__couponInput__couponCode', ref: 'couponCode', placeholder: 'xxxx-xx-xx-xx' }),
+	        React.createElement(
+	          'button',
+	          { onClick: redeemCoupon.bind(this), className: 'shoppingCart__couponInput__redeemCoupon' },
+	          'einlösen'
+	        ),
+	        couponCodeWarning
+	      );
+	    }
+	  }, {
 	    key: '_getArticleItems',
 	    value: function _getArticleItems() {
 	      var _this = this;
@@ -20943,12 +20978,6 @@
 	        'Gesamtmenge muss ein Vielfaches von 50 sein!'
 	      ) : '';
 
-	      var couponCodeWarning = this.state.shoppingCartContent.couponCodeInvalid ? React.createElement(
-	        'div',
-	        { className: 'shoppingCart__couponCodeWarning' },
-	        'Der eingegebene Coupon-Code ist ungültig!'
-	      ) : '';
-
 	      var articleItems = this._getArticleItems();
 	      var totalPrice = this.state.shoppingCartContent.totalPrice / 100;
 	      var couponDiscount = this.state.shoppingCartContent.couponDiscount / 100;
@@ -20956,11 +20985,6 @@
 	      var formattedTotalPrice = utils.formatAsPrice(totalPrice);
 	      var formattedCouponDiscount = utils.formatAsPrice(couponDiscount);
 	      var formattedReducedTotalPrice = utils.formatAsPrice(reducedTotalPrice);
-
-	      var redeemCoupon = function redeemCoupon() {
-	        var couponCode = this.refs.couponCode.value;
-	        this.props.actionCreator.redeemCoupon(couponCode);
-	      };
 
 	      var alertIt = function alertIt() {
 	        alert('Sorry, just a demo!');
@@ -20988,25 +21012,9 @@
 	        )
 	      ));
 
-	      var couponCodeInput = React.createElement(
-	        'div',
-	        { className: 'shoppingCart__couponInput' },
-	        React.createElement(
-	          'span',
-	          null,
-	          'Geben Sie hier Ihren Coupon-Code ein:'
-	        ),
-	        React.createElement('input', { type: 'text', className: 'shoppingCart__couponInput__couponCode', ref: 'couponCode', placeholder: 'xxxx-xx-xx-xx' }),
-	        React.createElement(
-	          'button',
-	          { onClick: redeemCoupon.bind(this), className: 'shoppingCart__couponInput__redeemCoupon' },
-	          'einlösen'
-	        ),
-	        couponCodeWarning
-	      );
+	      var couponCodeInput = this._getCouponCodeInput();
 
 	      if (this.state.shoppingCartContent.couponCode.hasValue && this.state.shoppingCartContent.couponCode.value.isValid) {
-	        couponCodeInput = '';
 	        footerRows.push(React.createElement(
 	          'tr',
 	          { className: 'shoppingCart__footer__couponDiscount' },
