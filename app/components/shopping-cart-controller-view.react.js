@@ -75,7 +75,7 @@ class ShoppingCartControllerView extends React.Component {
         <td>
           <span className="shoppingCartItem__amount">{item.amount}</span>
           <br/>
-          <button className='shoppingCartItem__addToCart' onClick={addToCart}>+</button> <button className='shoppingCartItem__removeFromCart' onClick={removeFromCart}>-</button>
+          <button className='shoppingCartItem__removeFromCart' onClick={removeFromCart}>-</button> <button className='shoppingCartItem__addToCart' onClick={addToCart}>+</button>
         </td>
         <td className="shoppingCartItem__totalPrice">{itemTotalPrice}</td>
       </tr>;
@@ -99,15 +99,14 @@ class ShoppingCartControllerView extends React.Component {
       alert('Sorry, just a demo!');
     };
 
-    let footerRows = [];
-    footerRows.push(
+    let footerRows = [
       <tr>
         <td>Gesamt:</td>
         <td></td>
         <td>{this.state.shoppingCartContent.totalAmount}</td>
         <td>{formattedTotalPrice}</td>
       </tr>
-    );
+    ];
 
     let couponCodeInput = this._getCouponCodeInput();
 

@@ -20951,14 +20951,14 @@
 	            React.createElement('br', null),
 	            React.createElement(
 	              'button',
-	              { className: 'shoppingCartItem__addToCart', onClick: addToCart },
-	              '+'
+	              { className: 'shoppingCartItem__removeFromCart', onClick: removeFromCart },
+	              '-'
 	            ),
 	            ' ',
 	            React.createElement(
 	              'button',
-	              { className: 'shoppingCartItem__removeFromCart', onClick: removeFromCart },
-	              '-'
+	              { className: 'shoppingCartItem__addToCart', onClick: addToCart },
+	              '+'
 	            )
 	          ),
 	          React.createElement(
@@ -20990,8 +20990,7 @@
 	        alert('Sorry, just a demo!');
 	      };
 
-	      var footerRows = [];
-	      footerRows.push(React.createElement(
+	      var footerRows = [React.createElement(
 	        'tr',
 	        null,
 	        React.createElement(
@@ -21010,7 +21009,7 @@
 	          null,
 	          formattedTotalPrice
 	        )
-	      ));
+	      )];
 
 	      var couponCodeInput = this._getCouponCodeInput();
 
