@@ -66,7 +66,7 @@ class ShoppingCartControllerView extends React.Component {
       : '';
 
     let couponCodeWarning = this.state.shoppingCartContent.couponCodeInvalid
-      ? <div className='shoppingCart__couponCodeWarning'>Ungültiger Coupon-Code</div>
+      ? <div className='shoppingCart__couponCodeWarning'>Der eingegebene Coupon-Code ist ungültig!</div>
       : '';
 
     let articleItems = this._getArticleItems();

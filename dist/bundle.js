@@ -20946,7 +20946,7 @@
 	      var couponCodeWarning = this.state.shoppingCartContent.couponCodeInvalid ? React.createElement(
 	        'div',
 	        { className: 'shoppingCart__couponCodeWarning' },
-	        'Ungültiger Coupon-Code'
+	        'Der eingegebene Coupon-Code ist ungültig!'
 	      ) : '';
 
 	      var articleItems = this._getArticleItems();
