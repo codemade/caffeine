@@ -96,10 +96,10 @@ class ShoppingCartControllerView extends React.Component {
       </tr>
     );
 
-    let couponCodeInput = <div className="shoppingCart__coupon">
+    let couponCodeInput = <div className="shoppingCart__couponInput">
               <span>Geben Sie hier Ihren Coupon-Code ein:</span>
-              <input type="text" className="shoppingCart__couponCode" ref="couponCode" placeholder="xxxx-xx-xx-xx"></input>
-              <button onClick={redeemCoupon.bind(this)} className="shoppingCart__redeemCoupon">OK</button>
+              <input type="text" className="shoppingCart__couponInput__couponCode" ref="couponCode" placeholder="xxxx-xx-xx-xx"></input>
+              <button onClick={redeemCoupon.bind(this)} className="shoppingCart__couponInput__redeemCoupon">einlösen</button>
               {couponCodeWarning}
             </div>;
 

@@ -16,7 +16,36 @@
 		}
 	}
 
+	&__couponInput {
+		float:right;
+		text-align:right;
+		margin-bottom: 20px;
+
+		span {
+			font-style:italic;
+		}
+
+		&__couponCode {
+			margin-left:10px;
+			text-align:center;
+			width:200px;
+			height:30px;
+			border-radius:4px;
+			border:1px solid gray;
+		}
+
+		&__redeemCoupon {
+			font-style:italic;
+			color: #337ab7;
+			height:30px;
+			line-height:30px;
+			border:none;
+			background-color:transparent;
+		}
+	}
+
 	&__cashPoint {
+		clear:right;
 		float: right;
 		margin-bottom: 20px;
 		position: relative;

@@ -20990,17 +20990,17 @@
 
 	      var couponCodeInput = React.createElement(
 	        'div',
-	        { className: 'shoppingCart__coupon' },
+	        { className: 'shoppingCart__couponInput' },
 	        React.createElement(
 	          'span',
 	          null,
 	          'Geben Sie hier Ihren Coupon-Code ein:'
 	        ),
-	        React.createElement('input', { type: 'text', className: 'shoppingCart__couponCode', ref: 'couponCode', placeholder: 'xxxx-xx-xx-xx' }),
+	        React.createElement('input', { type: 'text', className: 'shoppingCart__couponInput__couponCode', ref: 'couponCode', placeholder: 'xxxx-xx-xx-xx' }),
 	        React.createElement(
 	          'button',
-	          { onClick: redeemCoupon.bind(this), className: 'shoppingCart__redeemCoupon' },
-	          'OK'
+	          { onClick: redeemCoupon.bind(this), className: 'shoppingCart__couponInput__redeemCoupon' },
+	          'einlösen'
 	        ),
 	        couponCodeWarning
 	      );

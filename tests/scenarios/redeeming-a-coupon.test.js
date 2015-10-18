@@ -48,8 +48,8 @@ describe('redeeming a coupon', () => {
 
   describe('with an invalid coupon code', () => {
     beforeEach(() => {
-      let couponCodeInput = renderTarget.querySelector('.shoppingCart__couponCode');
-      let redeemCouponButton = renderTarget.querySelector('.shoppingCart__redeemCoupon');
+      let couponCodeInput = renderTarget.querySelector('.shoppingCart__couponInput__couponCode');
+      let redeemCouponButton = renderTarget.querySelector('.shoppingCart__couponInput__redeemCoupon');
       couponCodeInput.value = 'invalid coupon code';
       TestUtils.Simulate.click(redeemCouponButton);
     });
@@ -72,14 +72,14 @@ describe('redeeming a coupon', () => {
 
   describe('with a valid coupon code', () => {
     beforeEach(() => {
-      let couponCodeInput = renderTarget.querySelector('.shoppingCart__couponCode');
-      let redeemCouponButton = renderTarget.querySelector('.shoppingCart__redeemCoupon');
+      let couponCodeInput = renderTarget.querySelector('.shoppingCart__couponInput__couponCode');
+      let redeemCouponButton = renderTarget.querySelector('.shoppingCart__couponInput__redeemCoupon');
       couponCodeInput.value = 'wmks-09-11-15';
       TestUtils.Simulate.click(redeemCouponButton);
     });
 
     it('should not show coupon input', () => {
-      let couponCodeInput = renderTarget.querySelector('.shoppingCart__coupon');
+      let couponCodeInput = renderTarget.querySelector('.shoppingCart__couponInput');
       expect(couponCodeInput).to.equal(null);
     });
 
@@ -90,7 +90,7 @@ describe('redeeming a coupon', () => {
 
     it('should show the coupon discount price', () => {
       let couponDiscount = renderTarget.querySelector('.shoppingCart__footer__couponDiscount td:last-child');
-      expect(couponDiscount.textContent).to.equal('2.97 €');
+      expect(couponDiscount.textContent).to.equal('- 2.97 €');
     });
 
     it('should show the reduced total price', () => {
