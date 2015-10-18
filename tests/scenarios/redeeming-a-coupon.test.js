@@ -58,6 +58,16 @@ describe('redeeming a coupon', () => {
       let couponCodeWarning = renderTarget.querySelector('.shoppingCart__couponCodeWarning');
       expect(couponCodeWarning).not.to.equal(null);
     });
+
+    it('should not show the coupon discount price', () => {
+      let couponDiscountRow = renderTarget.querySelector('.shoppingCart__footer__couponDiscount');
+      expect(couponDiscountRow).to.equal(null);
+    });
+
+    it('should not show the reduced total price', () => {
+      let reducedTotalPriceRow = renderTarget.querySelector('.shoppingCart__footer__reducedTotalPrice');
+      expect(reducedTotalPriceRow).to.equal(null);
+    });
   });
 
   describe('with a valid coupon code', () => {
@@ -68,9 +78,24 @@ describe('redeeming a coupon', () => {
       TestUtils.Simulate.click(redeemCouponButton);
     });
 
+    it('should not show coupon input', () => {
+      let couponCodeInput = renderTarget.querySelector('.shoppingCart__coupon');
+      expect(couponCodeInput).to.equal(null);
+    });
+
     it('should not show a warning', () => {
       let couponCodeWarning = renderTarget.querySelector('.shoppingCart__couponCodeWarning');
       expect(couponCodeWarning).to.equal(null);
+    });
+
+    it('should show the coupon discount price', () => {
+      let couponDiscount = renderTarget.querySelector('.shoppingCart__footer__couponDiscount td:last-child');
+      expect(couponDiscount.textContent).to.equal('2.97 €');
+    });
+
+    it('should show the reduced total price', () => {
+      let reducedTotalPrice = renderTarget.querySelector('.shoppingCart__footer__reducedTotalPrice td:last-child');
+      expect(reducedTotalPrice.textContent).to.equal('16.83 €');
     });
   });
 });

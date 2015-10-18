@@ -19933,7 +19933,7 @@
 	        totalPrice: 0,
 	        packagingSizeInvalid: false,
 	        couponCodeInvalid: false,
-	        couponCode: null,
+	        couponCode: Maybe.Not,
 	        items: []
 	      };
 
@@ -19962,6 +19962,13 @@
 	      shoppingCartContent.totalPrice = items.reduce(function (sum, item) {
 	        return sum + item.totalPrice;
 	      }, 0);
+	      shoppingCartContent.couponDiscount = 0;
+	      shoppingCartContent.reducedTotalPrice = 0;
+
+	      if (this.state.maybeCouponCode.hasValue && this.state.maybeCouponCode.value.isValid) {
+	        shoppingCartContent.couponDiscount = shoppingCartContent.totalPrice * 0.15;
+	      }
+
 	      shoppingCartContent.packagingSizeInvalid = shoppingCartContent.totalAmount % 50 !== 0;
 	      shoppingCartContent.couponCodeInvalid = this.state.maybeCouponCode.hasValue && !this.state.maybeCouponCode.value.isValid;
 	      shoppingCartContent.couponCode = this.state.maybeCouponCode;
@@ -20973,7 +20980,12 @@
 	      ) : '';
 
 	      var articleItems = this._getArticleItems();
-	      var totalArticlesPrice = utils.formatAsPrice(this.state.shoppingCartContent.totalPrice / 100);
+	      var totalPrice = this.state.shoppingCartContent.totalPrice / 100;
+	      var couponDiscount = this.state.shoppingCartContent.couponDiscount / 100;
+	      var reducedTotalPrice = totalPrice - couponDiscount;
+	      var formattedTotalPrice = utils.formatAsPrice(totalPrice);
+	      var formattedCouponDiscount = utils.formatAsPrice(couponDiscount);
+	      var formattedReducedTotalPrice = utils.formatAsPrice(reducedTotalPrice);
 
 	      var redeemCoupon = function redeemCoupon() {
 	        var couponCode = this.refs.couponCode.value;
@@ -20983,6 +20995,81 @@
 	      var alertIt = function alertIt() {
 	        alert('Sorry, just a demo!');
 	      };
+
+	      var footerRows = [];
+	      footerRows.push(React.createElement(
+	        'tr',
+	        null,
+	        React.createElement(
+	          'td',
+	          null,
+	          'Gesamt:'
+	        ),
+	        React.createElement('td', null),
+	        React.createElement(
+	          'td',
+	          null,
+	          this.state.shoppingCartContent.totalAmount
+	        ),
+	        React.createElement(
+	          'td',
+	          null,
+	          formattedTotalPrice
+	        )
+	      ));
+
+	      var couponCodeInput = React.createElement(
+	        'div',
+	        { className: 'shoppingCart__coupon' },
+	        React.createElement(
+	          'span',
+	          null,
+	          'Geben Sie hier Ihren Coupon-Code ein:'
+	        ),
+	        React.createElement('input', { type: 'text', className: 'shoppingCart__couponCode', ref: 'couponCode', placeholder: 'xxxx-xx-xx-xx' }),
+	        React.createElement(
+	          'button',
+	          { onClick: redeemCoupon.bind(this), className: 'shoppingCart__redeemCoupon' },
+	          'OK'
+	        ),
+	        couponCodeWarning
+	      );
+
+	      if (this.state.shoppingCartContent.couponCode.hasValue && this.state.shoppingCartContent.couponCode.value.isValid) {
+	        couponCodeInput = '';
+	        footerRows.push(React.createElement(
+	          'tr',
+	          { className: 'shoppingCart__footer__couponDiscount' },
+	          React.createElement(
+	            'td',
+	            null,
+	            'Rabatt:'
+	          ),
+	          React.createElement('td', null),
+	          React.createElement('td', null),
+	          React.createElement(
+	            'td',
+	            null,
+	            formattedCouponDiscount
+	          )
+	        ));
+	        footerRows.push(React.createElement(
+	          'tr',
+	          { className: 'shoppingCart__footer__reducedTotalPrice' },
+	          React.createElement(
+	            'td',
+	            null,
+	            'Zu zahlen:'
+	          ),
+	          React.createElement('td', null),
+	          React.createElement('td', null),
+	          React.createElement(
+	            'td',
+	            null,
+	            formattedReducedTotalPrice
+	          )
+	        ));
+	      }
 
 	      return React.createElement(
 	        'div',
@@ -21032,51 +21119,17 @@
 	              )
 	            ),
 	            React.createElement(
+	              'tfoot',
+	              { className: 'shoppingCart__footer' },
+	              footerRows
+	            ),
+	            React.createElement(
 	              'tbody',
 	              null,
 	              articleItems
-	            ),
-	            React.createElement(
-	              'tfoot',
-	              { className: 'shoppingCart__footer' },
-	              React.createElement(
-	                'tr',
-	                null,
-	                React.createElement(
-	                  'td',
-	                  null,
-	                  'Gesamt:'
-	                ),
-	                React.createElement('td', null),
-	                React.createElement(
-	                  'td',
-	                  null,
-	                  this.state.shoppingCartContent.totalAmount
-	                ),
-	                React.createElement(
-	                  'td',
-	                  null,
-	                  totalArticlesPrice
-	                )
-	              )
 	            )
 	          ),
-	          React.createElement(
-	            'div',
-	            { className: 'shoppingCart__coupon' },
-	            React.createElement(
-	              'span',
-	              null,
-	              'Geben Sie hier Ihren Coupon-Code ein:'
-	            ),
-	            React.createElement('input', { type: 'text', className: 'shoppingCart__couponCode', ref: 'couponCode', placeholder: 'xxxx-xx-xx-xx' }),
-	            React.createElement(
-	              'button',
-	              { onClick: redeemCoupon.bind(this), className: 'shoppingCart__redeemCoupon' },
-	              'OK'
-	            ),
-	            couponCodeWarning
-	          ),
+	          couponCodeInput,
 	          React.createElement(
 	            'button',
 	            { onClick: alertIt, className: 'shoppingCart__cashPoint' },

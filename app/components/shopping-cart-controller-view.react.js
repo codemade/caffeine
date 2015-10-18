@@ -70,7 +70,12 @@ class ShoppingCartControllerView extends React.Component {
       : '';
 
     let articleItems = this._getArticleItems();
-    let totalArticlesPrice = utils.formatAsPrice(this.state.shoppingCartContent.totalPrice / 100);
+    let totalPrice = this.state.shoppingCartContent.totalPrice / 100;
+    let couponDiscount = this.state.shoppingCartContent.couponDiscount / 100;
+    let reducedTotalPrice = totalPrice - couponDiscount;
+    let formattedTotalPrice = utils.formatAsPrice(totalPrice);
+    let formattedCouponDiscount = utils.formatAsPrice(couponDiscount);
+    let formattedReducedTotalPrice = utils.formatAsPrice(reducedTotalPrice);
 
     let redeemCoupon = function() {
       let couponCode = this.refs.couponCode.value;
@@ -80,6 +85,41 @@ class ShoppingCartControllerView extends React.Component {
     let alertIt = function() {
       alert('Sorry, just a demo!');
     };
+
+    let footerRows = [];
+    footerRows.push(
+      <tr>
+        <td>Gesamt:</td>
+        <td></td>
+        <td>{this.state.shoppingCartContent.totalAmount}</td>
+        <td>{formattedTotalPrice}</td>
+      </tr>
+    );
+
+    let couponCodeInput = <div className="shoppingCart__coupon">
+              <span>Geben Sie hier Ihren Coupon-Code ein:</span>
+              <input type="text" className="shoppingCart__couponCode" ref="couponCode" placeholder="xxxx-xx-xx-xx"></input>
+              <button onClick={redeemCoupon.bind(this)} className="shoppingCart__redeemCoupon">OK</button>
+              {couponCodeWarning}
+            </div>;
+
+    if (this.state.shoppingCartContent.couponCode.hasValue && this.state.shoppingCartContent.couponCode.value.isValid) {
+      couponCodeInput = '';
+      footerRows.push(
+        <tr className='shoppingCart__footer__couponDiscount'>
+          <td>Rabatt:</td>
+          <td></td>
+          <td></td>
+          <td>{formattedCouponDiscount}</td>
+        </tr>);
+      footerRows.push(
+        <tr className='shoppingCart__footer__reducedTotalPrice'>
+          <td>Zu zahlen:</td>
+          <td></td>
+          <td></td>
+          <td>{formattedReducedTotalPrice}</td>
+        </tr>);
+    }
 
     return <div className="shoppingCart">
       <Navigation/>
@@ -97,24 +137,14 @@ class ShoppingCartControllerView extends React.Component {
               <th>Gesamtpreis</th>
             </tr>
           </thead>
+          <tfoot className="shoppingCart__footer">
+            {footerRows}
+          </tfoot>
           <tbody>
             {articleItems}
           </tbody>
-          <tfoot className="shoppingCart__footer">
-            <tr>
-              <td>Gesamt:</td>
-              <td></td>
-              <td>{this.state.shoppingCartContent.totalAmount}</td>
-              <td>{totalArticlesPrice}</td>
-            </tr>
-          </tfoot>
         </table>
-        <div className="shoppingCart__coupon">
-          <span>Geben Sie hier Ihren Coupon-Code ein:</span>
-          <input type="text" className="shoppingCart__couponCode" ref="couponCode" placeholder="xxxx-xx-xx-xx"></input>
-          <button onClick={redeemCoupon.bind(this)} className="shoppingCart__redeemCoupon">OK</button>
-          {couponCodeWarning}
-        </div>
+        {couponCodeInput}
         <button onClick={alertIt} className="shoppingCart__cashPoint">Buy it</button>
       </div>
     </div>;

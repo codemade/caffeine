@@ -80,7 +80,7 @@ class ArticleStore extends Store {
       totalPrice: 0,
       packagingSizeInvalid: false,
       couponCodeInvalid: false,
-      couponCode: null,
+      couponCode: Maybe.Not,
       items: []
     };
 
@@ -105,6 +105,13 @@ class ArticleStore extends Store {
     shoppingCartContent.items = items;
     shoppingCartContent.totalAmount = items.reduce((sum, item) => sum + item.amount, 0);
     shoppingCartContent.totalPrice = items.reduce((sum, item) => sum + item.totalPrice, 0);
+    shoppingCartContent.couponDiscount = 0;
+    shoppingCartContent.reducedTotalPrice = 0;
+
+    if (this.state.maybeCouponCode.hasValue && this.state.maybeCouponCode.value.isValid) {
+      shoppingCartContent.couponDiscount = shoppingCartContent.totalPrice * 0.15;
+    }
+
     shoppingCartContent.packagingSizeInvalid = shoppingCartContent.totalAmount % 50 !== 0;
     shoppingCartContent.couponCodeInvalid = this.state.maybeCouponCode.hasValue && !this.state.maybeCouponCode.value.isValid;
     shoppingCartContent.couponCode = this.state.maybeCouponCode;
