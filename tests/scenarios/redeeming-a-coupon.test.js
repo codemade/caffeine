@@ -43,4 +43,13 @@ describe('redeeming a coupon', () => {
     ReactDOM.unmountComponentAtNode(renderTarget);
     renderedComponent = null;
   });
+
+  describe('with an invalid coupon code', () => {
+    it('should show a warning', () => {
+      let redeemCouponButton = renderTarget.querySelector('.shoppingCart__redeemCoupon');
+      TestUtils.Simulate.click(redeemCouponButton);
+      let couponCodeWarning = couponCodeWarning.querySelector('.shoppingCart__couponCodeWarning');
+      expect(couponCodeWarning).to.be.defined;
+    });
+  });
 });

@@ -102,7 +102,7 @@ describe('Displaying the shopping cart overview', () => {
     });
 
     it('should not display packaging size warning', () => {
-      let warnings = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shoppingCart__warning');
+      let warnings = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shoppingCart__packagingSizeWarning');
       expect(warnings.length).to.equal(0);
     });
 
@@ -128,7 +128,7 @@ describe('Displaying the shopping cart overview', () => {
       });
 
       it('should display packaging size warning', () => {
-        let warnings = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shoppingCart__warning');
+        let warnings = TestUtils.scryRenderedDOMComponentsWithClass(renderedComponent, 'shoppingCart__packagingSizeWarning');
         expect(warnings.length).to.equal(1);
       });
     });

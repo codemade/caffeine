@@ -20933,14 +20933,22 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var warning = this.state.shoppingCartContent.packagingSizeInvalid ? React.createElement(
+	      var packagingSizeWarning = this.state.shoppingCartContent.packagingSizeInvalid ? React.createElement(
 	        'div',
-	        { className: 'shoppingCart__warning' },
+	        { className: 'shoppingCart__packagingSizeWarning' },
 	        'Gesamtmenge muss ein Vielfaches von 50 sein!'
 	      ) : '';
 
+	      var couponCodeWarning = React.createElement(
+	        'div',
+	        { className: 'shoppingCart__couponCodeWarning' },
+	        'Ungültiger Coupon-Code'
+	      );
+
 	      var articleItems = this._getArticleItems();
 	      var totalArticlesPrice = utils.formatAsPrice(this.state.shoppingCartContent.totalPrice / 100);
+
+	      var redeemCoupon = function redeemCoupon() {};
 
 	      var alertIt = function alertIt() {
 	        alert('Sorry, just a demo!');
@@ -20961,7 +20969,7 @@
 	          ),
 	          React.createElement('br', null),
 	          React.createElement('br', null),
-	          warning,
+	          packagingSizeWarning,
 	          React.createElement(
 	            'table',
 	            null,
@@ -21022,6 +21030,22 @@
 	                )
 	              )
 	            )
+	          ),
+	          React.createElement(
+	            'div',
+	            { className: 'shoppingCart__coupon' },
+	            React.createElement(
+	              'span',
+	              null,
+	              'Coupon-Code:'
+	            ),
+	            React.createElement('input', { type: 'text' }),
+	            React.createElement(
+	              'button',
+	              { onClick: redeemCoupon, className: 'shoppingCart__redeemCoupon' },
+	              'OK'
+	            ),
+	            couponCodeWarning
 	          ),
 	          React.createElement(
 	            'button',
