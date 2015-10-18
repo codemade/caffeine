@@ -57,6 +57,20 @@ describe('redeeming a coupon', () => {
       actionCreator.addArticleToShoppingCart(4, 30);
     });
 
+    describe('with an empty coupon code', () => {
+      beforeEach(() => {
+        let couponCodeInput = renderTarget.querySelector('.shoppingCart__couponInput__couponCode');
+        let redeemCouponButton = renderTarget.querySelector('.shoppingCart__couponInput__redeemCoupon');
+        couponCodeInput.value = '';
+        TestUtils.Simulate.click(redeemCouponButton);
+      });
+
+      it('should not show a warning', () => {
+        let couponCodeWarning = renderTarget.querySelector('.shoppingCart__couponCodeWarning');
+        expect(couponCodeWarning).to.equal(null);
+      });
+    });
+
     describe('with an invalid coupon code', () => {
       beforeEach(() => {
         let couponCodeInput = renderTarget.querySelector('.shoppingCart__couponInput__couponCode');

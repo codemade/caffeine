@@ -141,6 +141,7 @@ class ArticleStore extends Store {
   }
 
   onRedeemCoupon(couponCodeValue) {
+    if (!couponCodeValue || couponCodeValue === '') return;
     let couponCode = {
       value: couponCodeValue,
       isValid: (couponCodeValue === 'wmks-09-11-15')

@@ -20000,6 +20000,7 @@
 	  }, {
 	    key: 'onRedeemCoupon',
 	    value: function onRedeemCoupon(couponCodeValue) {
+	      if (!couponCodeValue || couponCodeValue === '') return;
 	      var couponCode = {
 	        value: couponCodeValue,
 	        isValid: couponCodeValue === 'wmks-09-11-15'
