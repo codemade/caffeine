@@ -10,7 +10,6 @@ class ArticleStore extends Store {
     super('article-store', storage);
     if (!this.state.shoppingCart) this.state.shoppingCart = {};
     if (!this.state.intensityFilter) this.state.intensityFilter = Maybe.Not;
-    if (!this.state.maybeSelectedArticle) this.state.maybeSelectedArticle = Maybe.Not;
     if (!this.state.maybeCouponCode) this.state.maybeCouponCode = Maybe.Not;
     dispatcher.register(this.onActionDispatched.bind(this));
   }
@@ -27,10 +26,6 @@ class ArticleStore extends Store {
       return article;
     });
     return result;
-  }
-
-  getMaybeSelectedArticle() {
-    return this.state.maybeSelectedArticle;
   }
 
   articleMatchesFilter(article) {
@@ -130,14 +125,6 @@ class ArticleStore extends Store {
     this.emitChange('changed');
   }
 
-  onSelectArticle(articleId) {
-    let selectedArticle = this.state.data.articles.filter((article) => {
-      return article.id === articleId;
-    })[0];
-    this.state.maybeSelectedArticle = new Maybe(selectedArticle);
-    this.emitChange('changed');
-  }
-
   onAddArticleToShoppingCart(articleId, amount) {
     let previousAmount = this.state.shoppingCart[articleId];
     let currentAmount = previousAmount ? previousAmount + amount : amount;
@@ -169,9 +156,6 @@ class ArticleStore extends Store {
         break;
       case actionIdentifiers.articleList.filterByIntensity:
         this.onFilterByIntensity(action.intensity);
-        break;
-      case actionIdentifiers.articleList.selectArticle:
-        this.onSelectArticle(action.articleId);
         break;
       case actionIdentifiers.shoppingCart.addArticle:
         this.onAddArticleToShoppingCart(action.articleId, action.amount);

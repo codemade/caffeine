@@ -21,13 +21,6 @@ class ActionCreator {
     });
   }
 
-  selectArticle(articleId) {
-    dispatcher.dispatch({
-      type: actionIdentifiers.articleList.selectArticle,
-      articleId: articleId
-    });
-  }
-
   addArticleToShoppingCart(articleId, amount) {
     dispatcher.dispatch({
       type: actionIdentifiers.shoppingCart.addArticle,

@@ -19848,7 +19848,6 @@
 	    _get(Object.getPrototypeOf(ArticleStore.prototype), 'constructor', this).call(this, 'article-store', storage);
 	    if (!this.state.shoppingCart) this.state.shoppingCart = {};
 	    if (!this.state.intensityFilter) this.state.intensityFilter = Maybe.Not;
-	    if (!this.state.maybeSelectedArticle) this.state.maybeSelectedArticle = Maybe.Not;
 	    if (!this.state.maybeCouponCode) this.state.maybeCouponCode = Maybe.Not;
 	    dispatcher.register(this.onActionDispatched.bind(this));
 	  }
@@ -19870,11 +19869,6 @@
 	        return article;
 	      });
 	      return result;
-	    }
-	  }, {
-	    key: 'getMaybeSelectedArticle',
-	    value: function getMaybeSelectedArticle() {
-	      return this.state.maybeSelectedArticle;
 	    }
 	  }, {
 	    key: 'articleMatchesFilter',
@@ -19987,15 +19981,6 @@
 	      this.emitChange('changed');
 	    }
 	  }, {
-	    key: 'onSelectArticle',
-	    value: function onSelectArticle(articleId) {
-	      var selectedArticle = this.state.data.articles.filter(function (article) {
-	        return article.id === articleId;
-	      })[0];
-	      this.state.maybeSelectedArticle = new Maybe(selectedArticle);
-	      this.emitChange('changed');
-	    }
-	  }, {
 	    key: 'onAddArticleToShoppingCart',
 	    value: function onAddArticleToShoppingCart(articleId, amount) {
 	      var previousAmount = this.state.shoppingCart[articleId];
@@ -20031,9 +20016,6 @@
 	          break;
 	        case actionIdentifiers.articleList.filterByIntensity:
 	          this.onFilterByIntensity(action.intensity);
-	          break;
-	        case actionIdentifiers.articleList.selectArticle:
-	          this.onSelectArticle(action.articleId);
 	          break;
 	        case actionIdentifiers.shoppingCart.addArticle:
 	          this.onAddArticleToShoppingCart(action.articleId, action.amount);
@@ -20114,8 +20096,7 @@
 	var actionIdentifiers = {
 	  articleList: {
 	    initialize: 'articleList.initialize',
-	    filterByIntensity: 'articleList.filterByIntensity',
-	    selectArticle: 'articleList.selectArticle'
+	    filterByIntensity: 'articleList.filterByIntensity'
 	  },
 	  shoppingCart: {
 	    addArticle: 'shoppingCart.addArticle',
@@ -20275,14 +20256,6 @@
 	      });
 	    }
 	  }, {
-	    key: 'selectArticle',
-	    value: function selectArticle(articleId) {
-	      dispatcher.dispatch({
-	        type: actionIdentifiers.articleList.selectArticle,
-	        articleId: articleId
-	      });
-	    }
-	  }, {
 	    key: 'addArticleToShoppingCart',
 	    value: function addArticleToShoppingCart(articleId, amount) {
 	      dispatcher.dispatch({
@@ -20391,7 +20364,6 @@
 	var ShoppingCartBadge = __webpack_require__(171);
 	var ArticleList = __webpack_require__(172);
 	var IntensityFilter = __webpack_require__(175);
-	var Maybe = __webpack_require__(165);
 
 	var ArticlesControllerView = (function (_React$Component) {
 	  _inherits(ArticlesControllerView, _React$Component);
@@ -20403,7 +20375,6 @@
 	    this.state = {
 	      categories: [],
 	      articles: [],
-	      selectedArticle: Maybe.Not,
 	      shoppingCartInfo: {}
 	    };
 	  }
@@ -20414,7 +20385,6 @@
 	      this.setState({
 	        categories: this.props.store.getCategories(),
 	        articles: this.props.store.getArticles(),
-	        selectedArticle: this.props.store.getMaybeSelectedArticle(),
 	        shoppingCartInfo: this.props.store.getShoppingCartBadgeInformation()
 	      });
 	    }
