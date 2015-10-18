@@ -43,6 +43,13 @@ class ActionCreator {
       amount: amount
     });
   }
+
+  redeemCoupon(couponCode) {
+    dispatcher.dispatch({
+      type: actionIdentifiers.shoppingCart.redeemCoupon,
+      couponCode: couponCode
+    });
+  }
 }
 
 module.exports = ActionCreator;

@@ -11,6 +11,7 @@ class ArticleStore extends Store {
     if (!this.state.shoppingCart) this.state.shoppingCart = {};
     if (!this.state.intensityFilter) this.state.intensityFilter = Maybe.Not;
     if (!this.state.maybeSelectedArticle) this.state.maybeSelectedArticle = Maybe.Not;
+    if (!this.state.maybeCouponCode) this.state.maybeCouponCode = Maybe.Not;
     dispatcher.register(this.onActionDispatched.bind(this));
   }
 
@@ -78,6 +79,8 @@ class ArticleStore extends Store {
       totalAmount: 0,
       totalPrice: 0,
       packagingSizeInvalid: false,
+      couponCodeInvalid: false,
+      couponCode: null,
       items: []
     };
 
@@ -103,6 +106,8 @@ class ArticleStore extends Store {
     shoppingCartContent.totalAmount = items.reduce((sum, item) => sum + item.amount, 0);
     shoppingCartContent.totalPrice = items.reduce((sum, item) => sum + item.totalPrice, 0);
     shoppingCartContent.packagingSizeInvalid = shoppingCartContent.totalAmount % 50 !== 0;
+    shoppingCartContent.couponCodeInvalid = this.state.maybeCouponCode.hasValue && !this.state.maybeCouponCode.value.isValid;
+    shoppingCartContent.couponCode = this.state.maybeCouponCode;
     return shoppingCartContent;
   }
 
@@ -141,6 +146,15 @@ class ArticleStore extends Store {
     this.emitChange('changed');
   }
 
+  onRedeemCoupon(couponCodeValue) {
+    let couponCode = {
+      value: couponCodeValue,
+      isValid: (couponCodeValue === 'wmks-09-11-15')
+    };
+    this.state.maybeCouponCode = new Maybe(couponCode);
+    this.emitChange('changed');
+  }
+
   onActionDispatched(action) {
     switch (action.type) {
       case actionIdentifiers.articleList.initialize:
@@ -157,6 +171,9 @@ class ArticleStore extends Store {
         break;
       case actionIdentifiers.shoppingCart.removeArticle:
         this.onRemoveArticleFromShoppingCart(action.articleId, action.amount);
+        break;
+      case actionIdentifiers.shoppingCart.redeemCoupon:
+        this.onRedeemCoupon(action.couponCode);
         break;
       default:
         // nothing to do here

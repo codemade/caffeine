@@ -19849,6 +19849,7 @@
 	    if (!this.state.shoppingCart) this.state.shoppingCart = {};
 	    if (!this.state.intensityFilter) this.state.intensityFilter = Maybe.Not;
 	    if (!this.state.maybeSelectedArticle) this.state.maybeSelectedArticle = Maybe.Not;
+	    if (!this.state.maybeCouponCode) this.state.maybeCouponCode = Maybe.Not;
 	    dispatcher.register(this.onActionDispatched.bind(this));
 	  }
 
@@ -19931,6 +19932,8 @@
 	        totalAmount: 0,
 	        totalPrice: 0,
 	        packagingSizeInvalid: false,
+	        couponCodeInvalid: false,
+	        couponCode: null,
 	        items: []
 	      };
 
@@ -19960,6 +19963,8 @@
 	        return sum + item.totalPrice;
 	      }, 0);
 	      shoppingCartContent.packagingSizeInvalid = shoppingCartContent.totalAmount % 50 !== 0;
+	      shoppingCartContent.couponCodeInvalid = this.state.maybeCouponCode.hasValue && !this.state.maybeCouponCode.value.isValid;
+	      shoppingCartContent.couponCode = this.state.maybeCouponCode;
 	      return shoppingCartContent;
 	    }
 	  }, {
@@ -20001,6 +20006,16 @@
 	      this.emitChange('changed');
 	    }
 	  }, {
+	    key: 'onRedeemCoupon',
+	    value: function onRedeemCoupon(couponCodeValue) {
+	      var couponCode = {
+	        value: couponCodeValue,
+	        isValid: couponCodeValue === 'wmks-09-11-15'
+	      };
+	      this.state.maybeCouponCode = new Maybe(couponCode);
+	      this.emitChange('changed');
+	    }
+	  }, {
 	    key: 'onActionDispatched',
 	    value: function onActionDispatched(action) {
 	      switch (action.type) {
@@ -20018,6 +20033,9 @@
 	          break;
 	        case actionIdentifiers.shoppingCart.removeArticle:
 	          this.onRemoveArticleFromShoppingCart(action.articleId, action.amount);
+	          break;
+	        case actionIdentifiers.shoppingCart.redeemCoupon:
+	          this.onRedeemCoupon(action.couponCode);
 	          break;
 	        default:
 	        // nothing to do here
@@ -20094,7 +20112,8 @@
 	  },
 	  shoppingCart: {
 	    addArticle: 'shoppingCart.addArticle',
-	    removeArticle: 'shoppingCart.removeArticle'
+	    removeArticle: 'shoppingCart.removeArticle',
+	    redeemCoupon: 'shoppingCart.redeemCoupon'
 	  }
 	};
 
@@ -20272,6 +20291,14 @@
 	        type: actionIdentifiers.shoppingCart.removeArticle,
 	        articleId: articleId,
 	        amount: amount
+	      });
+	    }
+	  }, {
+	    key: 'redeemCoupon',
+	    value: function redeemCoupon(couponCode) {
+	      dispatcher.dispatch({
+	        type: actionIdentifiers.shoppingCart.redeemCoupon,
+	        couponCode: couponCode
 	      });
 	    }
 	  }]);
@@ -20939,16 +20966,19 @@
 	        'Gesamtmenge muss ein Vielfaches von 50 sein!'
 	      ) : '';
 
-	      var couponCodeWarning = React.createElement(
+	      var couponCodeWarning = this.state.shoppingCartContent.couponCodeInvalid ? React.createElement(
 	        'div',
 	        { className: 'shoppingCart__couponCodeWarning' },
 	        'Ungültiger Coupon-Code'
-	      );
+	      ) : '';
 
 	      var articleItems = this._getArticleItems();
 	      var totalArticlesPrice = utils.formatAsPrice(this.state.shoppingCartContent.totalPrice / 100);
 
-	      var redeemCoupon = function redeemCoupon() {};
+	      var redeemCoupon = function redeemCoupon() {
+	        var couponCode = this.refs.couponCode.value;
+	        this.props.actionCreator.redeemCoupon(couponCode);
+	      };
 
 	      var alertIt = function alertIt() {
 	        alert('Sorry, just a demo!');
@@ -21037,12 +21067,12 @@
 	            React.createElement(
 	              'span',
 	              null,
-	              'Coupon-Code:'
+	              'Geben Sie hier Ihren Coupon-Code ein:'
 	            ),
-	            React.createElement('input', { type: 'text' }),
+	            React.createElement('input', { type: 'text', className: 'shoppingCart__couponCode', ref: 'couponCode', placeholder: 'xxxx-xx-xx-xx' }),
 	            React.createElement(
 	              'button',
-	              { onClick: redeemCoupon, className: 'shoppingCart__redeemCoupon' },
+	              { onClick: redeemCoupon.bind(this), className: 'shoppingCart__redeemCoupon' },
 	              'OK'
 	            ),
 	            couponCodeWarning

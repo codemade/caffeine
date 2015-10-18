@@ -5,7 +5,7 @@ let expect = require('chai').expect;
 let StorageFake = require('../flux/storage-fake.js');
 let TestUtils = require('react-addons-test-utils');
 
-let renderTarget, renderedComponent;
+let renderTarget, renderedComponent, shoppingCartOverview;
 
 describe('redeeming a coupon', () => {
   let categories = [
@@ -18,7 +18,7 @@ describe('redeeming a coupon', () => {
   ];
 
   beforeEach(() => {
-    let ComponentClass = require('../../app/components/articles-controller-view.react.js');
+    let ComponentClass = require('../../app/components/shopping-cart-controller-view.react.js');
     renderTarget = document.getElementsByClassName('app')[0];
 
     let dataAccess = {
@@ -34,9 +34,11 @@ describe('redeeming a coupon', () => {
     let actionCreator = new ActionCreator(dataAccess);
     let ArticleStore = require('../../app/article-store.js');
     let store = new ArticleStore(new StorageFake());
+    renderedComponent = ReactDOM.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
+    // initialize action creator, to fetch article data from server etc.
+    actionCreator.initialize();
     actionCreator.addArticleToShoppingCart(3, 20);
     actionCreator.addArticleToShoppingCart(4, 30);
-    renderedComponent = React.render(<ComponentClass actionCreator={actionCreator} store={store}/>, renderTarget);
   });
 
   afterEach(() => {
@@ -45,11 +47,30 @@ describe('redeeming a coupon', () => {
   });
 
   describe('with an invalid coupon code', () => {
-    it('should show a warning', () => {
+    beforeEach(() => {
+      let couponCodeInput = renderTarget.querySelector('.shoppingCart__couponCode');
       let redeemCouponButton = renderTarget.querySelector('.shoppingCart__redeemCoupon');
+      couponCodeInput.value = 'invalid coupon code';
       TestUtils.Simulate.click(redeemCouponButton);
-      let couponCodeWarning = couponCodeWarning.querySelector('.shoppingCart__couponCodeWarning');
-      expect(couponCodeWarning).to.be.defined;
+    });
+
+    it('should show a warning', () => {
+      let couponCodeWarning = renderTarget.querySelector('.shoppingCart__couponCodeWarning');
+      expect(couponCodeWarning).not.to.equal(null);
+    });
+  });
+
+  describe('with a valid coupon code', () => {
+    beforeEach(() => {
+      let couponCodeInput = renderTarget.querySelector('.shoppingCart__couponCode');
+      let redeemCouponButton = renderTarget.querySelector('.shoppingCart__redeemCoupon');
+      couponCodeInput.value = 'wmks-09-11-15';
+      TestUtils.Simulate.click(redeemCouponButton);
+    });
+
+    it('should not show a warning', () => {
+      let couponCodeWarning = renderTarget.querySelector('.shoppingCart__couponCodeWarning');
+      expect(couponCodeWarning).to.equal(null);
     });
   });
 });

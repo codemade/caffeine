@@ -65,12 +65,16 @@ class ShoppingCartControllerView extends React.Component {
       ? <div className='shoppingCart__packagingSizeWarning'>Gesamtmenge muss ein Vielfaches von 50 sein!</div>
       : '';
 
-    let couponCodeWarning = <div className='shoppingCart__couponCodeWarning'>Ungültiger Coupon-Code</div>;
+    let couponCodeWarning = this.state.shoppingCartContent.couponCodeInvalid
+      ? <div className='shoppingCart__couponCodeWarning'>Ungültiger Coupon-Code</div>
+      : '';
 
     let articleItems = this._getArticleItems();
     let totalArticlesPrice = utils.formatAsPrice(this.state.shoppingCartContent.totalPrice / 100);
 
     let redeemCoupon = function() {
+      let couponCode = this.refs.couponCode.value;
+      this.props.actionCreator.redeemCoupon(couponCode);
     };
 
     let alertIt = function() {
@@ -106,9 +110,9 @@ class ShoppingCartControllerView extends React.Component {
           </tfoot>
         </table>
         <div className="shoppingCart__coupon">
-          <span>Coupon-Code:</span>
-          <input type="text"></input>
-          <button onClick={redeemCoupon} className="shoppingCart__redeemCoupon">OK</button>
+          <span>Geben Sie hier Ihren Coupon-Code ein:</span>
+          <input type="text" className="shoppingCart__couponCode" ref="couponCode" placeholder="xxxx-xx-xx-xx"></input>
+          <button onClick={redeemCoupon.bind(this)} className="shoppingCart__redeemCoupon">OK</button>
           {couponCodeWarning}
         </div>
         <button onClick={alertIt} className="shoppingCart__cashPoint">Buy it</button>

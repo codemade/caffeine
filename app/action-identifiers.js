@@ -6,7 +6,8 @@ let actionIdentifiers = {
   },
   shoppingCart: {
     addArticle: 'shoppingCart.addArticle',
-    removeArticle: 'shoppingCart.removeArticle'
+    removeArticle: 'shoppingCart.removeArticle',
+    redeemCoupon: 'shoppingCart.redeemCoupon'
   }
 };
 
