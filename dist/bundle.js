@@ -19848,7 +19848,7 @@
 	    _get(Object.getPrototypeOf(ArticleStore.prototype), 'constructor', this).call(this, 'article-store', storage);
 	    if (!this.state.shoppingCart) this.state.shoppingCart = {};
 	    if (!this.state.intensityFilter) this.state.intensityFilter = Maybe.Not;
-	    if (!this.state.maybeSelectedArticle) this.state.maybeSelectedArticle = Maybe.Not;
+	    if (!this.state.maybeCouponCode) this.state.maybeCouponCode = Maybe.Not;
 	    dispatcher.register(this.onActionDispatched.bind(this));
 	  }
 
@@ -19869,11 +19869,6 @@
 	        return article;
 	      });
 	      return result;
-	    }
-	  }, {
-	    key: 'getMaybeSelectedArticle',
-	    value: function getMaybeSelectedArticle() {
-	      return this.state.maybeSelectedArticle;
 	    }
 	  }, {
 	    key: 'articleMatchesFilter',
@@ -19931,6 +19926,8 @@
 	        totalAmount: 0,
 	        totalPrice: 0,
 	        packagingSizeInvalid: false,
+	        couponCodeInvalid: false,
+	        couponCode: Maybe.Not,
 	        items: []
 	      };
 
@@ -19959,7 +19956,16 @@
 	      shoppingCartContent.totalPrice = items.reduce(function (sum, item) {
 	        return sum + item.totalPrice;
 	      }, 0);
+	      shoppingCartContent.couponDiscount = 0;
+	      shoppingCartContent.reducedTotalPrice = 0;
+
+	      if (this.state.maybeCouponCode.hasValue && this.state.maybeCouponCode.value.isValid) {
+	        shoppingCartContent.couponDiscount = shoppingCartContent.totalPrice * 0.15;
+	      }
+
 	      shoppingCartContent.packagingSizeInvalid = shoppingCartContent.totalAmount % 50 !== 0;
+	      shoppingCartContent.couponCodeInvalid = this.state.maybeCouponCode.hasValue && !this.state.maybeCouponCode.value.isValid;
+	      shoppingCartContent.couponCode = this.state.maybeCouponCode;
 	      return shoppingCartContent;
 	    }
 	  }, {
@@ -19972,15 +19978,6 @@
 	    key: 'onFilterByIntensity',
 	    value: function onFilterByIntensity(intensity) {
 	      this.state.intensityFilter = this.state.intensityFilter.hasValue && this.state.intensityFilter.value === intensity ? Maybe.Not : new Maybe(intensity);
-	      this.emitChange('changed');
-	    }
-	  }, {
-	    key: 'onSelectArticle',
-	    value: function onSelectArticle(articleId) {
-	      var selectedArticle = this.state.data.articles.filter(function (article) {
-	        return article.id === articleId;
-	      })[0];
-	      this.state.maybeSelectedArticle = new Maybe(selectedArticle);
 	      this.emitChange('changed');
 	    }
 	  }, {
@@ -20001,6 +19998,17 @@
 	      this.emitChange('changed');
 	    }
 	  }, {
+	    key: 'onRedeemCoupon',
+	    value: function onRedeemCoupon(couponCodeValue) {
+	      if (!couponCodeValue || couponCodeValue === '') return;
+	      var couponCode = {
+	        value: couponCodeValue,
+	        isValid: couponCodeValue === 'wmks-09-11-15'
+	      };
+	      this.state.maybeCouponCode = new Maybe(couponCode);
+	      this.emitChange('changed');
+	    }
+	  }, {
 	    key: 'onActionDispatched',
 	    value: function onActionDispatched(action) {
 	      switch (action.type) {
@@ -20010,14 +20018,14 @@
 	        case actionIdentifiers.articleList.filterByIntensity:
 	          this.onFilterByIntensity(action.intensity);
 	          break;
-	        case actionIdentifiers.articleList.selectArticle:
-	          this.onSelectArticle(action.articleId);
-	          break;
 	        case actionIdentifiers.shoppingCart.addArticle:
 	          this.onAddArticleToShoppingCart(action.articleId, action.amount);
 	          break;
 	        case actionIdentifiers.shoppingCart.removeArticle:
 	          this.onRemoveArticleFromShoppingCart(action.articleId, action.amount);
+	          break;
+	        case actionIdentifiers.shoppingCart.redeemCoupon:
+	          this.onRedeemCoupon(action.couponCode);
 	          break;
 	        default:
 	        // nothing to do here
@@ -20089,12 +20097,12 @@
 	var actionIdentifiers = {
 	  articleList: {
 	    initialize: 'articleList.initialize',
-	    filterByIntensity: 'articleList.filterByIntensity',
-	    selectArticle: 'articleList.selectArticle'
+	    filterByIntensity: 'articleList.filterByIntensity'
 	  },
 	  shoppingCart: {
 	    addArticle: 'shoppingCart.addArticle',
-	    removeArticle: 'shoppingCart.removeArticle'
+	    removeArticle: 'shoppingCart.removeArticle',
+	    redeemCoupon: 'shoppingCart.redeemCoupon'
 	  }
 	};
 
@@ -20249,14 +20257,6 @@
 	      });
 	    }
 	  }, {
-	    key: 'selectArticle',
-	    value: function selectArticle(articleId) {
-	      dispatcher.dispatch({
-	        type: actionIdentifiers.articleList.selectArticle,
-	        articleId: articleId
-	      });
-	    }
-	  }, {
 	    key: 'addArticleToShoppingCart',
 	    value: function addArticleToShoppingCart(articleId, amount) {
 	      dispatcher.dispatch({
@@ -20272,6 +20272,14 @@
 	        type: actionIdentifiers.shoppingCart.removeArticle,
 	        articleId: articleId,
 	        amount: amount
+	      });
+	    }
+	  }, {
+	    key: 'redeemCoupon',
+	    value: function redeemCoupon(couponCode) {
+	      dispatcher.dispatch({
+	        type: actionIdentifiers.shoppingCart.redeemCoupon,
+	        couponCode: couponCode
 	      });
 	    }
 	  }]);
@@ -20357,7 +20365,6 @@
 	var ShoppingCartBadge = __webpack_require__(171);
 	var ArticleList = __webpack_require__(172);
 	var IntensityFilter = __webpack_require__(175);
-	var Maybe = __webpack_require__(165);
 
 	var ArticlesControllerView = (function (_React$Component) {
 	  _inherits(ArticlesControllerView, _React$Component);
@@ -20369,7 +20376,6 @@
 	    this.state = {
 	      categories: [],
 	      articles: [],
-	      selectedArticle: Maybe.Not,
 	      shoppingCartInfo: {}
 	    };
 	  }
@@ -20380,7 +20386,6 @@
 	      this.setState({
 	        categories: this.props.store.getCategories(),
 	        articles: this.props.store.getArticles(),
-	        selectedArticle: this.props.store.getMaybeSelectedArticle(),
 	        shoppingCartInfo: this.props.store.getShoppingCartBadgeInformation()
 	      });
 	    }
@@ -20866,6 +20871,41 @@
 	      this.deregisterChangeListener();
 	    }
 	  }, {
+	    key: '_getCouponCodeInput',
+	    value: function _getCouponCodeInput() {
+	      if (this.state.shoppingCartContent.items.length === 0) return '';
+	      var couponCode = this.state.shoppingCartContent.couponCode;
+	      if (couponCode.hasValue && couponCode.value.isValid) return '';
+
+	      var couponCodeWarning = this.state.shoppingCartContent.couponCodeInvalid ? React.createElement(
+	        'div',
+	        { className: 'shoppingCart__couponCodeWarning' },
+	        'Der eingegebene Coupon-Code ist ungültig!'
+	      ) : '';
+
+	      var redeemCoupon = function redeemCoupon() {
+	        var couponCode = this.refs.couponCode.value;
+	        this.props.actionCreator.redeemCoupon(couponCode);
+	      };
+
+	      return React.createElement(
+	        'div',
+	        { className: 'shoppingCart__couponInput' },
+	        React.createElement(
+	          'span',
+	          null,
+	          'Geben Sie hier Ihren Coupon-Code ein:'
+	        ),
+	        React.createElement('input', { type: 'text', className: 'shoppingCart__couponInput__couponCode', ref: 'couponCode', placeholder: 'xxxx-xx-xx-xx' }),
+	        React.createElement(
+	          'button',
+	          { onClick: redeemCoupon.bind(this), className: 'shoppingCart__couponInput__redeemCoupon' },
+	          'einlösen'
+	        ),
+	        couponCodeWarning
+	      );
+	    }
+	  }, {
 	    key: '_getArticleItems',
 	    value: function _getArticleItems() {
 	      var _this = this;
@@ -20912,14 +20952,14 @@
 	            React.createElement('br', null),
 	            React.createElement(
 	              'button',
-	              { className: 'shoppingCartItem__addToCart', onClick: addToCart },
-	              '+'
+	              { className: 'shoppingCartItem__removeFromCart', onClick: removeFromCart },
+	              '-'
 	            ),
 	            ' ',
 	            React.createElement(
 	              'button',
-	              { className: 'shoppingCartItem__removeFromCart', onClick: removeFromCart },
-	              '-'
+	              { className: 'shoppingCartItem__addToCart', onClick: addToCart },
+	              '+'
 	            )
 	          ),
 	          React.createElement(
@@ -20933,18 +20973,82 @@
 	  }, {
 	    key: 'render',
 	    value: function render() {
-	      var warning = this.state.shoppingCartContent.packagingSizeInvalid ? React.createElement(
+	      var packagingSizeWarning = this.state.shoppingCartContent.packagingSizeInvalid ? React.createElement(
 	        'div',
-	        { className: 'shoppingCart__warning' },
+	        { className: 'shoppingCart__packagingSizeWarning' },
 	        'Gesamtmenge muss ein Vielfaches von 50 sein!'
 	      ) : '';
 
 	      var articleItems = this._getArticleItems();
-	      var totalArticlesPrice = utils.formatAsPrice(this.state.shoppingCartContent.totalPrice / 100);
+	      var totalPrice = this.state.shoppingCartContent.totalPrice / 100;
+	      var couponDiscount = this.state.shoppingCartContent.couponDiscount / 100;
+	      var reducedTotalPrice = totalPrice - couponDiscount;
+	      var formattedTotalPrice = utils.formatAsPrice(totalPrice);
+	      var formattedCouponDiscount = utils.formatAsPrice(couponDiscount);
+	      var formattedReducedTotalPrice = utils.formatAsPrice(reducedTotalPrice);
 
 	      var alertIt = function alertIt() {
 	        alert('Sorry, just a demo!');
 	      };
+
+	      var footerRows = [React.createElement(
+	        'tr',
+	        { key: 'totalPrice' },
+	        React.createElement(
+	          'td',
+	          null,
+	          'Gesamt:'
+	        ),
+	        React.createElement('td', null),
+	        React.createElement(
+	          'td',
+	          null,
+	          this.state.shoppingCartContent.totalAmount
+	        ),
+	        React.createElement(
+	          'td',
+	          null,
+	          formattedTotalPrice
+	        )
+	      )];
+
+	      var couponCodeInput = this._getCouponCodeInput();
+
+	      if (this.state.shoppingCartContent.couponCode.hasValue && this.state.shoppingCartContent.couponCode.value.isValid) {
+	        footerRows.push(React.createElement(
+	          'tr',
+	          { key: 'couponDiscount', className: 'shoppingCart__footer__couponDiscount' },
+	          React.createElement(
+	            'td',
+	            null,
+	            'Rabatt:'
+	          ),
+	          React.createElement('td', null),
+	          React.createElement('td', null),
+	          React.createElement(
+	            'td',
+	            null,
+	            '- ',
+	            formattedCouponDiscount
+	          )
+	        ));
+	        footerRows.push(React.createElement(
+	          'tr',
+	          { key: 'reducedtotalPrice', className: 'shoppingCart__footer__reducedTotalPrice' },
+	          React.createElement(
+	            'td',
+	            null,
+	            'Zu zahlen:'
+	          ),
+	          React.createElement('td', null),
+	          React.createElement('td', null),
+	          React.createElement(
+	            'td',
+	            null,
+	            formattedReducedTotalPrice
+	          )
+	        ));
+	      }
 
 	      return React.createElement(
 	        'div',
@@ -20961,7 +21065,7 @@
 	          ),
 	          React.createElement('br', null),
 	          React.createElement('br', null),
-	          warning,
+	          packagingSizeWarning,
 	          React.createElement(
 	            'table',
 	            null,
@@ -20994,35 +21098,17 @@
 	              )
 	            ),
 	            React.createElement(
+	              'tfoot',
+	              { className: 'shoppingCart__footer' },
+	              footerRows
+	            ),
+	            React.createElement(
 	              'tbody',
 	              null,
 	              articleItems
-	            ),
-	            React.createElement(
-	              'tfoot',
-	              { className: 'shoppingCart__footer' },
-	              React.createElement(
-	                'tr',
-	                null,
-	                React.createElement(
-	                  'td',
-	                  null,
-	                  'Gesamt:'
-	                ),
-	                React.createElement('td', null),
-	                React.createElement(
-	                  'td',
-	                  null,
-	                  this.state.shoppingCartContent.totalAmount
-	                ),
-	                React.createElement(
-	                  'td',
-	                  null,
-	                  totalArticlesPrice
-	                )
-	              )
 	            )
 	          ),
+	          couponCodeInput,
 	          React.createElement(
 	            'button',
 	            { onClick: alertIt, className: 'shoppingCart__cashPoint' },

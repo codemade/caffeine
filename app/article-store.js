@@ -10,7 +10,7 @@ class ArticleStore extends Store {
     super('article-store', storage);
     if (!this.state.shoppingCart) this.state.shoppingCart = {};
     if (!this.state.intensityFilter) this.state.intensityFilter = Maybe.Not;
-    if (!this.state.maybeSelectedArticle) this.state.maybeSelectedArticle = Maybe.Not;
+    if (!this.state.maybeCouponCode) this.state.maybeCouponCode = Maybe.Not;
     dispatcher.register(this.onActionDispatched.bind(this));
   }
 
@@ -26,10 +26,6 @@ class ArticleStore extends Store {
       return article;
     });
     return result;
-  }
-
-  getMaybeSelectedArticle() {
-    return this.state.maybeSelectedArticle;
   }
 
   articleMatchesFilter(article) {
@@ -78,6 +74,8 @@ class ArticleStore extends Store {
       totalAmount: 0,
       totalPrice: 0,
       packagingSizeInvalid: false,
+      couponCodeInvalid: false,
+      couponCode: Maybe.Not,
       items: []
     };
 
@@ -102,7 +100,16 @@ class ArticleStore extends Store {
     shoppingCartContent.items = items;
     shoppingCartContent.totalAmount = items.reduce((sum, item) => sum + item.amount, 0);
     shoppingCartContent.totalPrice = items.reduce((sum, item) => sum + item.totalPrice, 0);
+    shoppingCartContent.couponDiscount = 0;
+    shoppingCartContent.reducedTotalPrice = 0;
+
+    if (this.state.maybeCouponCode.hasValue && this.state.maybeCouponCode.value.isValid) {
+      shoppingCartContent.couponDiscount = shoppingCartContent.totalPrice * 0.15;
+    }
+
     shoppingCartContent.packagingSizeInvalid = shoppingCartContent.totalAmount % 50 !== 0;
+    shoppingCartContent.couponCodeInvalid = this.state.maybeCouponCode.hasValue && !this.state.maybeCouponCode.value.isValid;
+    shoppingCartContent.couponCode = this.state.maybeCouponCode;
     return shoppingCartContent;
   }
 
@@ -115,14 +122,6 @@ class ArticleStore extends Store {
     this.state.intensityFilter = this.state.intensityFilter.hasValue && this.state.intensityFilter.value === intensity
       ? Maybe.Not
       : new Maybe(intensity);
-    this.emitChange('changed');
-  }
-
-  onSelectArticle(articleId) {
-    let selectedArticle = this.state.data.articles.filter((article) => {
-      return article.id === articleId;
-    })[0];
-    this.state.maybeSelectedArticle = new Maybe(selectedArticle);
     this.emitChange('changed');
   }
 
@@ -141,6 +140,16 @@ class ArticleStore extends Store {
     this.emitChange('changed');
   }
 
+  onRedeemCoupon(couponCodeValue) {
+    if (!couponCodeValue || couponCodeValue === '') return;
+    let couponCode = {
+      value: couponCodeValue,
+      isValid: (couponCodeValue === 'wmks-09-11-15')
+    };
+    this.state.maybeCouponCode = new Maybe(couponCode);
+    this.emitChange('changed');
+  }
+
   onActionDispatched(action) {
     switch (action.type) {
       case actionIdentifiers.articleList.initialize:
@@ -149,14 +158,14 @@ class ArticleStore extends Store {
       case actionIdentifiers.articleList.filterByIntensity:
         this.onFilterByIntensity(action.intensity);
         break;
-      case actionIdentifiers.articleList.selectArticle:
-        this.onSelectArticle(action.articleId);
-        break;
       case actionIdentifiers.shoppingCart.addArticle:
         this.onAddArticleToShoppingCart(action.articleId, action.amount);
         break;
       case actionIdentifiers.shoppingCart.removeArticle:
         this.onRemoveArticleFromShoppingCart(action.articleId, action.amount);
+        break;
+      case actionIdentifiers.shoppingCart.redeemCoupon:
+        this.onRedeemCoupon(action.couponCode);
         break;
       default:
         // nothing to do here
