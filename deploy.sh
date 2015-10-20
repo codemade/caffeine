@@ -1,6 +1,11 @@
 #!/bin/bash
 set -o errexit -o nounset # exit with nonzero exit code if anything fails, unset variables not allowed
 
+# build javascript bundle
+npm run build-js
+# build css
+npm run build-css
+
 rev=$(git rev-parse --short HEAD) # get short hash of last commit (used in commit message later)
 
 # clear and re-create the out directory
@@ -16,10 +21,8 @@ cp -r libs out/libs
 # go to the out directory and create a *new* Git repo
 cd out
 git init
-git config user.name "travis-ci deployer"
-git config user.email "travis-ci-deployer@codemade.js.org"
 
-git remote add upstream "https://$GH_TOKEN@github.com/codemade/caffeine.git"
+git remote add upstream "https://github.com/codemade/caffeine.git"
 git fetch upstream
 git reset upstream/gh-pages
 
@@ -35,4 +38,4 @@ git commit -m "Deploy to github-pages at commit ${rev}."
 # repo's gh-pages branch. (All previous history on the gh-pages branch
 # will be lost, since we are overwriting it.) We redirect any output to
 # /dev/null to hide any sensitive credential data that might otherwise be exposed.
-git push --force --quiet upstream HEAD:gh-pages > /dev/null 2>&1
+git push --force --quiet upstream HEAD:gh-pages
