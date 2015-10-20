@@ -20993,7 +20993,7 @@
 
 	      var footerRows = [React.createElement(
 	        'tr',
-	        null,
+	        { key: 'totalPrice' },
 	        React.createElement(
 	          'td',
 	          null,
@@ -21017,7 +21017,7 @@
 	      if (this.state.shoppingCartContent.couponCode.hasValue && this.state.shoppingCartContent.couponCode.value.isValid) {
 	        footerRows.push(React.createElement(
 	          'tr',
-	          { className: 'shoppingCart__footer__couponDiscount' },
+	          { key: 'couponDiscount', className: 'shoppingCart__footer__couponDiscount' },
 	          React.createElement(
 	            'td',
 	            null,
@@ -21034,7 +21034,7 @@
 	        ));
 	        footerRows.push(React.createElement(
 	          'tr',
-	          { className: 'shoppingCart__footer__reducedTotalPrice' },
+	          { key: 'reducedtotalPrice', className: 'shoppingCart__footer__reducedTotalPrice' },
 	          React.createElement(
 	            'td',
 	            null,

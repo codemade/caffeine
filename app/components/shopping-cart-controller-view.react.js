@@ -100,7 +100,7 @@ class ShoppingCartControllerView extends React.Component {
     };
 
     let footerRows = [
-      <tr>
+      <tr key='totalPrice'>
         <td>Gesamt:</td>
         <td></td>
         <td>{this.state.shoppingCartContent.totalAmount}</td>
@@ -112,14 +112,14 @@ class ShoppingCartControllerView extends React.Component {
 
     if (this.state.shoppingCartContent.couponCode.hasValue && this.state.shoppingCartContent.couponCode.value.isValid) {
       footerRows.push(
-        <tr className='shoppingCart__footer__couponDiscount'>
+        <tr key='couponDiscount' className='shoppingCart__footer__couponDiscount'>
           <td>Rabatt:</td>
           <td></td>
           <td></td>
           <td>- {formattedCouponDiscount}</td>
         </tr>);
       footerRows.push(
-        <tr className='shoppingCart__footer__reducedTotalPrice'>
+        <tr key='reducedtotalPrice' className='shoppingCart__footer__reducedTotalPrice'>
           <td>Zu zahlen:</td>
           <td></td>
           <td></td>
