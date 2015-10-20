@@ -1,18 +1,56 @@
 .shoppingCart {
 
-	&__warning {
+	&__packagingSizeWarning {
 		background-color: #e74c3c;
 		padding: 10px;
 		margin-bottom: 10px;
 		color: white;
 	}
 
+	&__couponCodeWarning {
+		color: #e74c3c;
+		font-style:italic;
+	}
+
 	&__footer {
 		font-weight: bold;
 		color: #27ae60;
+
+		&__couponDiscount {
+			color: #d9534f;
+		}
+	}
+
+	&__couponInput {
+		float:right;
+		text-align:right;
+		margin-bottom: 20px;
+
+		span {
+			font-style:italic;
+		}
+
+		&__couponCode {
+			margin-left:10px;
+			text-align:center;
+			width:200px;
+			height:30px;
+			border-radius:4px;
+			border:1px solid gray;
+		}
+
+		&__redeemCoupon {
+			font-style:italic;
+			color: #337ab7;
+			height:30px;
+			line-height:30px;
+			border:none;
+			background-color:transparent;
+		}
 	}
 
 	&__cashPoint {
+		clear:right;
 		float: right;
 		margin-bottom: 20px;
 		position: relative;
@@ -35,7 +73,7 @@
 		top: 1px;
 		outline: none;
 		-webkit-box-shadow: none;
-		box-shadow: none;	
+		box-shadow: none;
 	}
 
 	table {

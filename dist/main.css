@@ -147,17 +147,45 @@
     font-size: 14px;
     padding-bottom: 4px; }
 
-.shoppingCart__warning {
+.shoppingCart__packagingSizeWarning {
   background-color: #e74c3c;
   padding: 10px;
   margin-bottom: 10px;
   color: white; }
 
+.shoppingCart__couponCodeWarning {
+  color: #e74c3c;
+  font-style: italic; }
+
 .shoppingCart__footer {
   font-weight: bold;
   color: #27ae60; }
+  .shoppingCart__footer__couponDiscount {
+    color: #d9534f; }
+
+.shoppingCart__couponInput {
+  float: right;
+  text-align: right;
+  margin-bottom: 20px; }
+  .shoppingCart__couponInput span {
+    font-style: italic; }
+  .shoppingCart__couponInput__couponCode {
+    margin-left: 10px;
+    text-align: center;
+    width: 200px;
+    height: 30px;
+    border-radius: 4px;
+    border: 1px solid gray; }
+  .shoppingCart__couponInput__redeemCoupon {
+    font-style: italic;
+    color: #337ab7;
+    height: 30px;
+    line-height: 30px;
+    border: none;
+    background-color: transparent; }
 
 .shoppingCart__cashPoint {
+  clear: right;
   float: right;
   margin-bottom: 20px;
   position: relative;
