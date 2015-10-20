@@ -1,0 +1,18 @@
+{
+  "ignore": [
+    "**/node_modules/**",
+    "libs/**",
+    "dist/**",
+    "out/**",
+    "coverage/**"
+  ],
+  "test": [
+    "tests/**"
+  ],
+  "dependencies": {
+    "unused-ignores": [
+      "react",
+      "react-*"
+    ]
+  }
+}

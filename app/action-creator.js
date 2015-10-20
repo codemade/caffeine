@@ -21,13 +21,6 @@ class ActionCreator {
     });
   }
 
-  selectArticle(articleId) {
-    dispatcher.dispatch({
-      type: actionIdentifiers.articleList.selectArticle,
-      articleId: articleId
-    });
-  }
-
   addArticleToShoppingCart(articleId, amount) {
     dispatcher.dispatch({
       type: actionIdentifiers.shoppingCart.addArticle,
@@ -41,6 +34,13 @@ class ActionCreator {
       type: actionIdentifiers.shoppingCart.removeArticle,
       articleId: articleId,
       amount: amount
+    });
+  }
+
+  redeemCoupon(couponCode) {
+    dispatcher.dispatch({
+      type: actionIdentifiers.shoppingCart.redeemCoupon,
+      couponCode: couponCode
     });
   }
 }

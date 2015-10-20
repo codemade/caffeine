@@ -1,12 +1,12 @@
 let actionIdentifiers = {
   articleList: {
     initialize: 'articleList.initialize',
-    filterByIntensity: 'articleList.filterByIntensity',
-    selectArticle: 'articleList.selectArticle'
+    filterByIntensity: 'articleList.filterByIntensity'
   },
   shoppingCart: {
     addArticle: 'shoppingCart.addArticle',
-    removeArticle: 'shoppingCart.removeArticle'
+    removeArticle: 'shoppingCart.removeArticle',
+    redeemCoupon: 'shoppingCart.redeemCoupon'
   }
 };
 

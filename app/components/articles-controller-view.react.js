@@ -3,7 +3,6 @@ let Navigation = require('./navigation.react.js');
 let ShoppingCartBadge = require('./shopping-cart-badge.react.js');
 let ArticleList = require('./article-list.react.js');
 let IntensityFilter = require('./intensity-filter.react.js');
-let Maybe = require('../maybe.js');
 
 class ArticlesControllerView extends React.Component {
   constructor(props) {
@@ -11,7 +10,6 @@ class ArticlesControllerView extends React.Component {
     this.state = {
       categories: [],
       articles: [],
-      selectedArticle: Maybe.Not,
       shoppingCartInfo: {}
     };
   }
@@ -21,7 +19,6 @@ class ArticlesControllerView extends React.Component {
       {
         categories: this.props.store.getCategories(),
         articles: this.props.store.getArticles(),
-        selectedArticle: this.props.store.getMaybeSelectedArticle(),
         shoppingCartInfo: this.props.store.getShoppingCartBadgeInformation()
       }
     );
