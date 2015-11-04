@@ -40,7 +40,7 @@ let ArticlesControllerView = React.createClass({
     let maximumIntensity = this.props.store.getMaximumPossibleIntensity();
     let availableIntensities = this.props.store.getAvailableIntensities();
 
-    return <div>
+    return <div className="componentIndicator">
             <Navigation>
               <ShoppingCartBadge shoppingCartInfo={this.state.shoppingCartInfo} navigate={this.props.navigate} />
             </Navigation>

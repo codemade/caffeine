@@ -13,3 +13,14 @@ html, body {
 .contentWrapper {
 	padding-top: $main-navigation-height + 20px;
 }
+
+.articleList {
+	float: left;
+}
+
+.showIndicators {
+	.componentIndicator {
+		border: 3px solid #e74c3c;
+		margin: 5px;
+	}
+}

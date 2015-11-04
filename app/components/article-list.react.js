@@ -9,7 +9,7 @@ let ArticleList = React.createClass({
                       actionCreator={this.props.actionCreator}/>;
     });
 
-    return <div>
+    return <div className="componentIndicator articleList">
             {articles}
           </div>;
   }

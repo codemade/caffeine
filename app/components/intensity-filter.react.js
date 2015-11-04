@@ -11,7 +11,7 @@ let IntensityFilter = React.createClass({
       intensityFilterItems.push(<span key={intensity} className={className} onClick={selectIntensity}>{intensity}</span>);
     }
 
-    return <div className="intensityFilter">
+    return <div className="componentIndicator intensityFilter">
       <div className="intensityFilter__legend">Nach Intensität filtern</div>
       {intensityFilterItems}
     </div>;

@@ -11,7 +11,7 @@ let Article = React.createClass({
 
   render() {
     let article = this.props.article;
-    let className = article.isMatchingFilter ? 'articleDetails' : 'articleDetails articleDetails--grayed-out';
+    let className = article.isMatchingFilter ? 'componentIndicator articleDetails' : 'componentIndicator articleDetails articleDetails--grayed-out';
 
     let styles = {
       backgroundColor: article.color

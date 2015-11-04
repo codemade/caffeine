@@ -15,7 +15,7 @@ let ArticleInformation = React.createClass({
        <button className='addToCart' onClick={addToCart}>+</button>
     </div>;
   }
-})
+});
 
 ArticleInformation.propTypes = {
   actionCreator: React.PropTypes.object.isRequired,

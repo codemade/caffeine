@@ -77,7 +77,7 @@ describe('filtering articles by intensity', () => {
           .filter((article) => {
             return +article.querySelector('.articleDetails__intensityValue').textContent === 3;
           });
-      expect(articleInfosWithIntensity.every(article => article.className === 'articleDetails')).to.equal(true);
+      expect(articleInfosWithIntensity.every(article => article.className.includes('articleDetails') === true)).to.equal(true);
     });
 
     it('should display articles with non-matching intensity grayed-out', () => {
@@ -86,7 +86,7 @@ describe('filtering articles by intensity', () => {
           .filter((article) => {
             return +article.querySelector('.articleDetails__intensityValue').textContent !== 3;
           });
-      expect(articleInfosWithIntensity.every(article => article.className === 'articleDetails articleDetails--grayed-out')).to.equal(true);
+      expect(articleInfosWithIntensity.every(article => article.className.includes('articleDetails articleDetails--grayed-out') === true)).to.equal(true);
     });
 
     it('should disable all other intensity filter items', () => {

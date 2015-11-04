@@ -11,7 +11,7 @@ let IntensityBar = React.createClass({
       let key = 'intensity-bar-item-' + i;
       dots.push(<span key={key} className={className}></span>);
     }
-    return <div className="intensity-bar">
+    return <div className="componentIndicator intensity-bar">
       {dots}
     </div>;
   }

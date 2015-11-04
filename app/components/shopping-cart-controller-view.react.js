@@ -39,7 +39,7 @@ let ShoppingCartControllerView = React.createClass({
         this.props.actionCreator.redeemCoupon(couponCode);
       }.bind(this);
 
-    return <div className="shoppingCart__couponInput">
+    return <div className="componentIndicator shoppingCart__couponInput">
               <span>Geben Sie hier Ihren Coupon-Code ein:</span>
               <input type="text" className="shoppingCart__couponInput__couponCode" ref="couponCode" placeholder="xxxx-xx-xx-xx"></input>
               <button onClick={redeemCoupon} className="shoppingCart__couponInput__redeemCoupon">einlösen</button>

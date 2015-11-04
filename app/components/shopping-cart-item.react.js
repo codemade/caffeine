@@ -14,7 +14,7 @@ let ShoppingCartItem = React.createClass({
         this.props.actionCreator.removeArticleFromShoppingCart(this.props.article.id, 10);
       };
 
-      return <div className='shopping-cart-item'>
+      return <div className='componentIndicator shopping-cart-item'>
         <div className='content'><div className="article-image" style={styles}/>{this.props.article.name}</div>
         <div className='content'>{this.props.article.price / 100}</div>
         <div>
