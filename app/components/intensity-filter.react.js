@@ -1,10 +1,6 @@
 let React = require('react');
 
-class IntensityFilter extends React.Component {
-  constructor(props) {
-    super(props);
-  }
-
+let IntensityFilter = React.createClass({
   render() {
     let intensityFilterItems = [];
     for (let intensity = 1; intensity <= this.props.maximumIntensity; intensity++) {
@@ -20,7 +16,8 @@ class IntensityFilter extends React.Component {
       {intensityFilterItems}
     </div>;
   }
-}
+});
+
 IntensityFilter.propTypes = {
   actionCreator: React.PropTypes.object.isRequired,
   maximumIntensity: React.PropTypes.number.isRequired,

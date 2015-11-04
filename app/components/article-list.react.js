@@ -1,7 +1,7 @@
 let React = require('react');
 let Article = require('./article.react.js');
 
-class ArticleList extends React.Component {
+let ArticleList = React.createClass({
   render() {
     let articles = this.props.articles.map((article) => {
       return <Article key={article.id}
@@ -13,7 +13,7 @@ class ArticleList extends React.Component {
             {articles}
           </div>;
   }
-}
+});
 
 ArticleList.propTypes = {
   actionCreator: React.PropTypes.object.isRequired,

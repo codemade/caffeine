@@ -1,6 +1,6 @@
 let React = require('react');
 
-class ShoppingCartBadge extends React.Component {
+let ShoppingCartBadge = React.createClass({
   render() {
     let navigateToShoppingCart = () => {
       this.props.navigate('shopping-cart');
@@ -13,7 +13,7 @@ class ShoppingCartBadge extends React.Component {
       <div className='shoppingCartBadge__cartInfo col-xs-10'>{this.props.shoppingCartInfo.articleCount + ' Artikel:'} {shoppingCartPrice + ' €'}</div>
     </div>;
   }
-}
+});
 
 ShoppingCartBadge.propTypes = {
   shoppingCartInfo: React.PropTypes.object.isRequired
