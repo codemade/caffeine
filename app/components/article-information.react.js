@@ -1,6 +1,6 @@
 let React = require('react');
 
-class ArticleInformation extends React.Component {
+let ArticleInformation = React.createClass({
   render() {
     let styles = {
       border: '1px solid white'
@@ -15,7 +15,7 @@ class ArticleInformation extends React.Component {
        <button className='addToCart' onClick={addToCart}>+</button>
     </div>;
   }
-}
+});
 
 ArticleInformation.propTypes = {
   actionCreator: React.PropTypes.object.isRequired,

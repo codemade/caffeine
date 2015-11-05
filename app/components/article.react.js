@@ -1,23 +1,23 @@
 let React = require('react');
 let IntensityBar = require('./intensity-bar.react.js');
 
-class Article extends React.Component {
+let Article = React.createClass({
   handleClick() {
     if (!this.props.article.isMatchingFilter) {
       return;
     }
     this.props.actionCreator.addArticleToShoppingCart(this.props.article.id, 10);
-  }
+  },
 
   render() {
     let article = this.props.article;
-    let className = article.isMatchingFilter ? 'articleDetails' : 'articleDetails articleDetails--grayed-out';
+    let className = article.isMatchingFilter ? 'componentIndicator articleDetails' : 'componentIndicator articleDetails articleDetails--grayed-out';
 
     let styles = {
       backgroundColor: article.color
     };
 
-    return <div className={className} onClick={this.handleClick.bind(this)}>
+    return <div className={className} onClick={this.handleClick}>
             <div className="articleDetails__image" style={styles}></div>
             <br />
             <div className="articleDetails__contentWrapper">
@@ -29,7 +29,7 @@ class Article extends React.Component {
             </div>
            </div>;
   }
-}
+});
 
 Article.propTypes = {
   article: React.PropTypes.shape({

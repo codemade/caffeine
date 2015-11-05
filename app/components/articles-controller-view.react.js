@@ -4,15 +4,14 @@ let ShoppingCartBadge = require('./shopping-cart-badge.react.js');
 let ArticleList = require('./article-list.react.js');
 let IntensityFilter = require('./intensity-filter.react.js');
 
-class ArticlesControllerView extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
+let ArticlesControllerView = React.createClass({
+  getInitialState() {
+    return {
       categories: [],
       articles: [],
       shoppingCartInfo: {}
     };
-  }
+  },
 
   handleDataChanged() {
     this.setState(
@@ -22,26 +21,26 @@ class ArticlesControllerView extends React.Component {
         shoppingCartInfo: this.props.store.getShoppingCartBadgeInformation()
       }
     );
-  }
+  },
 
   componentDidMount() {
-    this.deregisterChangeListener = this.props.store.addChangeListener('changed', this.handleDataChanged.bind(this));
+    this.deregisterChangeListener = this.props.store.addChangeListener('changed', this.handleDataChanged);
     this.props.actionCreator.initialize();
-  }
+  },
 
   componentWillUnmount() {
     this.deregisterChangeListener();
-  }
+  },
 
   filterByIntensity(intensity) {
     this.props.actionCreator.filterByIntensity(intensity);
-  }
+  },
 
   render() {
     let maximumIntensity = this.props.store.getMaximumPossibleIntensity();
     let availableIntensities = this.props.store.getAvailableIntensities();
 
-    return <div>
+    return <div className="componentIndicator">
             <Navigation>
               <ShoppingCartBadge shoppingCartInfo={this.state.shoppingCartInfo} navigate={this.props.navigate} />
             </Navigation>
@@ -56,7 +55,7 @@ class ArticlesControllerView extends React.Component {
             </div>
           </div>;
   }
-}
+});
 
 ArticlesControllerView.propTypes = {
   store: React.PropTypes.object.isRequired,

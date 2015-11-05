@@ -1,6 +1,6 @@
 let React = require('react');
 
-class ShoppingCartItem extends React.Component {
+let ShoppingCartItem = React.createClass({
     render() {
       let styles = {
         backgroundColor: this.props.article.color
@@ -14,7 +14,7 @@ class ShoppingCartItem extends React.Component {
         this.props.actionCreator.removeArticleFromShoppingCart(this.props.article.id, 10);
       };
 
-      return <div className='shopping-cart-item'>
+      return <div className='componentIndicator shopping-cart-item'>
         <div className='content'><div className="article-image" style={styles}/>{this.props.article.name}</div>
         <div className='content'>{this.props.article.price / 100}</div>
         <div>
@@ -25,7 +25,7 @@ class ShoppingCartItem extends React.Component {
         <div className='content'>{this.props.article.amount * this.props.article.price / 100}</div>
       </div>;
     }
-}
+});
 
 ShoppingCartItem.propTypes = {
   article: React.PropTypes.object.isRequired

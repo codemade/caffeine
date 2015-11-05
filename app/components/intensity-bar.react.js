@@ -1,6 +1,6 @@
 let React = require('react');
 
-class IntensityBar extends React.Component {
+let IntensityBar = React.createClass({
   render() {
     let dots = [];
     let className = 'dot-on';
@@ -11,11 +11,11 @@ class IntensityBar extends React.Component {
       let key = 'intensity-bar-item-' + i;
       dots.push(<span key={key} className={className}></span>);
     }
-    return <div className="intensity-bar">
+    return <div className="componentIndicator intensity-bar">
       {dots}
     </div>;
   }
-}
+});
 
 IntensityBar.propTypes = {
   intensity: React.PropTypes.number.isRequired

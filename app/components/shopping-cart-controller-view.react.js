@@ -2,13 +2,12 @@ let React = require('react');
 let Navigation = require('./navigation.react.js');
 let utils = require('../utils.js');
 
-class ShoppingCartControllerView extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      shoppingCartContent: props.store.getShoppingCartContent()
+let ShoppingCartControllerView = React.createClass({
+  getInitialState() {
+    return {
+      shoppingCartContent: this.props.store.getShoppingCartContent()
     };
-  }
+  },
 
   fetchData() {
     this.setState(
@@ -16,15 +15,15 @@ class ShoppingCartControllerView extends React.Component {
         shoppingCartContent: this.props.store.getShoppingCartContent()
       }
     );
-  }
+  },
 
   componentDidMount() {
-    this.deregisterChangeListener = this.props.store.addChangeListener('changed', this.fetchData.bind(this));
-  }
+    this.deregisterChangeListener = this.props.store.addChangeListener('changed', this.fetchData);
+  },
 
   componentWillUnmount() {
     this.deregisterChangeListener();
-  }
+  },
 
   _getCouponCodeInput() {
     if (this.state.shoppingCartContent.items.length === 0) return '';
@@ -38,15 +37,15 @@ class ShoppingCartControllerView extends React.Component {
       let redeemCoupon = function() {
         let couponCode = this.refs.couponCode.value;
         this.props.actionCreator.redeemCoupon(couponCode);
-      };
+      }.bind(this);
 
-    return <div className="shoppingCart__couponInput">
+    return <div className="componentIndicator shoppingCart__couponInput">
               <span>Geben Sie hier Ihren Coupon-Code ein:</span>
               <input type="text" className="shoppingCart__couponInput__couponCode" ref="couponCode" placeholder="xxxx-xx-xx-xx"></input>
-              <button onClick={redeemCoupon.bind(this)} className="shoppingCart__couponInput__redeemCoupon">einlösen</button>
+              <button onClick={redeemCoupon} className="shoppingCart__couponInput__redeemCoupon">einlösen</button>
               {couponCodeWarning}
             </div>;
-  }
+  },
 
   _getArticleItems() {
     return this.state.shoppingCartContent.items.map((item) => {
@@ -80,7 +79,7 @@ class ShoppingCartControllerView extends React.Component {
         <td className="shoppingCartItem__totalPrice">{itemTotalPrice}</td>
       </tr>;
     });
-  }
+  },
 
   render() {
     let packagingSizeWarning = this.state.shoppingCartContent.packagingSizeInvalid
@@ -126,14 +125,13 @@ class ShoppingCartControllerView extends React.Component {
           <td>{formattedReducedTotalPrice}</td>
         </tr>);
     }
-
     return <div className="shoppingCart">
       <Navigation/>
       <div className="container contentWrapper">
         <a href="#"><i className="fa fa-chevron-left"></i> Back to articles overview</a>
         <br/>
         <br/>
-        {packagingSizeWarning}
+
         <table>
           <thead>
             <tr>
@@ -150,11 +148,14 @@ class ShoppingCartControllerView extends React.Component {
             {articleItems}
           </tbody>
         </table>
+
+        {packagingSizeWarning}
+
         {couponCodeInput}
         <button onClick={alertIt} className="shoppingCart__cashPoint">Buy it</button>
       </div>
     </div>;
   }
-}
+});
 
 module.exports = ShoppingCartControllerView;
