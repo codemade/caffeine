@@ -7,8 +7,6 @@ Caffeine is a simple coffee store web application, built with [React](http://fac
 [![bitHound Dependencies](https://www.bithound.io/github/codemade/caffeine/badges/dependencies.svg)](https://www.bithound.io/github/codemade/caffeine/master/dependencies/npm)
 
 The npm dependencies are kept up-to-date by [greenkeeper.io](http://greenkeeper.io).
-
-The caffeine website is deployed to the [gh-pages branch](https://github.com/codemade/caffeine/tree/gh-pages) after a successful [travis-ci](https://travis-ci.org) build. The deployment will only be performed on commits (merges) into the (original, means not forked) master branch.
 The deployed website is accessible via this url: http://codemade.js.org/caffeine/.
 
 # Authors
