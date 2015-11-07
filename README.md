@@ -9,6 +9,15 @@ Caffeine is a simple coffee store web application, built with [React](http://fac
 The npm dependencies are kept up-to-date by [greenkeeper.io](http://greenkeeper.io).
 The deployed website is accessible via this url: http://codemade.js.org/caffeine/.
 
+# Quick install guide
+Make sure you have Node.js installed (>= 4.0.0)
+
+	$ git clone https://github.com/codemade/caffeine.git
+	$ cd caffeine
+	$ npm install
+	$ bower install
+	$ npm start
+
 # Authors
 Christian Kühl, René Viering
 
