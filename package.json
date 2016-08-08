@@ -45,7 +45,7 @@
     "istanbul": "0.4.0",
     "jsdom": "6.5.1",
     "local-web-server": "0.5.23",
-    "mocha": "2.3.3",
+    "mocha": "3.0.2",
     "node-sass": "^3.3.3",
     "mocha-lcov-reporter": "1.0.0",
     "react-addons-test-utils": "0.14.0",
