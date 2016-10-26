@@ -51,7 +51,7 @@
     "react-addons-test-utils": "0.14.0",
     "sinon": "1.17.1",
     "sinon-chai": "2.8.0",
-    "webpack": "1.12.2"
+    "webpack": "1.13.3"
   },
   "config": {
     "blanket": {
